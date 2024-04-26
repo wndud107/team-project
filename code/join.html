@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Sans&family=Oleo+Script+Swash+Caps:wght@400;700&family=Oswald:wght@700&family=Roboto:wght@400;900&display=swap"
+    rel="stylesheet"
+    />
+    <title>Healancaler</title>
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="join.css">
+  </head>
+  <body>
+    <header>
+        <div id="logo">
+            <a href="index.html">Healancaler</a>
+        </div>
+            <nav>
+                <ul id="navi">
+                    <li><a href="">다이어리</a></li>
+                    <li><a href="">커뮤니티</a></li>
+                    <li><a href="">운동법</a></li>
+                    <li><a href="">로그인</a></li>
+                </ul>
+            </nav>
+    </header>
+
+    <main>
+      <fieldset>
+        <legend>Healancaler</legend>
+        <form action="" method="GET">
+          <section>
+              <input type="email" name="join-email" placeholder="Id" required>
+              <input type="password" name="join-password" placeholder="Password" required>
+          </section>
+
+          <hr>
+
+          <section>
+            <input type="text" name="join-name" placeholder="Name" required>
+            <input type="text" name="join-birth" placeholder="YYYY/MM/DD" required>
+            <input type="tel" name="join-telnumber" placeholder="Tel number" required>
+          </section>
+
+          <section id="select-gender">
+            <div class="select-gender">
+                <input type="radio" name="join-gender" id="male" value="male">
+                <label for="male">Male</label>
+            </div>
+            <div class="select-gender">
+                <input type="radio" name="join-gender" id="female" value="female">
+                <label for="female">Female</label>
+            </div>
+          </section>               
+        </form>
+      </fieldset>
+
+      <button name="join">회원가입</button>
+    </main>
+  </body>
+</html>

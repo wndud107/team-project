@@ -1,0 +1,90 @@
+@font-face {
+    font-family: 'BMDOHYEON';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMDOHYEON.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    text-align: center;
+}
+
+fieldset {
+    width: 60%;
+    margin: auto;
+    margin-top: 80px;
+    border-radius: 6px;
+}
+
+legend {
+    text-align: center;
+    font-size: 32px;
+}
+
+input {
+    font:inherit;
+    display: block;
+    margin: 24px auto;
+    width: 80%;
+    padding: 14px;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+}
+
+input::placeholder {
+    font-size: 16px;
+}
+
+#select-gender {
+    display: flex;
+    justify-content: center;
+    width: 80%;
+    margin: auto;   
+}
+
+.select-gender {
+    display: flex;
+    justify-content: center; /* Center the items horizontally */
+    align-items: center; /* Center the items vertically */
+    margin-bottom: 16px;
+}
+
+.select-gender input[type="radio"] {
+    display: none;
+}
+
+.select-gender label {
+    display: inline-block;
+    cursor: pointer;
+    padding: 8px 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    margin: 0 8px; /* Add some space between each button */
+}
+
+.select-gender input[type="radio"] + label {
+    margin-left: 0; /* Remove margin from the first button */
+}
+
+.select-gender input[type="radio"]:checked + label {
+    background-color: rgb(11, 154, 167);
+    color: white;
+    border-color: rgb(11, 154, 167);
+}
+
+button {
+    font-family: 'BMDOHYEON';
+    margin: 128px auto;
+    padding: 20px 96px;
+    font-size: 16px;
+    color: white;
+    background-color: rgb(11, 154, 167);
+    border: 1px solid rgb(11, 154, 167);
+    border-radius: 6px;
+}
+
+button:hover {
+    background-color: rgb(55, 196, 170);
+    border: 1px solid rgb(55, 196, 170);
+    border-radius: 6px;
+}

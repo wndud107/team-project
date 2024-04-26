@@ -1,39 +1,48 @@
 h2 {
     text-align: center;
     font-size: 40px;
+    position: relative;
+    top: 30px;
 }
 
-form {
+form {    /* 로그인 박스 전체 */
     margin: auto;
-    margin-top: 160px;
-    width: 40%;
+    margin-top: 200px;
+    width: 700px;
+    height: 400px;
     padding: 16px;
     border: 1px solid rgb(0, 53, 89);
     border-radius: 12px;
     text-align: center;
 }
 
-form input {
+form input {   /* 아이디, 비밀번호 입력 박스 */
     display: block;
-    width: 60%;
+    width: 400px;
     padding: 20px 20px;
-    font: inherit;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     box-sizing: border-box;
     margin: auto;
     margin-bottom: 8px;
     border: 1.5px solid rgb(11, 154, 167);
     border-radius: 6px;
+    position: relative; /* 로고(h2) 기준 */
+    top: 30px; 
 }
 
 input:focus {
     border: 2px solid rgb(0, 53, 89);
 }
 
-button {
-    width: 60%;
+#btn-login {    /* 로그인 버튼 */
+    width: 500px;
+    height: 50px;
     display: block;
-    margin: 32px auto;
-    padding: 16px 80px;
+    margin: 20px auto;
+    /* padding: 16px 80px; */
+    position: relative;  /* 구조상 부모요소(pw입력박스) 기준으로 position 값 지정 */
+    top: 45px;
+    /* bottom: 20px; */
     border-radius: 6px;
     border: 1.5px solid rgb(11, 154, 167);
     background-color:  rgb(11, 154, 167);
@@ -60,19 +69,19 @@ button:hover {
     color: rgb(55, 196, 170);
 } */
 
-#a {
+#a-find {
     margin: auto;
     text-align: center;
     padding-top: 32px;
     font-size: 16px;
 }
 
-.a {
+.a-find {
     text-decoration: none;
     color: gray;
     padding: 16px;
 }
 
-.a:hover {
+.a-find:hover {
     color: rgb(0, 53, 89);
 }

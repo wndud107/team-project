@@ -8,39 +8,45 @@ ul {
     padding: 0;
 }
 
-header {
+header {    
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 64px;
-    /* position: absolute; */
-    width: 100%;
+    /* padding: 8px 64px; */
+    width: auto;
+    height: 100px;
     box-sizing: border-box;
     margin:0;
     border-bottom: 1px solid rgb(55, 196, 170);
 }
 
-#logo a {
+#logo {
     padding: 0.5px;
     color: rgb(0, 53, 89);
     text-shadow: 1px 1px 2px rgb(0,0,0,0.2);
-    font-size: 64px;
-    font-weight: 900;
+    /* font-size: 40px;
+    font-weight: 900; */
     text-decoration: none;
+    width: 370px;
+    height:200px;
+    position: relative;
+    left: 10px;
 }
+
 
 header ul {
     display: flex; 
 }
 
 header li {
-    margin: 0 8px;
+    margin: 0 8px
 }
 
-header a {
+.nav {         /* 상단 네비게이션 */
     color: rgb(11, 154, 167);
     text-decoration: none;
-    font-size: 24px;
+    font-size: 20px;
     padding: 16px;
     text-shadow: 1px 1px 2px rgb(0,0,0,0.2);
 }
+

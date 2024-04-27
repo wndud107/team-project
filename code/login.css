@@ -19,7 +19,7 @@ form {    /* 로그인 박스 전체 */
 }
 
 form input {   /* 아이디, 비밀번호 입력 박스 */
-    display: block;
+    /* display: block; */
     width: 300px;
     height: 35px;
     padding: 20px 20px;
@@ -30,7 +30,8 @@ form input {   /* 아이디, 비밀번호 입력 박스 */
     border: 1.5px solid rgb(11, 154, 167);
     border-radius: 6px;
     position: relative; /* 로고(h2) 기준 */
-
+    text-align: left;
+    padding-left: 40px;
 }
 
 input:focus {      
@@ -40,7 +41,7 @@ input:focus {
 #btn-login {    /* 로그인 버튼 */
     width: 300px;
     height: 40px;
-    display: block;
+    /* display: block; */
     margin: 0 auto;
     /* padding: 16px 80px; */
     position: relative;  /* 구조상 부모요소(pw입력박스) 기준으로 position 값 지정 */
@@ -49,7 +50,7 @@ input:focus {
     border-radius: 6px;
     border: 1.5px solid rgb(11, 154, 167);
     background-color:  rgb(11, 154, 167);
-    font-size: 24px;
+    font-size: 18px;
     color: white;
 }
 
@@ -59,24 +60,11 @@ button:hover {
     color: rgb(0, 53, 89);
 }
 
-/* 
-#join {
-    font-size: 1.2rem;
-    text-decoration: none;
-    color: rgb(0, 53, 89);
-    padding:0;
-    margin: 0;
-}
-
-#join:hover {
-    color: rgb(55, 196, 170);
-} */
-
 #a-find-total {    /* 비밀번호 찾기 | 아이디 찾기 | 회원가입 */
     margin: auto;
     text-align: center;
     padding-top: 32px;
-    font-size: 16px;
+    font-size: 15px;
     position: relative;
     top: 110px;
 }
@@ -89,4 +77,12 @@ button:hover {
 
 .a-find:hover {
     color: rgb(0, 53, 89);
+}
+
+svg {
+    position: relative;
+    left: 35px;
+    top: 3px;
+    z-index: 9999;
+    color: rgb(78, 77, 77);
 }

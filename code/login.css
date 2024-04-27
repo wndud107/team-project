@@ -1,48 +1,50 @@
-h2 {
+h2 {  /* 로그인 박스 안 로고 */
     font-family : 'Oleo Script Swash Caps', sans-serif;
     text-align: center;
-    font-size: 40px;
+    font-size: 35px;
     position: relative;
-    top: 30px;
 }
 
 form {    /* 로그인 박스 전체 */
-    margin: auto;
-    margin-top: 200px;
-    width: 700px;
-    height: 400px;
-    padding: 16px;
+    margin: 0 auto;
+    /* margin-top: 200px; */
+    width: 500px;
+    height: 280px;
+    padding: 10px;
     border: 1px solid rgb(0, 53, 89);
     border-radius: 12px;
     text-align: center;
+    position: relative;
+    top: 120px;
 }
 
 form input {   /* 아이디, 비밀번호 입력 박스 */
     display: block;
-    width: 400px;
+    width: 300px;
+    height: 35px;
     padding: 20px 20px;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     box-sizing: border-box;
-    margin: auto;
+    margin: 0 auto;
     margin-bottom: 8px;
     border: 1.5px solid rgb(11, 154, 167);
     border-radius: 6px;
     position: relative; /* 로고(h2) 기준 */
-    top: 30px; 
+
 }
 
-input:focus {
+input:focus {      
     border: 2px solid rgb(0, 53, 89);
 }
 
 #btn-login {    /* 로그인 버튼 */
-    width: 500px;
-    height: 50px;
+    width: 300px;
+    height: 40px;
     display: block;
-    margin: 20px auto;
+    margin: 0 auto;
     /* padding: 16px 80px; */
     position: relative;  /* 구조상 부모요소(pw입력박스) 기준으로 position 값 지정 */
-    top: 45px;
+    top: 8px;
     /* bottom: 20px; */
     border-radius: 6px;
     border: 1.5px solid rgb(11, 154, 167);
@@ -70,11 +72,13 @@ button:hover {
     color: rgb(55, 196, 170);
 } */
 
-#a-find {
+#a-find-total {    /* 비밀번호 찾기 | 아이디 찾기 | 회원가입 */
     margin: auto;
     text-align: center;
     padding-top: 32px;
     font-size: 16px;
+    position: relative;
+    top: 110px;
 }
 
 .a-find {

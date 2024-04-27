@@ -1,6 +1,6 @@
-body {
+/* body {
     font-family : 'Oleo Script Swash Caps', sans-serif;
-}
+} */
 
 ul {
     list-style: none;
@@ -14,23 +14,34 @@ header {
     align-items: center;
     /* padding: 8px 64px; */
     width: auto;
-    height: 100px;
+    height: 80px;
     box-sizing: border-box;
     margin:0;
     border-bottom: 1px solid rgb(55, 196, 170);
 }
 
-#logo {
-    padding: 0.5px;
-    color: rgb(0, 53, 89);
-    text-shadow: 1px 1px 2px rgb(0,0,0,0.2);
+#logo-img{
     /* font-size: 40px;
     font-weight: 900; */
     text-decoration: none;
-    width: 370px;
-    height:200px;
+    width: 55px;
+    height:55px;
     position: relative;
-    left: 10px;
+    top: 17px;
+    bottom: 10px;
+
+}    
+
+.logo-text{
+    font-family : 'Oleo Script Swash Caps', sans-serif;
+    padding: 0.5px;
+    color: rgb(0, 53, 89);
+    text-shadow: 1px 1px 2px rgb(0,0,0,0.2);
+    text-decoration: none;
+    font-size : 35px;
+    position: relative;
+    bottom: 10px;
+    
 }
 
 
@@ -49,4 +60,3 @@ header li {
     padding: 16px;
     text-shadow: 1px 1px 2px rgb(0,0,0,0.2);
 }
-

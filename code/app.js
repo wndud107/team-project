@@ -1,5 +1,3 @@
-// app.js
-
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -7,10 +5,8 @@ const bodyParser = require('body-parser');
 // 사용자 데이터를 저장하기 위한 가상의 데이터베이스
 let users = [];
 
-// 정적 파일을 제공하기 위해 static 미들웨어를 사용합니다.
 app.use(express.static('public'));
 
-// POST 요청의 body를 파싱하기 위한 미들웨어를 추가합니다.
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // 로그인 페이지로 이동하는 라우트
@@ -42,7 +38,7 @@ app.post('/join', (req, res) => {
   res.send('회원가입이 완료되었습니다!');
 });
 
-// 서버를 3000 포트에서 시작합니다.
+// 서버를 3000 포트에서 시작
 app.listen(3000, () => {
   console.log('서버가 3000번 포트에서 실행 중입니다.');
 });

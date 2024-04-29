@@ -1,35 +1,48 @@
-@font-face {
-    font-family: 'BMDOHYEON';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMDOHYEON.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
 body {
     text-align: center;
 }
 
 fieldset {
-    width: 60%;
+    width: 700px;
     margin: auto;
     margin-top: 80px;
     border-radius: 6px;
 }
+
+form {  /* 회원가입 박스 */
+    margin: 0 auto;
+    /* margin-top: 200px; */
+    width: 450px;
+    height: 455px;
+    padding: 10px;
+    border: 1px solid rgb(0, 53, 89);
+    border-radius: 12px;
+    text-align: center;
+    position: relative;
+    top: 70px;
+}
+
 
 legend {
     text-align: center;
     font-size: 32px;
 }
 
-input {
+.input-join-field{
+    margin-top: 0px;
+}
+
+input {   /* 입력란들 */
     font:inherit;
     display: block;
-    margin: 24px auto;
-    width: 80%;
-    padding: 14px;
+    margin: 10px auto;
+    margin-top: 15px ;  
+    width: 300px;
+    padding: 12px;
     border: 2px solid #ccc;
     border-radius: 6px;
 }
+
 
 input::placeholder {
     font-size: 16px;
@@ -38,7 +51,7 @@ input::placeholder {
 #select-gender {
     display: flex;
     justify-content: center;
-    width: 80%;
+    width: 80px;
     margin: auto;   
 }
 
@@ -60,6 +73,7 @@ input::placeholder {
     border: 2px solid #ccc;
     border-radius: 5px;
     margin: 0 8px; /* Add some space between each button */
+    font-family: 'BMDOHYEON';
 }
 
 .select-gender input[type="radio"] + label {
@@ -73,8 +87,8 @@ input::placeholder {
 }
 
 button {
-    font-family: 'BMDOHYEON';
     margin: 128px auto;
+    margin-bottom:0;
     padding: 20px 96px;
     font-size: 16px;
     color: white;
@@ -87,4 +101,16 @@ button:hover {
     background-color: rgb(55, 196, 170);
     border: 1px solid rgb(55, 196, 170);
     border-radius: 6px;
+}
+
+#return_to_login {
+    display: block;
+    text-decoration: none;
+    color: gray;
+    margin: 20px;
+    padding: 0;
+}
+
+#return_to_login:hover {
+    color: rgb(0, 53, 89);
 }

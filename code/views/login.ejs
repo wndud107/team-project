@@ -52,6 +52,13 @@
             <span> | </span>
             <a id="a-join" href="/join" class="a-find">회원가입</a>      
         </div>
+
+        <% if (message) { %>
+            <div style="text-align: center; margin-top: 40px;">
+                <p style="color: red; font-size: 12px;"><%= message %></p>
+            </div>
+        <% } %>
+        
     </main>
   </body>
 </html>

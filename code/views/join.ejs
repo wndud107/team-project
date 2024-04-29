@@ -5,46 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-    href="https://fonts.googleapis.com/css2?family=Fira+Sans&family=Oleo+Script+Swash+Caps:wght@400;700&family=Oswald:wght@700&family=Roboto:wght@400;900&display=swap"
-    rel="stylesheet"
-    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans&family=Oleo+Script+Swash+Caps:wght@400;700&family=Oswald:wght@700&family=Roboto:wght@400;900&display=swap" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans&family=Noto+Sans+KR:wght@100..900&family=Oleo+Script+Swash+Caps:wght@400;700&family=Oswald:wght@700&family=Roboto:wght@400;900&display=swap" rel="stylesheet">
     <title>Healancaler</title>
-    <link rel="stylesheet" href="shared.css">
-    <link rel="stylesheet" href="join.css">
+    <link rel="stylesheet" href="/styles/shared.css">
+    <link rel="stylesheet" href="/styles/join.css">
   </head>
   <body>
     <header>
-        <div id="logo">
-            <a href="index.html">Healancaler</a>
+        <div>
+            <a href="index.html" class="logo-text"><img src="/logo_icon.png" alt="" id="logo-img">Healancaler</a>
         </div>
             <nav>
-                <ul id="navi">
-                    <li><a href="">다이어리</a></li>
-                    <li><a href="">커뮤니티</a></li>
-                    <li><a href="">운동법</a></li>
-                    <li><a href="">로그인</a></li>
+                <ul>
+                    <li><a href="" class="nav">다이어리</a></li>
+                    <li><a href="" class="nav">커뮤니티</a></li>
+                    <li><a href="" class="nav">운동법</a></li>
+                    <!-- <li><a href="">로그인</a></li> -->
                 </ul>
             </nav>
     </header>
 
     <main>
-      <fieldset>
-        <legend>Healancaler</legend>
         <form action="" method="GET">
-          <section>
-              <input type="email" name="join-email" placeholder="Id" required>
-              <input type="password" name="join-password" placeholder="Password" required>
-          </section>
-
-          <hr>
-
-          <section>
-            <input type="text" name="join-name" placeholder="Name" required>
-            <input type="text" name="join-birth" placeholder="YYYY/MM/DD" required>
-            <input type="tel" name="join-telnumber" placeholder="Tel number" required>
-          </section>
-
+          <span class="input-join-field">
+            <section>
+                <input type="email" name="join-id" placeholder="아이디" required>
+                <input type="password" name="join-password" placeholder="비밀번호" required>
+            </section>
+            <hr>
+            <section>
+              <input type="text" name="join-name" placeholder="이름" required>
+              <input type="text" name="join-birth" placeholder="생년월일 8자리" required>
+              <input type="tel" name="join-telnumber" placeholder="전화번호" required>
+              <input type="text" name="join-email" placeholder="이메일" required>
+            </section>
+          </span>
           <section id="select-gender">
             <div class="select-gender">
                 <input type="radio" name="join-gender" id="male" value="male">
@@ -56,9 +54,10 @@
             </div>
           </section>               
         </form>
-      </fieldset>
-
       <button name="join">회원가입</button>
+
+      <a href="/login.html" id="return_to_login">로그인하러 가기</a>
+
     </main>
   </body>
 </html>

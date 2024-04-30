@@ -1,116 +1,103 @@
-body {
-    text-align: center;
+div {
+    display: flex;
+    align-items: center;
 }
 
-fieldset {
-    width: 700px;
-    margin: auto;
-    margin-top: 80px;
-    border-radius: 6px;
+#id_pw_join,#detail_join {
+    width: 500px;
+    border:2px solid lightgray;
+    border-radius: 5px;
+    margin: 50px auto;
 }
 
-form {  /* 회원가입 박스 */
-    margin: 0 auto;
-    /* margin-top: 200px; */
-    width: 450px;
-    height: 455px;
-    padding: 10px;
-    border: 1px solid rgb(0, 53, 89);
-    border-radius: 12px;
-    text-align: center;
-    position: relative;
-    top: 70px;
+.basic_join,.detail_join {
+    width: 90%;
+    margin: 5px auto;
+    padding: 15px 0;
+    border: 0;
 }
 
-
-legend {
-    text-align: center;
-    font-size: 32px;
+.basic_join:focus,
+.detail_join:focus {
+    outline: none; 
+    color: rgb(11, 154, 167);
 }
 
-.input-join-field{
-    margin-top: 0px;
-}
-
-input {   /* 입력란들 */
+input[placeholder] {
     font:inherit;
-    display: block;
-    margin: 10px auto;
-    margin-top: 15px ;  
-    width: 300px;
-    padding: 12px;
-    border: 2px solid #ccc;
-    border-radius: 6px;
+    font-size: 20px;
 }
 
-
-input::placeholder {
-    font-size: 16px;
+.img_join {
+    width: 25px;
+    padding: 10px;
+    margin: 0;
 }
 
 #select-gender {
     display: flex;
     justify-content: center;
-    width: 80px;
-    margin: auto;   
+    align-items: center;
+    width: 100%;
 }
 
-.select-gender {
-    display: flex;
-    justify-content: center; /* Center the items horizontally */
-    align-items: center; /* Center the items vertically */
-    margin-bottom: 16px;
-}
-
-.select-gender input[type="radio"] {
-    display: none;
-}
-
-.select-gender label {
+.gender-label {
+    flex: 1;
     display: inline-block;
     cursor: pointer;
-    padding: 8px 16px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    margin: 0 8px; /* Add some space between each button */
-    font-family: 'BMDOHYEON';
+    text-align: center;
+    padding: 10px 0;
+    border: 1px solid lightgray;
 }
 
-.select-gender input[type="radio"] + label {
-    margin-left: 0; /* Remove margin from the first button */
-}
-
-.select-gender input[type="radio"]:checked + label {
-    background-color: rgb(11, 154, 167);
-    color: white;
+.gender-label:hover {
+    color: rgb(11, 154, 167);
+    font-weight: 600;
     border-color: rgb(11, 154, 167);
 }
 
+#select-gender input[type="radio"] {
+    display: none; 
+}
+
+#select-gender input[type="radio"]:checked + label {
+    /* 선택된 상태의 label 스타일 */
+    font-weight: 600;
+    color: rgb(11, 154, 167);
+    border-color: rgb(11, 154, 167);
+}
+
+hr {
+    margin:0;
+    padding:0;
+}
+
 button {
-    margin: 128px auto;
-    margin-bottom:0;
-    padding: 20px 96px;
-    font-size: 16px;
+    margin-top: 50px;
+    font:inherit;
+    font-weight: 700;
     color: white;
-    background-color: rgb(11, 154, 167);
-    border: 1px solid rgb(11, 154, 167);
     border-radius: 6px;
+    border: 1px solid lightgray;
+    background-color: rgb(55, 196, 170);
+    padding: 15px 30px;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
 }
 
 button:hover {
-    background-color: rgb(55, 196, 170);
-    border: 1px solid rgb(55, 196, 170);
-    border-radius: 6px;
+    background-color: rgb(11, 154, 167);
+    color: white;
+    border-color:  rgb(55, 196, 170);  
+    box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
 }
 
-#return_to_login {
-    display: block;
+.return_to_login {
+    margin-top: 10px;
     text-decoration: none;
-    color: gray;
-    margin: 20px;
-    padding: 0;
+    display: block;
+    color: rgb(151, 151, 151);
 }
 
-#return_to_login:hover {
-    color: rgb(0, 53, 89);
+.return_to_login:hover {
+    color: rgb(11, 154, 167);
 }

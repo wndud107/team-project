@@ -10,8 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans&family=Noto+Sans+KR:wght@100..900&family=Oleo+Script+Swash+Caps:wght@400;700&family=Oswald:wght@700&family=Roboto:wght@400;900&display=swap" rel="stylesheet">
     <title>Healancaler</title>
-    <link rel="stylesheet" href="shared.css">
-    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="/shared.css">
+    <link rel="stylesheet" href="/login.css">
   </head>
   <body>
     <header>
@@ -28,15 +28,15 @@
             </nav>
     </header>
     <main>
-        <form action="" class="input-group">
+        <form action="/login" class="input-group" method="post">
             <img src="어두운달력.png" alt="">
             <section >
                 <h2>Healancaler</h2>
                 <div>
-                        <input type="text" name="user-id" class="input-field" placeholder="아이디" id="id" required>
+                        <input type="text" name="userid" class="input-field" placeholder="아이디" id="id" required>
                 </div>
                 <div> 
-                    <input type="password" name="user-pw" class="input-field" placeholder="비밀번호" id="pw" required>
+                    <input type="password" name="userpw" class="input-field" placeholder="비밀번호" id="pw" required>
                 </div>
             </section>
 
@@ -50,10 +50,15 @@
             <span> | </span>
             <a href="" class="a-find">아이디 찾기</a>
             <span> | </span>
-            <a id="a-join" href="join" class="a-find">회원가입</a>      
+            <a id="a-join" href="/join" class="a-find">회원가입</a>      
         </div>
+
+        <% if (message) { %>
+            <div style="text-align: center; margin-top: -22.3px;">
+                <p style="color: red; font-size: 9px;"><%= message %></p>
+            </div>
+        <% } %>
+        
     </main>
   </body>
 </html>
-
-

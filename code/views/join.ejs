@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans&family=Oleo+Script+Swash+Caps:wght@400;700&family=Oswald:wght@700&family=Roboto:wght@400;900&display=swap" />
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans&family=Oleo+Script+Swash+Caps:wght@400;700&family=Oswald:wght@700&family=Roboto:wght@400;900&display=swap" rel="stylesheet"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans&family=Noto+Sans+KR:wght@100..900&family=Oleo+Script+Swash+Caps:wght@400;700&family=Oswald:wght@700&family=Roboto:wght@400;900&display=swap" rel="stylesheet">
     <title>Healancaler</title>
-    <link rel="stylesheet" href="join.css">
     <link rel="stylesheet" href="shared.css">
-  </head>
-  <body>
+    <link rel="stylesheet" href="join1.css">
+</head>
+<body>
     <header>
         <div>
             <a href="index.html" class="logo-text"><img src="/logo_icon.png" alt="" id="logo-img">Healancaler</a>
@@ -22,41 +22,66 @@
                 <ul>
                     <li><a href="" class="nav">다이어리</a></li>
                     <li><a href="" class="nav">커뮤니티</a></li>
-                    <li><a href="" class="nav">운동법</a></li>
+                    <li><a href="board" class="nav">운동법</a></li>
                     <!-- <li><a href="">로그인</a></li> -->
                 </ul>
             </nav>
     </header>
-
     <main>
-        <form action="/join" method="post">
-          <span class="input-join-field">
-            <section>
-                <input type="text" name="joinId" placeholder="아이디" required>
-                <input type="password" name="joinPassword" placeholder="비밀번호" required>
-            </section>
+        <form action="" id="id_pw_join">
+            <div class="img_placeholder">
+                <img src="person.svg" alt="person" class="img_join">
+                <input type="text" name="join-id" placeholder="아아디" class="basic_join" id="id_join">
+            </div>
             <hr>
-            <section>
-              <input type="text" name="joinName" placeholder="이름" required>
-              <input type="text" name="joinBirth" placeholder="생년월일 8자리" required>
-              <input type="tel" name="joinTelnumber" placeholder="전화번호" required>
-              <input type="text" name="joinEmail" placeholder="이메일" required>
-            </section>
-          </span>
-          <section id="select-gender">
-            <div class="select-gender">
-                <input type="radio" name="join-gender" id="male" value="male">
-                <label for="male">Male</label>
+            <div class="img_placeholder">
+                <img src="lock.svg" alt="lock" class="img_join">
+                <input type="password" name="join-pw" placeholder="비밀번호" class="basic_join" id="pw_join">
             </div>
-            <div class="select-gender">
-                <input type="radio" name="join-gender" id="female" value="female">
-                <label for="female">Female</label>
-            </div>
-          </section>   
-          <button name="join" type="submit">회원가입</button>
-          <a href="login" id="return_to_login">로그인하러 가기</a>
         </form>
 
+        <p></p>
+        <!-- 경고문 -->
+
+        <form action="" id="detail_join">
+            <div>
+                <img src="person.svg" alt="person" class="img_join">
+                <input type="text" name="join-name" placeholder="이름" class="detail_join" id="name_join">
+            </div>
+            <hr>
+            <div>
+                <img src="calendar4-event.svg" alt="person" class="img_join">
+                <input type="text" name="join-birth" placeholder="생년월일 8자리" class="detail_join" id="birth_join">
+            </div>
+            <hr>
+            <div>
+                <img src="phone.svg" alt="person" class="img_join">
+                <input type="text" name="join-birth" placeholder="전화번호" class="detail_join" id="telnumber_join">
+            </div>
+            <hr>
+            <div id="select-gender">
+                <input type="radio" name="join-gender" id="join-man">
+                <label for="join-gender" class="gender-label">남자</label>
+                <input type="radio" name="join-gender" id="join-woman">
+                <label for="join-gender" class="gender-label">여자</label>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const genderLabels = document.querySelectorAll('.gender-label');
+                    genderLabels.forEach(function(label) {
+                        label.addEventListener('click', function() {
+                        const radioButton = label.previousElementSibling;
+                        radioButton.checked = true;
+                        });
+                    });
+                });
+            </script>
+
+        </form>
+
+        <button>회원가입</button>
+        <a href="login" class="return_to_login">로그인하러 가기</a>
     </main>
-  </body>
+</body>
 </html>

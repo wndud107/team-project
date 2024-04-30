@@ -29,18 +29,18 @@
     </header>
 
     <main>
-        <form action="" method="GET">
+        <form action="/join" method="post">
           <span class="input-join-field">
             <section>
-                <input type="email" name="join-id" placeholder="아이디" required>
-                <input type="password" name="join-password" placeholder="비밀번호" required>
+                <input type="text" name="joinId" placeholder="아이디" required>
+                <input type="password" name="joinPassword" placeholder="비밀번호" required>
             </section>
             <hr>
             <section>
-              <input type="text" name="join-name" placeholder="이름" required>
-              <input type="text" name="join-birth" placeholder="생년월일 8자리" required>
-              <input type="tel" name="join-telnumber" placeholder="전화번호" required>
-              <input type="text" name="join-email" placeholder="이메일" required>
+              <input type="text" name="joinName" placeholder="이름" required>
+              <input type="text" name="joinBirth" placeholder="생년월일 8자리" required>
+              <input type="tel" name="joinTelnumber" placeholder="전화번호" required>
+              <input type="text" name="joinEmail" placeholder="이메일" required>
             </section>
           </span>
           <section id="select-gender">
@@ -52,11 +52,10 @@
                 <input type="radio" name="join-gender" id="female" value="female">
                 <label for="female">Female</label>
             </div>
-          </section>               
+          </section>   
+          <button name="join" type="submit">회원가입</button>
+          <a href="login" id="return_to_login">로그인하러 가기</a>
         </form>
-      <button name="join">회원가입</button>
-
-      <a href="login" id="return_to_login">로그인하러 가기</a>
 
     </main>
   </body>

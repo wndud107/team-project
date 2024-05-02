@@ -51,13 +51,13 @@ form input[text] {
 }
 
 #id {
-    background-image: url("/images/person.svg");
+    background-image: url("person.svg");
     background-repeat: no-repeat;
     background-position: 10px center;
 }
 
 #pw {
-    background-image: url("/images/lock.svg");
+    background-image: url("lock.svg");
     background-repeat: no-repeat;
     background-position: 10px center;
 }

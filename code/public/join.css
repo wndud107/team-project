@@ -1,24 +1,36 @@
+.join_calendar {
+    position: absolute;
+    width: 50%;
+    margin: auto;
+}
+
+
 div {
     display: flex;
     align-items: center;
 }
 
-#id-pw-join,#detail-join {
-    width: 500px;
+#id_pw_join,#detail_join {
+    position: relative;
+    width: 350px;
     border:2px solid lightgray;
     border-radius: 5px;
     margin: 50px auto;
 }
 
-.basic-join,.detail-join {
+#id_pw_join {
+    margin-top: 200px;
+}
+
+.basic_join,.detail_join {
     width: 90%;
     margin: 5px auto;
-    padding: 15px 0;
+    padding: 10px 0;
     border: 0;
 }
 
-.basic-join:focus,
-.detail-join:focus {
+.basic_join:focus,
+.detail_join:focus {
     outline: none; 
     color: rgb(11, 154, 167);
 }
@@ -28,7 +40,7 @@ input[placeholder] {
     font-size: 20px;
 }
 
-.img-join {
+.img_join {
     width: 25px;
     padding: 10px;
     margin: 0;

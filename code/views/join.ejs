@@ -28,65 +28,66 @@
             </nav>
     </header>
     <main>
-
-        <img class="join_calendar" src="회원가입달력.png" alt="">
-        <form action="" id="id_pw_join">
-            <div class="img_placeholder">
-                <img src="/person.svg" alt="person" class="img_join">
-                <input type="text" name="join-id" placeholder="아이디" class="basic_join" id="id_join">
-            </div>
-            <hr>
-            <div class="img_placeholder">
-                <img src="/lock.svg" alt="lock" class="img_join">
-                <input type="password" name="join-pw" placeholder="비밀번호" class="basic_join" id="pw_join">
-            </div>
-        </form>
-
-        <p></p>
-        <!-- 경고문 -->
-
-        <form action="" id="detail_join">
-            <div>
-                <img src="/person.svg" alt="person" class="img_join">
-                <input type="text" name="join-name" placeholder="이름" class="detail_join" id="name_join">
-            </div>
-            <hr>
-            <div>
-                <img src="/calendar4-event.svg" alt="person" class="img_join">
-                <input type="date" name="join-birth" placeholder="생년월일 8자리" class="detail_join" id="birth_join">
-            </div>
-            <hr>
-            <div>
-                <img src="/phone.svg" alt="person" class="img_join">
-                <input type="text" name="join-birth" placeholder="전화번호" class="detail_join" id="telnumber_join">
-            </div>
-            <hr>
-            <div id="select-gender">
-                <input type="radio" name="join-gender" id="join-man">
-                <label for="join-gender" class="gender-label">남자</label>
-                <input type="radio" name="join-gender" id="join-woman">
-                <label for="join-gender" class="gender-label">여자</label>
-            </div>
-
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const genderLabels = document.querySelectorAll('.gender-label');
-                    genderLabels.forEach(function(label) {
-                        label.addEventListener('click', function() {
-                        const radioButton = label.previousElementSibling;
-                        radioButton.checked = true;
+        <section>
+            <img class="join_calendar" src="회원가입달력.png" alt="">
+            <form action="" id="id_pw_join">
+                <div class="img_placeholder">
+                    <img src="images/person.svg" alt="person" class="img_join">
+                    <input type="text" name="join-id" placeholder="아이디" class="basic_join" id="id_join">
+                </div>
+                <hr>
+                <div class="img_placeholder">
+                    <img src="images/lock.svg" alt="lock" class="img_join">
+                    <input type="password" name="join-pw" placeholder="비밀번호" class="basic_join" id="pw_join">
+                </div>
+            </form>
+    
+            <p></p>
+            <!-- 경고문 -->
+    
+            <form action="" id="detail_join">
+                <div>
+                    <img src="images/person.svg" alt="person" class="img_join">
+                    <input type="text" name="join-name" placeholder="이름" class="detail_join" id="name_join">
+                </div>
+                <hr>
+                <div>
+                    <img src="images/calendar4-event.svg" alt="person" class="img_join">
+                    <input type="date" name="join-birth" placeholder="생년월일 8자리" class="detail_join" id="birth_join">
+                </div>
+                <hr>
+                <div>
+                    <img src="images/phone.svg" alt="person" class="img_join">
+                    <input type="text" name="join-birth" placeholder="전화번호" class="detail_join" id="telnumber_join">
+                </div>
+                <hr>
+                <div id="select-gender">
+                    <input type="radio" name="join-gender" id="join-man">
+                    <label for="join-gender" class="gender-label">남자</label>
+                    <input type="radio" name="join-gender" id="join-woman">
+                    <label for="join-gender" class="gender-label">여자</label>
+                </div>
+    
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const genderLabels = document.querySelectorAll('.gender-label');
+                        genderLabels.forEach(function(label) {
+                            label.addEventListener('click', function() {
+                            const radioButton = label.previousElementSibling;
+                            radioButton.checked = true;
+                            });
                         });
                     });
-                });
-            </script>
-
-        </form>
-        <div>
-            <button class="btn-join">회원가입</button>
-        </div>
-        <div>
-            <a href="login" class="return-to-login">로그인하러 가기</a>
-        </div>
+                </script>
+    
+            </form>
+            <div>
+                <button class="btn-join">회원가입</button>
+            </div>
+            <div>
+                <a href="login" class="return-to-login">로그인하러 가기</a>
+            </div>
+        </section>
     </main>
 </body>
 </html>

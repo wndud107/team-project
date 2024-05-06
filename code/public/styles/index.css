@@ -53,7 +53,7 @@ span {
 
 #main-2 {
     display: flex;
-    justify-content:space-evenly;
+    justify-content:center;
     /* background: linear-gradient(to bottom, #ffffff, #0b99a9); */
     /* background: inherit; */
     align-items: center;
@@ -62,6 +62,7 @@ span {
 #main-2-text {
     color: black;
     text-align: right;
+    margin-left: 50px;
 }
 
 .main-2-text {
@@ -74,14 +75,16 @@ span {
     font-size: 20px;
 }
 
+#main-2-img {
+    width: 600px;
+}
+
 #main-3 {
-    /* background-color: #0b99a9; */
-    /* background: linear-gradient(to bottom, #0b99a9, #ffffff); */
-    /* background: inherit; */
     display: grid; /* Grid 레이아웃을 사용하여 요소 배치 */
     grid-template-columns: 30% 30%; /* 두 개의 열로 나누기 */
     justify-content: center; /* 좌우 중앙 정렬 */
     align-items: center; /* 상하 중앙 정렬 */
+    grid-column-gap: 150px;
 }
 
 .main-3-text {
@@ -98,6 +101,7 @@ span {
 
 .main-3-img {
     object-fit: cover;
+    width: 600px;
 }
 
 #main-4 {
@@ -123,8 +127,7 @@ span {
 }
 
 #main-4-img {
-    width: 40%;
-    overflow: hidden;
-    object-fit: fill;
-    
+    margin-top: 200px;
+    width: 800px;    
+    height: 600px;
 }

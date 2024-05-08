@@ -1,0 +1,48 @@
+#img {
+    width : 416px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    margin-top: 110px;
+}
+
+#remainingElement {
+    position: relative;
+    margin-top: 160px;
+}
+
+#remainingElement h2 {
+    font-family : 'Oleo Script Swash Caps';
+    font-size: 35px;
+    font-weight: bold;
+    margin-bottom: 35px;
+}
+
+#remainingElement p {
+    font-size : 20px;
+    margin:0;
+}
+
+#find-id{
+    color: #0b99a9;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+#remainingElement a {
+    display: block;
+    width: 150px;
+    margin: 20px auto;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 6px;
+    border: 1px solid #0b99a9;
+    background-color: #0b99a9;
+    padding: 12px 27px;
+    box-shadow: 0 4px 3px rgba(0, 0, 0, 0.15); /* 그림자 추가 */
+}
+
+#remainingElement a:hover {
+    border: 1px solid rgb(55, 196, 170);
+    background-color: rgb(55, 196, 170);
+}

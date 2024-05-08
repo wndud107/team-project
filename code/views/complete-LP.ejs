@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('includes/head') %>
+    <link rel="stylesheet" href="styles/complete-LP.css">
+</head>
+<body>
+    <%- include('includes/header') %>
+    <main>
+        <img id="img" src="어두운달력.png" alt="">
+        <div id="remainingElement">
+            <h2>Healancaler</h2>
+            <p>회원님의 비밀번호는 </p>
+            <p id="find-pw"><%= userPw %></p>
+            <p>입니다.</p>
+            <a href="login">로그인하러 가기</a>
+        </div>
+    </main>
+</body>
+</html>

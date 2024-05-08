@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <%- include('includes/head') %>
+    <link rel="stylesheet" href="styles/looking-for-pw.css">
+    <script src="app.js" defer></script>
+</head>
+  <body>
+    <%- include('includes/header') %>
+    <main>
+        <form action="/looking-for-pw" class="input-group" method="post">
+            <img src="어두운달력.png" alt="">
+            <section >
+                <h2>Healancaler</h2>
+                <div> 
+                    <input type="text" name="userid" class="input-field" placeholder="아이디" id="userid" required>
+                </div>
+                <div>
+                    <input type="text" name="username" class="input-field" placeholder="이름" id="username" required>
+                </div>
+            </section>
+
+            <% if (error) { %>
+                <p class="error-message"><%= error %></p>
+            <% } %>
+
+            <section>
+                <button id="btn-login">비밀번호 찾기</button>
+            </section>
+        </form>
+
+        <div id="a-find-total">
+            <a href="looking-for-id" class="a-find">아이디 찾기</a>
+            <span> | </span>
+            <a href="login" class="a-find">로그인</a>
+            <span> | </span>
+            <a id="a-join" href="/join" class="a-find">회원가입</a>      
+        </div>
+        
+    </main>
+  </body>
+</html>

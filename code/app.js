@@ -12,6 +12,7 @@ app.set('view engine','ejs');
 
 // 정적 파일을 제공하기 위해 static 미들웨어 사용
 app.use(express.static('public'));
+
 // POST 요청의 body를 파싱하기 위한 미들웨어 추가
 app.use(express.urlencoded({ extended: false }));
 
@@ -48,17 +49,14 @@ app.get('/join', function (req, res) {
 
 // 회원가입 요청 처리하는 라우트
 app.post('/join', function (req, res) {
-  const join= req.body; // 필드들을 받아옴
+  const join= req.body;
 
-  // 기존의 join.json 파일을 읽어옴
   const filePath = path.join(__dirname, 'data', 'joins.json');
   const fileData = fs.readFileSync(filePath);
   const storedJoins = JSON.parse(fileData);
 
-  // HTML 폼에서 받아온 데이터를 프로퍼티와 값의 형태로 가지는 객체를 생성하여 추가
   storedJoins.push(join);
 
-  // join.json에 새로운 데이터를 씀
   fs.writeFileSync(filePath, JSON.stringify(storedJoins));
 
   console.log('complete-join으로 리다이렉팅 중...');
@@ -73,22 +71,50 @@ app.get('/test', function(req,res) {
   res.render('test');
 });
 
-app.post('/test', function (req, res) {
-  const test = req.body; // 필드들을 받아옴
+app.get('/looking-for-id', function(req,res) {
+  res.render('looking-for-id', { error: null } );
+});
 
-  // 기존의 join.json 파일을 읽어옴
-  const filePath = path.join(__dirname, 'data', 'tests.json');
+app.post('/looking-for-id', function(req, res) {
+  const { username, usertel } = req.body;
+  const filePath = path.join(__dirname, 'data', 'joins.json');
   const fileData = fs.readFileSync(filePath);
-  const storedJoins = JSON.parse(fileData);
+  const users = JSON.parse(fileData);
 
-  // HTML 폼에서 받아온 데이터를 프로퍼티와 값의 형태로 가지는 객체를 생성하여 추가
-  storedJoins.push(test);
+  const user = users.find(u => u.name_join === username && u.telnumber_join === usertel);
+  
+  if (user) {
+    res.render('complete-LI', { userId: user['id_join'] }); 
+  } else {
+    res.render('looking-for-id', { error: '해당 아이디 또는 이름이 일치하지 않습니다' });
+  }
+});
 
-  // join.json에 새로운 데이터를 씀
-  fs.writeFileSync(filePath, JSON.stringify(storedJoins));
+app.get('/looking-for-pw', function(req,res) {
+  res.render('looking-for-pw', { error: null });
+});
 
-  console.log('complete-join으로 리다이렉팅 중...');
-  res.redirect('complete-join');
+app.post('/looking-for-pw', function(req, res) {
+  const { userid, username } = req.body;
+  const filePath = path.join(__dirname, 'data', 'joins.json');
+  const fileData = fs.readFileSync(filePath);
+  const users = JSON.parse(fileData);
+
+  const user = users.find(u => u.id_join === userid && u.name_join === username);
+  
+  if (user) {
+      res.render('complete-LP', { userPw: user['pw_join'] });
+  } else {
+      res.render('looking-for-pw', { error: '해당 아이디 또는 이름이 일치하지 않습니다' });
+  }
+});
+
+app.get('/complete-LI', function(req,res) {
+  res.render('complete-LI');
+});
+
+app.get('/complete-LP', function(req,res) {
+  res.render('complete-LP');
 });
 
 // 서버를 3000 포트에서 시작

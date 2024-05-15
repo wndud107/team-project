@@ -1,10 +1,33 @@
-.join_calendar {
+ /* 기본 스타일 초기화 */
+ * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+/* 캘린더 이미지 */
+.join_calendar {   
     position: absolute;
     width: 500px;
+    height: 520px;
     left: 50%; /* 부모 요소의 가로 중앙에 위치하기 위해 왼쪽 여백을 50%로 설정 */
     transform: translateX(-50%); /* 이미지의 가로 중앙을 부모 요소의 중앙에 맞춤 */
-    margin: -140px auto; /* 수평 및 수직 가운데 정렬 */
+    margin: 0 auto; /* 수평 및 수직 가운데 정렬 */
     pointer-events: none;
+}
+
+h2 {  /* 로그인 박스 안 로고 */
+    font-family : 'Oleo Script Swash Caps';
+    text-align: center;
+    font-size: 35px;
+    position: relative;
+    top: 100px;
+}
+
+/* 입력 박스 전체 */
+form { 
+    position: relative;
+    top: 90px;
 }
 
 div {
@@ -21,7 +44,7 @@ div {
 }
 
 #id_pw_join {
-    margin-top: 240px;
+    /* margin-top: 160px; */
 }
 
 .basic_join,.detail_join {
@@ -39,11 +62,11 @@ div {
 
 input[placeholder] {
     font:inherit;
-    font-size: 20px;
+    font-size: 18px;
 }
 
 .img_join {
-    width: 25px;
+    /* width: 25px; */
     padding: 10px;
     margin: 0;
 }
@@ -53,6 +76,7 @@ input[placeholder] {
     justify-content: center;
     align-items: center;
     width: 100%;
+
 }
 
 .gender-label {
@@ -60,7 +84,7 @@ input[placeholder] {
     display: inline-block;
     cursor: pointer;
     text-align: center;
-    padding: 10px 0;
+    padding: 8px 0;
     border: 1px solid lightgray;
 }
 
@@ -84,18 +108,21 @@ input[placeholder] {
 hr {
     margin:0;
     padding:0;
+    background:lightgrey;
+    height:2px;
+    border:0;
 }
 
-.btn-join {
-    margin: auto;
-    margin-top: 50px;
+.btn-join {  
+    margin: 0 auto ;
+    margin-top: 55px;
     font:inherit;
     font-weight: 700;
     color: white;
     border-radius: 6px;
     border: 1px solid lightgray;
     background-color: rgb(11, 154, 167);
-    padding: 15px 30px;
+    padding: 10px 40px;
     box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
 }
 
@@ -106,15 +133,15 @@ button:hover {
     box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
 }
 
-
 .return-to-login {
     /* display: block; */
     text-align: center;
     text-decoration: none;
     color: rgb(151, 151, 151);
-    margin: 15px auto;
+    margin: 5px auto;
 }
 
 .return-to-login:hover {
     color: rgb(11, 154, 167);
 }
+

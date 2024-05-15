@@ -1,0 +1,284 @@
+ /* 기본 스타일 초기화 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  font-family: 'Noto Sans Kr';
+}
+
+.year-month{
+  /* margin-top: 40px; */
+  font-family: 'Noto Sans Kr';
+}
+.current-date {
+  position: relative;
+  top: -5px;
+}
+
+
+.icons{
+  position: relative;
+  left: 215px;
+  top: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-month {
+  width: 30px;
+  height: 30px;
+  margin: 0 3px;
+  cursor: pointer;
+  border-radius: 50%;
+  border-color: #0b99a9;
+  background-color: #ffffff;
+}
+
+.bi{
+  position: relative;
+  top: 2px;
+  width: 25px;
+  height: 25px;
+  color: #0b99a9;
+}
+
+.btn-month:hover{
+  background-color: #0b99a944;
+  color: white;
+}
+
+.bi-caret-left {
+  position: relative;
+  right: 1px;
+}
+.bi-caret-right {
+  position: relative;
+  left: 1px;
+}
+
+
+.calendar {
+  /* display: inline; */
+    width: 450px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 25px;
+    border-color: #0b99a9;
+    margin-left: 120px;
+    position: relative;
+    top: 0px;
+  }
+   
+hr {
+    margin:0;
+    padding:0;
+    background:#0b99a9;
+    height:2px;
+    width: 400px;
+    border:0;
+    position: relative;
+    left: -5px;
+}
+
+.calendar .year-month {
+    display: flex;
+    align-items: center;
+    /* justify-content: space-between; */
+    margin-bottom: 30px;
+  }
+
+.calendar .year-month .current-date {
+    font-size: 24px;
+    font-weight: 600;
+    text-align: left;
+  }
+.weeks-days{
+  outline: auto;
+  outline-color: #0b99a9;
+  padding: 5px;
+  position: relative;
+  top: -30px;
+}
+
+
+.weeks-days ul {
+    display: flex;
+    list-style: none;
+    flex-wrap: wrap;
+    text-align: center;
+  }
+.weeks-days .weeks li {
+    font-weight: 500;
+  }
+
+
+.weeks-days ul li {
+    /*#8*/
+    width: calc(100% / 7);
+    /*#9*/
+    position: relative;
+  }
+.weeks-days .days li {
+    /*#10*/
+    z-index: 1;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    cursor: pointer;
+  }
+   
+  /* 현재 달이 아닌 날짜 색 */
+.days li.inactive {
+    color: #aaa;
+  }
+
+
+.days li.active {
+    color: #fff;
+  }
+
+
+.weeks-days .days li::before {
+    position: absolute;
+    content: '';
+    height: 40px;
+    width: 40px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    z-index: -1;
+  }
+
+/* 날짜 선택시  */
+.days li:hover::before {
+    background: #f2f2f2;
+  }
+  
+/* 오늘 날짜 */
+.days li.active::before {
+    background: #0b99a9;
+  }
+
+.weeks {
+    /* margin-top: 10px; */
+    margin-bottom: 5px;
+}
+.current-year {
+  font-size: 22px; /* 연도 크기 */
+  font-weight: 700;
+}
+
+.current-month {
+  font-size: 30px; /* 월 크기 */
+  font-weight: 800;
+  position: relative;
+  top: -5px;
+}
+
+
+/* 달력 버튼만 남기기 */
+input[type="month"] {
+  position: relative;
+  width: 22px; 
+  height: 22px;
+  color: transparent; 
+  background: none; 
+  border: none; 
+}
+
+input[type="month"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+input[type="month"]::-webkit-input-placeholder {
+  color: transparent;
+}
+
+input[type="month"]:focus {
+  outline: none;
+}
+
+#monthPicker{
+  position: relative;
+  top: 10px;
+}
+
+
+
+
+/* 캘린더 오른쪽 영역 */
+.calendar-right {
+  position: absolute;
+  top: 120px;
+  left: 600px;
+  width: 500px;
+  height: 530px;
+  border: 3px;
+  margin-right: 145px;
+}
+
+.kcal {
+  width: 220px;
+  height: 220px;
+  background-color: rgb(255, 255, 255);  
+  border-radius: 5px;
+  outline: auto;
+  outline-color: #e1e1e1;
+}
+.p-kcal{
+  position: absolute;
+  top: 70px;
+  left: 90px;
+  font-size: 60px;
+  font-weight: 700;
+  color: #0b99a9;
+}
+.p-ko-kcal{
+  font-size: 20px;
+  font-weight: 500;
+  position: absolute;
+  top: 15px;
+  left: 65px;
+}
+.p-en-kcal{
+  position: absolute;
+  top: 150px;
+  left: 70px;
+  font-size: 40px;
+  font-weight: 700;
+}
+
+.D-day {
+  position: absolute;
+  top: 0;
+  left: 240px;
+  width: 220px;
+  height: 220px;
+  background-color: rgb(255, 255, 255);  
+  border-radius: 5px;
+  outline: auto;
+  outline-color: #e1e1e1;
+}
+
+.graph {
+  position: absolute;
+  top: 240px;
+  width: 460px;
+  height: 290px;
+  background-color: rgb(255, 255, 255);  
+  border-radius: 5px;
+  outline: auto;
+  outline-color: #e1e1e1;
+}

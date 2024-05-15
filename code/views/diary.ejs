@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('includes/head') %>
+    <link rel="stylesheet" href="styles/shared.css" />
+    <link rel="stylesheet" href="styles/diary.css">
+</head>
+<body>
+     <%- include('includes/header') %>
+    <!-- 캘린더 -->
+    <div class="calendar">
+        <!-- 달력 상단 부분 -->
+        <div class="year-month">
+            <div class="current-date">
+              <span class="current-year"></span>
+              <span class="current-month"></span>
+            </div >
+            <input type="month" id="monthPicker"  /> 
+            <!-- 달력 넘기기 버튼 -->
+            <div class="icons">
+              <span id="prev" class="btn-month btn-left">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left" viewBox="0 0 16 16">
+                <path d="M10 12.796V3.204L4.519 8zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753"/>
+                </svg>
+              </span>
+              <span id="next" class="btn-month btn-right">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right" viewBox="0 0 16 16">
+                <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753"/>
+                </svg>
+              </span>
+            </div>
+        </div>
+        
+        <!-- 달력 부분 -->
+        <div class="weeks-days">
+          <ul class="weeks">
+            <li>일</li>
+            <li>월</li>
+            <li>화</li>
+            <li>수</li>
+            <li>목</li>
+            <li>금</li>
+            <li>토</li>
+          </ul>
+          <hr/>
+          <ul class="days">
+          </ul>
+        </div>
+
+        <script>
+          let months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+          const daysTag = document.querySelector(".days"),
+                currentYearElement = document.querySelector(".current-year"),
+                currentMonthElement = document.querySelector(".current-month"),
+                prevNextIcon = document.querySelectorAll(".icons span"),
+                monthPicker = document.getElementById("monthPicker"),
+                datePicker = document.getElementById("datePicker");
+  
+          // 새로운 날짜, 현재 연도 및 월 가져오기
+          let date = new Date(),
+              currYear = date.getFullYear(),
+              currMonth = date.getMonth(),
+              selectedDate = date.getDate();
+  
+          const renderCalendar = () => {
+              let firstDayofMonth = new Date(currYear, currMonth, 1).getDay(), // 월의 첫 번째 날 가져오기
+                  lastDateofMonth = new Date(currYear, currMonth + 1, 0).getDate(), // 월의 마지막 날짜 가져오기
+                  lastDayofMonth = new Date(currYear, currMonth, lastDateofMonth).getDay(), // 월의 마지막 날 가져오기
+                  lastDateofLastMonth = new Date(currYear, currMonth, 0).getDate(); // 이전 월의 마지막 날짜 가져오기
+               let liTag = "";
+  
+              for (let i = firstDayofMonth; i > 0; i--) { // 이전 월의 마지막 날 li 생성
+                  liTag += `<li class="inactive">${lastDateofLastMonth - i + 1}</li>`;
+              }
+  
+              for (let i = 1; i <= lastDateofMonth; i++) { // 현재 월의 모든 날짜 li 생성
+                  // 현재 날짜, 월 및 연도가 일치하는 경우 li에 active 클래스 추가
+                  let isToday = i === new Date().getDate() && currMonth === new Date().getMonth()
+                      && currYear === new Date().getFullYear() ? "active" : "";
+                  // 선택된 날짜에 selected 클래스 추가
+                  let isSelected = i === selectedDate && currMonth === date.getMonth() 
+                      && currYear === date.getFullYear() ? "selected" : "";
+                  liTag += `<li class="${isToday} ${isSelected}">${i}</li>`;   
+              }
+  
+              for (let i = lastDayofMonth; i < 6; i++) { // 다음 월의 첫 번째 날 li 생성
+                  liTag += `<li class="inactive">${i - lastDayofMonth + 1}</li>`
+              }
+              currentYearElement.innerText = `${currYear}년`; // 연도 텍스트 설정
+              currentMonthElement.innerText = `
+                                                ${months[currMonth]}`; // 월 텍스트 설정
+              daysTag.innerHTML = liTag;
+  
+              // 날짜 클릭 이벤트 추가
+              document.querySelectorAll('.days li').forEach(day => {
+                  day.addEventListener('click', () => {
+                      selectedDate = parseInt(day.textContent);
+                      date = new Date(currYear, currMonth, selectedDate);
+                      datePicker.value = date.toISOString().split('T')[0]; // 날짜 선택기 업데이트
+                      renderCalendar(); // 달력 다시 렌더링
+                  });
+              });
+          }
+  
+          renderCalendar();
+  
+          prevNextIcon.forEach(icon => { // 이전 및 다음 아이콘 가져오기
+              icon.addEventListener("click", () => { // 두 아이콘에 클릭 이벤트 추가
+                  // 클릭된 아이콘이 이전 아이콘이면 현재 월을 1 감소, 그렇지 않으면 1 증가
+                  currMonth = icon.id === "prev" ? currMonth - 1 : currMonth + 1;
+  
+                  if (currMonth < 0 || currMonth > 11) { // 현재 월이 0보다 작거나 11보다 큰 경우
+                      // 현재 연도 및 월의 새 날짜를 생성하고 이를 날짜 값으로 전달
+                      date = new Date(currYear, currMonth, selectedDate);
+                      currYear = date.getFullYear(); // 새 날짜 연도로 현재 연도 업데이트
+                      currMonth = date.getMonth(); // 새 날짜 월로 현재 월 업데이트
+                  } else {
+                      date = new Date(currYear, currMonth, selectedDate); // 현재 날짜를 날짜 값으로 전달
+                  }
+                  monthPicker.value = `${currYear}-${String(currMonth + 1).padStart(2, '0')}`; // 월 선택기 업데이트
+                  renderCalendar(); // renderCalendar 함수 호출
+              });
+          });
+  
+          // 월 선택기의 값이 변경될 때 달력 업데이트
+          monthPicker.addEventListener('change', (event) => {
+              const [year, month] = event.target.value.split('-');
+              currYear = parseInt(year);
+              currMonth = parseInt(month) - 1;
+              renderCalendar();
+          });
+  
+          // 날짜 선택기의 값이 변경될 때 달력 업데이트
+          datePicker.addEventListener('change', (event) => {
+              const [year, month, day] = event.target.value.split('-');
+              currYear = parseInt(year);
+              currMonth = parseInt(month) - 1;
+              selectedDate = parseInt(day);
+              date = new Date(currYear, currMonth, selectedDate);
+              renderCalendar();
+          });
+  
+          // 월 선택기 값 초기화
+          monthPicker.value = `${currYear}-${String(currMonth + 1).padStart(2, '0')}`;
+          // 날짜 선택기 값 초기화
+          datePicker.value = date.toISOString().split('T')[0];
+
+
+
+
+
+          
+      </script>
+    </div>
+
+    <!-- 우측 내용 -->
+    <div class="calendar-right">
+      <div class="kcal">
+        <p class="p-ko-kcal">오늘의 <br> 소모칼로리</p>
+        <p class="p-kcal">0</p>   
+        <p class="p-en-kcal">Kcal</p>
+      </div>   
+      <div class="D-day">
+
+      </div>   
+      <div class="graph">
+
+      </div>
+    </div>
+
+</body>
+</html>

@@ -156,3 +156,39 @@ app.get('/diary', function(req,res){
 app.get('/update-board', function(req,res){
   res.render('update-board');
 });
+
+app.get('leg_list', function (req, res) {
+  res.render('leg_list');
+});
+
+app.get('chest_list', function (req, res) {
+  res.render('chest_list');
+});
+
+app.get('shoulder_list', function (req, res) {
+  res.render('chest_list');
+});
+
+app.get('abs_list', function (req, res) {
+  res.render('chest_list');
+});
+
+app.get('arm_list', function (req, res) {
+  res.render('chest_list');
+});
+
+app.get('cardio_list', function (req, res) {
+  res.render('chest_list');
+});
+
+app.get('wieght_list', function (req, res) {
+  res.render('chest_list');
+});
+
+app.get('stretching_list', function (req, res) {
+  res.render('chest_list');
+});
+
+app.get('etc_list', function (req, res) {
+  res.render('chest_list');
+});

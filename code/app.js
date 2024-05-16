@@ -206,10 +206,6 @@ app.get('/list_weight', function (req, res) {
   res.render('list_weight');
 });
 
-app.get('/list_stretching', function (req, res) {
-  res.render('list_stretching');
-});
-
 app.get('/list_etc', function (req, res) {
   res.render('list_etc');
 });

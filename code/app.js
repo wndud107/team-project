@@ -1,3 +1,20 @@
+// mongodb 연결
+const mongoclient = require('mongodb').MongoClient;
+const url = 'mongodb+srv://songhyojun:qpdCa0vTaBry6lv7@songhyojun.tvwku08.mongodb.net/?retryWrites=true&w=majority&appName=songhyojun';
+let mydb;
+mongoclient.connect(url).then(client => {
+  mydb = client.db('account');
+  mydb.collection('post').find().toArray().then(result => {
+    console.log(result);
+  })
+
+  app.listen(3000, function(){
+    console.log('localhost:3000/');
+  });
+}).catch(err => {
+  console.log(err);
+})
+
 const fs = require('fs');
 const path = require('path');
 
@@ -20,8 +37,6 @@ app.use(express.static('public'));
 // POST 요청의 body를 파싱하기 위한 미들웨어 추가
 app.use(express.urlencoded({ extended: false }));
 
-// 사용자 데이터를 저장하기 위한 가상의 데이터베이스
-
 app.get('/', function(req,res){
   res.render('index');
 });
@@ -38,12 +53,16 @@ app.get('/login', function (req, res) {
 // 로그인 요청 처리하는 라우트
 app.post('/login', function (req, res) {
   const { userid, userpw } = req.body;
-  const user = users.find(u => u.userid === userid && u.userpw === userpw);
-  if (user) {
-    res.send(`로그인 성공! 환영합니다, ${userid}님`);
-  } else {
-    res.render('login', { error: '아이디 또는 비밀번호를 잘못 입력했습니다.' });
-  }
+  mydb.collection('post').findOne({id_join: userid, pw_join: userpw}
+  ).then(user => {
+    if (user) {
+      res.render('index', {user});
+    } else {
+      res.render('login', { message: '아이디 또는 비밀번호를 잘못 입력했습니다.' });
+    }
+  }).catch(error => console.error('Error finding user:', error));
+
+
 });
 
 // 회원가입 페이지로 이동하는 라우트
@@ -53,7 +72,14 @@ app.get('/join', function (req, res) {
 
 // 회원가입 요청 처리하는 라우트
 app.post('/join', function (req, res) {
-  const join= req.body;
+  const join = req.body;
+
+  //몽고DB에 데이터 저장하기
+  mydb.collection('post').insertOne(join).then(result => {
+    console.log('데이터 추가 성공');
+    console.log('complete-join으로 리다이렉팅 중...');
+    res.redirect('complete-join');
+  });
 
   const filePath = path.join(__dirname, 'data', 'joins.json');
   const fileData = fs.readFileSync(filePath);
@@ -63,8 +89,6 @@ app.post('/join', function (req, res) {
 
   fs.writeFileSync(filePath, JSON.stringify(storedJoins));
 
-  console.log('complete-join으로 리다이렉팅 중...');
-  res.redirect('complete-join');
 });
 
 app.get('/complete-join', function(req, res) {
@@ -85,13 +109,15 @@ app.post('/looking-for-id', function(req, res) {
   const fileData = fs.readFileSync(filePath);
   const users = JSON.parse(fileData);
 
-  const user = users.find(u => u.name_join === username && u.telnumber_join === usertel);
-  
-  if (user) {
-    res.render('complete-LI', { userId: user['id_join'] }); 
-  } else {
-    res.render('looking-for-id', { error: '해당 아이디 또는 이름이 일치하지 않습니다' });
-  }
+  mydb.collection('post').findOne({ name_join: username, telnumber_join: usertel })
+    .then(user => {
+      if (user) {
+        res.render('complete-LI', { userId: user.id_join }); // 사용자가 있으면 아이디 찾기 성공 창 띄우기
+      } else {
+        res.render('looking-for-id', { error: '해당 아이디 또는 이름이 일치하지 않습니다' }); // 사용자가 없으면 오류 메시지 출력
+      }
+    })
+    .catch(error => console.error('아이디 찾기 오류:', error));
 });
 
 app.get('/looking-for-pw', function(req,res) {
@@ -104,13 +130,15 @@ app.post('/looking-for-pw', function(req, res) {
   const fileData = fs.readFileSync(filePath);
   const users = JSON.parse(fileData);
 
-  const user = users.find(u => u.id_join === userid && u.name_join === username);
-  
-  if (user) {
-      res.render('complete-LP', { userPw: user['pw_join'] });
-  } else {
-      res.render('looking-for-pw', { error: '해당 아이디 또는 이름이 일치하지 않습니다' });
-  }
+  mydb.collection('post').findOne({ id_join: userid, name_join: username })
+    .then(user => {
+      if (user) {
+        res.render('complete-LP', { userPw: user.pw_join }); // 사용자가 있으면 비밀번호 찾기 성공 창 띄우기
+      } else {
+        res.render('looking-for-pw', { error: '해당 아이디 또는 이름이 일치하지 않습니다' }); // 사용자가 없으면 오류 메시지 출력
+      }
+    })
+    .catch(error => console.error('비밀번호 찾기 오류:', error));
 });
 
 app.get('/complete-LI', function(req,res) {
@@ -123,8 +151,4 @@ app.get('/complete-LP', function(req,res) {
 
 app.get('/diary', function(req,res){
   res.render('diary');
-});
-
-app.listen(3000, () => {
-  console.log('localhost:3000/');
 });

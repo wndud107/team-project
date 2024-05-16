@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <%- include('includes/head')%>
+    <link rel="stylesheet" href="styles/update-board.css">
+</head>
+<body>
+    <%- include('includes/header')%>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="profile">
+                <div class="profile-image"><img src="" alt="..."></div>
+                <div class="profile-name">...</div>
+                <button class="profile-button">내 정보</button>
+                <button class="profile-button">로그아웃</button>
+            </div>
+            <hr>
+            <div class="menu">
+                <ul>
+                    <li><a href="update-free-board">자유게시판</a></li>
+                    <li><a href="update-end-board">오운완게시판</a></li>
+                    <li><a href="update-info-board">정보게시판</a></li>
+                    <li><a href="update-child-board">헬린이게시판</a></li>
+                    <li><a href="update-ghwm-board">G.H.W.M 게시판</a></li>
+                </ul>
+            </div>
+        </aside>
+        <main class="main-content">
+            <h1>정보게시판 글쓰기</h1>
+            <form>
+                <input type="text" placeholder="제목을 입력해 주세요." class="title-input">
+                <input type="file" placeholder="파일" class="file-input">
+                <textarea placeholder="내용을 입력해 주세요."></textarea>
+                <button type="submit">등록</button>
+            </form>
+        </main>
+    </div>
+    <script>
+        document.getElementById('file-input').addEventListener('change', function() {
+            var fileName = this.files[0] ? this.files[0].name : '선택된 파일 없음';
+            document.querySelector('.file-name').textContent = fileName;
+        });
+    </script>
+</body>
+</html>

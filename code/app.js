@@ -152,3 +152,7 @@ app.get('/complete-LP', function(req,res) {
 app.get('/diary', function(req,res){
   res.render('diary');
 });
+
+app.get('/update-board', function(req,res){
+  res.render('update-board');
+});

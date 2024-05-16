@@ -1,16 +1,8 @@
- /* 기본 스타일 초기화 */
- * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
 h2 {  /* 로그인 박스 안 로고 */
     font-family : 'Oleo Script Swash Caps';
     text-align: center;
     font-size: 35px;
     position: relative;
-    top: 20px;
 }
 
 form {    /* 로그인 박스 전체 */
@@ -46,8 +38,7 @@ form input {   /* 아이디, 비밀번호 입력 박스 */
     margin-bottom: 8px;
     border: 1.5px solid rgb(11, 154, 167);
     border-radius: 6px;
-    position: relative;     /* 로고(h2) 기준 */
-    top: 40px;
+    /* position: relative; 로고(h2) 기준 */
     padding-left: 40px;
 }
 
@@ -71,14 +62,13 @@ form input[text] {
     background-position: 10px center;
 }
 
-#btn-login {    /* 아이디 찾기 버튼 */
+#btn-login {    /* 로그인 버튼 */
     font-weight: bold;
     width: 300px;
     height: 40px;
     margin: auto;
-    margin-top: 5px;
     position: relative;  /* 구조상 부모요소(pw입력박스) 기준으로 position 값 지정 */
-    top: 42px;    
+    top: 8px;
     border-radius: 6px;
     border: 1.5px solid rgb(11, 154, 167);
     background-color:  rgb(11, 154, 167);
@@ -93,6 +83,7 @@ form input[text] {
 }
 
 #a-find-total {    /* 비밀번호 찾기 | 아이디 찾기 | 회원가입 */
+
     margin: auto;
     text-align: center;
     padding-top: 32px;

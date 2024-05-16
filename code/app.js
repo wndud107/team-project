@@ -173,3 +173,39 @@ app.get('/update-child-board', function(req,res){
 app.get('/free-board', function(req,res){
   res.render('free-board');
 });
+
+app.get('/list_leg', function (req, res) {
+  res.render('list_leg');
+});
+
+app.get('/list_chest', function (req, res) {
+  res.render('list_chest');
+});
+
+app.get('/list_shoulder', function (req, res) {
+  res.render('list_shoulder');
+});
+
+app.get('/list_abs', function (req, res) {
+  res.render('list_abs');
+});
+
+app.get('/list_arm', function (req, res) {
+  res.render('list_arm');
+});
+
+app.get('/list_cardio', function (req, res) {
+  res.render('list_cardio');
+});
+
+app.get('/list_weight', function (req, res) {
+  res.render('list_weight');
+});
+
+app.get('/list_stretching', function (req, res) {
+  res.render('list_stretching');
+});
+
+app.get('/list_etc', function (req, res) {
+  res.render('list_etc');
+});

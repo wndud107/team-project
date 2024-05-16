@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <%- include('includes/head')%>
+    <link rel="stylesheet" href="styles/update-board.css">
+</head>
+<body>
+    <%- include('includes/header')%>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="profile">
+                <div class="profile-image"></div>
+                <div class="profile-name">김글미</div>
+                <button class="profile-button">내 정보</button>
+                <button class="profile-button">로그아웃</button>
+            </div>
+            <hr>
+            <div class="menu">
+                <ul>
+                    <li><a href="#">자유게시판</a></li>
+                    <li><a href="#">오운완게시판</a></li>
+                    <li><a href="#">식단게시판</a></li>
+                    <li><a href="#">정보게시판</a></li>
+                    <li><a href="#">질문게시판</a></li>
+                    <li><a href="#">헬린이게시판</a></li>
+                    <li><a href="#">G.H.W.게시판</a></li>
+                    <li><a href="#">홍보게시판</a></li>
+                </ul>
+            </div>
+        </aside>
+        <main class="main-content">
+            <h1>자유게시판 글쓰기</h1>
+            <form>
+                <input type="text" placeholder="제목을 입력해 주세요." class="title-input">
+                <input type="file" placeholder="파일" class="file-input">
+                <textarea placeholder="내용을 입력해 주세요."></textarea>
+                <button type="submit">등록</button>
+            </form>
+        </main>
+    </div>
+</body>
+</html>

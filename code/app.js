@@ -121,6 +121,10 @@ app.get('/complete-LP', function(req,res) {
   res.render('complete-LP');
 });
 
+app.get('/diary', function(req,res){
+  res.render('diary');
+});
+
 app.listen(3000, () => {
   console.log('localhost:3000/');
 });

@@ -95,9 +95,6 @@ app.get('/complete-join', function(req, res) {
   res.render('complete-join');
 });
 
-app.get('/test', function(req,res) {
-  res.render('test');
-});
 
 app.get('/looking-for-id', function(req,res) {
   res.render('looking-for-id', { error: null } );
@@ -153,42 +150,26 @@ app.get('/diary', function(req,res){
   res.render('diary');
 });
 
-app.get('/update-board', function(req,res){
-  res.render('update-board');
+app.get('/update-free-board', function(req,res){
+  res.render('update-free-board');
 });
 
-app.get('/leg_list', function (req, res) {
-  res.render('leg_list');
+app.get('/update-end-board', function(req,res){
+  res.render('update-end-board');
 });
 
-app.get('/chest_list', function (req, res) {
-  res.render('chest_list');
+app.get('/update-ghwm-board', function(req,res){
+  res.render('update-ghwm-board');
 });
 
-app.get('/shoulder_list', function (req, res) {
-  res.render('chest_list');
+app.get('/update-info-board', function(req,res){
+  res.render('update-info-board');
 });
 
-app.get('/abs_list', function (req, res) {
-  res.render('chest_list');
+app.get('/update-child-board', function(req,res){
+  res.render('update-child-board');
 });
 
-app.get('/arm_list', function (req, res) {
-  res.render('chest_list');
-});
-
-app.get('/cardio_list', function (req, res) {
-  res.render('chest_list');
-});
-
-app.get('/wieght_list', function (req, res) {
-  res.render('chest_list');
-});
-
-app.get('/stretching_list', function (req, res) {
-  res.render('chest_list');
-});
-
-app.get('/etc_list', function (req, res) {
-  res.render('chest_list');
+app.get('/free-board', function(req,res){
+  res.render('free-board');
 });

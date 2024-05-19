@@ -18,10 +18,9 @@ body{
   top: -5px;
 }
 
-
 .icons{
   position: relative;
-  left: 215px;
+  left: 270px;
   top: 15px;
   display: flex;
   align-items: center;
@@ -60,25 +59,13 @@ body{
   left: 1px;
 }
 
-
-.calendar {
-  /* display: inline; */
-    width: 450px;
-    background: #fff;
-    border-radius: 10px;
-    padding: 25px;
-    border-color: #0b99a9;
-    margin-left: 120px;
-    position: relative;
-    top: 0px;
-  }
    
 hr {
     margin:0;
     padding:0;
     background:#0b99a9;
     height:2px;
-    width: 400px;
+    width: 450px;
     border:0;
     position: relative;
     left: -5px;
@@ -123,10 +110,11 @@ hr {
     position: relative;
   }
 .weeks-days .days li {
-    /*#10*/
     z-index: 1;
-    margin-top: 30px;
-    margin-bottom: 30px;
+    padding-top: 10px ;
+    padding-bottom: 10px;
+    margin-top: 25px;
+    margin-bottom: 25px;
     cursor: pointer;
   }
    
@@ -153,11 +141,27 @@ hr {
     z-index: -1;
   }
 
-/* 날짜 선택시  */
-.days li:hover::before {
-    background: #f2f2f2;
-  }
-  
+/* 선택된 날짜 스타일 추가 */
+.days li.selected::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    background-color: #bedfe4; /* 원 색상 */
+    border-radius: 50%;
+    z-index: -1;
+    display: inline-block;
+    line-height: 40px;
+    text-align: center;
+}
+
+.days li.selected {
+    position: relative;
+}
+
 /* 오늘 날짜 */
 .days li.active::before {
     background: #0b99a9;
@@ -183,8 +187,8 @@ hr {
 /* 달력 버튼만 남기기 */
 input[type="month"] {
   position: relative;
-  width: 22px; 
-  height: 22px;
+  width: 30px; 
+  height: 30px;
   color: transparent; 
   background: none; 
   border: none; 
@@ -205,29 +209,63 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 input[type="month"]::-webkit-input-placeholder {
   color: transparent;
 }
-
 input[type="month"]:focus {
   outline: none;
+  border: none;
 }
+
+/* input[type="month"]:focus {
+  outline: none;
+  border: none;
+  background: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+} */
 
 #monthPicker{
   position: relative;
   top: 10px;
 }
 
+.container {
+  width: 100%;
+  position: absolute;
+  /* 헤더 영역 80px */
+  top: 80px;  
+  height: 755px;
+  margin: 0 auto;
+  display: flex;
+  background-color: #ffffff;
+  padding-left: 130px;
+}
 
 
+.calendar {
+  /* display: inline; */
+    width: 500px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 25px;
+    border-color: #0b99a9;
+    /* margin-left: 15%; */
+    position: absolute;
+    right: 50%;
+    top: 30px;
+    margin: 10px;
+  }
 
 /* 캘린더 오른쪽 영역 */
 .calendar-right {
-  position: absolute;
-  top: 120px;
-  left: 600px;
   width: 500px;
-  height: 530px;
-  border: 3px;
-  margin-right: 145px;
+  height: 550px;
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  border: 4px;
+  margin: 30px;
 }
+
 
 .kcal {
   width: 220px;
@@ -276,9 +314,76 @@ input[type="month"]:focus {
   position: absolute;
   top: 240px;
   width: 460px;
-  height: 290px;
+  height: 310px;
   background-color: rgb(255, 255, 255);  
   border-radius: 5px;
   outline: auto;
   outline-color: #e1e1e1;
 }
+
+/* styles/diary.css */
+/* 기존 CSS 유지 */
+/* 전체 팝업창  */
+.popup {
+  display: none;
+  position: absolute;
+  top: -20px;
+  left: -5px;
+  border: 3px;
+  background-color: rgb(190, 223, 228);
+  border-radius: 5px;
+  width: 480px;
+  height: 573px;
+  z-index: 1000;
+}
+
+.popup.show {
+  display: block;
+}
+
+.popup-exercise {
+  display: flex;
+  position: absolute;
+  top: 80px;
+  left: 20px;
+  width: 440px;
+  height: 240px;
+  background-color: #ffffff;
+  border-radius: 5px;
+
+}
+
+.close {
+  position: absolute;
+  right: 10px;
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#popup-date{
+  position: absolute;
+  right: 15px;
+  top: 40px;
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.popup-text{
+  position: absolute;
+  left: 15px;
+  top: 50px;
+  font-weight: 600;
+}
+
+
+
+

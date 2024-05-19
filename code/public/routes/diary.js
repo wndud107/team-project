@@ -52,7 +52,7 @@ const renderCalendar = () => {
                 selectedDate = parseInt(target.textContent);
                 date = new Date(currYear, currMonth, selectedDate);
                 // datePicker.value = date.toISOString().split('T')[0];
-                popupDate.innerText = `${currYear}년 ${months[currMonth]} ${selectedDate}일`;
+                popupDate.innerText = ` ${months[currMonth]} ${selectedDate}일`;
                 popup.classList.add('show');
                 renderCalendar();
             }
@@ -103,23 +103,19 @@ closePopup.addEventListener('click', () => {
     popup.classList.remove('show');
 });
 
-// 날짜 선택기의 값이 변경될 때 달력 업데이트
-// datePicker.addEventListener('change', (event) => {
-//     const [year, month, day] = event.target.value.split('-');
-//     currYear = parseInt(year);
-//     currMonth = parseInt(month) - 1;
-//     selectedDate = parseInt(day);
-//     date = new Date(currYear, currMonth, selectedDate);
-//     renderCalendar();
-// });
-
-// 월 선택기 값 초기화
 monthPicker.value = `${currYear}-${String(currMonth + 1).padStart(2, '0')}`;
-// 날짜 선택기 값 초기화
-// datePicker.value = date.toISOString().split('T')[0];
-// datePicker.value = date.toISOString().split('T')[0];
 
 
 
+function previewImage(event, boxId) {
+    const input = event.target;
+    const reader = new FileReader();
+    reader.onload = function() {
+        const dataURL = reader.result;
+        const uploadBox = document.getElementById(boxId);
+        uploadBox.innerHTML = `<img src="${dataURL}" alt="Uploaded Image">`;
+    };
+    reader.readAsDataURL(input.files[0]);
+}
 
 

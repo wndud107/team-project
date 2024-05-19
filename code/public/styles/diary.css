@@ -111,8 +111,8 @@ hr {
   }
 .weeks-days .days li {
     z-index: 1;
-    padding-top: 10px ;
-    padding-bottom: 10px;
+    padding-top: 15px ;
+    padding-bottom: 15px;
     margin-top: 25px;
     margin-bottom: 25px;
     cursor: pointer;
@@ -251,16 +251,16 @@ input[type="month"]:focus {
     /* margin-left: 15%; */
     position: absolute;
     right: 50%;
-    top: 30px;
+    top: 20px;
     margin: 10px;
   }
 
 /* 캘린더 오른쪽 영역 */
 .calendar-right {
   width: 500px;
-  height: 550px;
+  height: 570px;
   position: absolute;
-  top: 80px;
+  top: 100px;
   left: 50%;
   border: 4px;
   margin: 30px;
@@ -314,27 +314,27 @@ input[type="month"]:focus {
   position: absolute;
   top: 240px;
   width: 460px;
-  height: 310px;
+  height: 320px;
   background-color: rgb(255, 255, 255);  
   border-radius: 5px;
   outline: auto;
   outline-color: #e1e1e1;
 }
 
-/* styles/diary.css */
-/* 기존 CSS 유지 */
+
 /* 전체 팝업창  */
 .popup {
   display: none;
   position: absolute;
-  top: -20px;
-  left: -5px;
+  top: -60px;
+  left: -10px;
   border: 3px;
   background-color: rgb(190, 223, 228);
   border-radius: 5px;
   width: 480px;
-  height: 573px;
+  height: 630px;
   z-index: 1000;
+  /* overflow: scroll; */
 }
 
 .popup.show {
@@ -344,13 +344,13 @@ input[type="month"]:focus {
 .popup-exercise {
   display: flex;
   position: absolute;
-  top: 80px;
+  top: 72px;
   left: 20px;
   width: 440px;
-  height: 240px;
+  height: 130px;
   background-color: #ffffff;
   border-radius: 5px;
-
+  overflow: auto;
 }
 
 .close {
@@ -371,19 +371,207 @@ input[type="month"]:focus {
 
 #popup-date{
   position: absolute;
-  right: 15px;
-  top: 40px;
-  font-size: 25px;
+  right: 20px;
+  top: 38px;
+  font-size: 23px;
   font-weight: 700;
 }
 
 .popup-text{
   position: absolute;
-  left: 15px;
-  top: 50px;
+  left: 20px;
+  top: 45px;
   font-weight: 600;
+  font-size: 18px;
+}
+
+.popup-content-1{
+  position: relative;
+}
+
+.popup-content-2 {
+  position: absolute;
+  top: 280px;
+}
+
+/* 팝업창 식단 섹션 */
+.popup-diet {
+  position: absolute;
+  left: 20px;
+  top: -40px;
+}
+
+.diet-image input[type="file"] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+}
+
+.image-upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.image-upload-box {
+  width: 200px;
+  height: 120px; 
+  border: 2px #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  border-radius: 5px;
+  background-color: #ffffff;
+}
+
+/* 스크롤바 생성 시 */
+.image-upload-box:last-child{
+  margin-bottom: 20px;
+}
+
+.image-upload-box img {
+  /* width: 100%;
+  height: 100%; */
+  width: 230px;
+  /* height: 150px; 스크롤바 생성시 */
+  height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.image-upload-box input[type="file"] {
+  display: none;
+}
+
+.image-upload-box .placeholder {
+  text-align: center;
+  color: #646464;
+}
+
+.p-popup-diet {
+  position: absolute;
+  left: 0;
+  top: -28px;
+  font-weight: 600;
+  font-size: 18px;
 }
 
 
+.diet-image{
+  width: 200px;
+  height: 90px;
+  background-color: #ffffff;
+  gap: 10px;
+}
 
+/* 팝업창 인바디 섹션 */
+/* 인바디 파트 전체 */
+.popup-inbody {
+  position: absolute;
+  left: 235px;
+  top: -68px;
+  /* background-color: #0b99a9; */
+  width: 230px;
+  height: 410px;
+  text-align: left;
+}
+/* 인바디 체크 버튼 */
+.check-icon button{
+  position: absolute;
+  left: 195px;
+  top: -5px;
+  color: transparent; 
+  background: none; 
+  border: none; 
+}
+.check-icon button.selected::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background-color: #bedfe4; /* 원 색상 */
+  border-radius: 50%;
+  z-index: -1;
+  display: inline-block;
+  line-height: 20px;
+  text-align: center;
+}
+
+/* 오늘의 인바디 */
+.p-popup-inbody{
+  /* position: absolute;
+  left: 50px; */
+  font-weight: 600;
+  font-size: 18px;
+  margin-left: 10px;
+}
+.popup-inbody-check{
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: 10px;
+}
+
+/* 인바디 input 파트 전체 */
+.popup-inbody-input{
+  position: absolute;
+  top: 28px; 
+  background-color: hwb(0 100% 0%);
+  width: 230px;
+  height: 380px;
+  border-radius: 5px;
+  
+}
+.inbody-input::placeholder { color: #aaaaaa; }
+.inbody-input:focus { outline: none; }
+
+/* 인바디 input 개별 요소들 */
+.popup-input {
+  display: flex;
+  gap: 10px;
+  margin-top: 30px;
+  margin-left: 20px;
+}
+.popup-input:first-child{
+  margin-bottom: 40px;
+}
+
+/* 인바디 개별 input요소 p태그 */
+.popup-inbody-input p{
+  font-size: 13px;
+  font-weight: 500;
+  margin: 6px 2px;
+}
+/* 4글자 너비 기준 (47.84) input요소 마진 설정해서 줄 맞추기 */
+.input-height{
+  margin-left: 35.88px;
+}
+.input-weight{
+  margin-left: 23.92px;
+}
+.input-bmi{
+  margin-left: 24.36px;
+}
+
+/* 인바디 input창 */
+.popup-inbody-input input {
+  width: 80px;
+  height: 30px;
+  font-size: 15px;
+  border: 0;
+  border-radius: 10px;
+  outline: none;
+  padding-left: 10px;
+  background-color: rgb(190, 223, 228);
+ 
+}
 

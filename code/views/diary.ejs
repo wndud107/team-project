@@ -12,6 +12,14 @@
 <body>
     <%- include('includes/header') %>
     <div class = "container">
+        <aside class="sidebar">
+            <div class="profile">
+                <div class="profile-image"></div>
+                <div class="profile-name">김글미</div>
+                <button class="profile-button">내 정보</button>
+                <button class="profile-button">로그아웃</button>
+            </div>
+        </aside>
         <!-- 캘린더 -->
         <div class="calendar">
             <!-- 달력 상단 부분 -->
@@ -68,12 +76,20 @@
                 <div id="popup" class="popup">
                     <div class="popup-content-1">
                         <span class="close">&times;</span>
-                        <p class="popup-text">오늘의 운동</p>
+                        <p class="p-popup-exercise">오늘의 운동</p>
                         <p id="popup-date"></p>
+
                         <div class="popup-exercise">
                             <!-- 운동 리스트 기록 -->
-                            
+                            <button  class="btn-add-exercise">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                              </svg>
+                              <p class="p-add-exercise">운동 추가하기</p>
+                            </button>
                         </div>
+
                     </div>
                     <div class="popup-content-2">
                         <div class="popup-diet">

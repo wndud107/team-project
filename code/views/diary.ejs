@@ -60,7 +60,6 @@
                     <p class="p-kcal">0</p>   
                     <p class="p-en-kcal">Kcal</p>
                 </div>   
-
                 <div class="D-day">
                 </div>   
                 <div class="graph">
@@ -72,7 +71,79 @@
                         <p class="popup-text">오늘의 운동</p>
                         <p id="popup-date"></p>
                         <div class="popup-exercise">
-                        <img src="" alt="">
+                            <!-- 운동 리스트 기록 -->
+                            
+                        </div>
+                    </div>
+                    <div class="popup-content-2">
+                        <div class="popup-diet">
+                            <p class="p-popup-diet">오늘의 식단</p>
+                            <div class="image-upload-container">
+                                <div class="image-upload-box" onclick="document.getElementById('uploadInput1').click()">
+                                    <input type="file" id="uploadInput1" accept="image/*" onchange="previewImage(event, 'uploadBox1')" />
+                                    <div id="uploadBox1" class="placeholder">
+                                        <p>+</p>
+                                        <p>아침 식단</p>
+                                    </div>
+                                </div>
+                                <div class="image-upload-box" onclick="document.getElementById('uploadInput2').click()">
+                                    <input type="file" id="uploadInput2" accept="image/*" onchange="previewImage(event, 'uploadBox2')" />
+                                    <div id="uploadBox2" class="placeholder">
+                                        <p>+</p>
+                                        <p>점심 식단</p>
+                                    </div>
+                                </div>
+                                <div class="image-upload-box" onclick="document.getElementById('uploadInput2').click()">
+                                    <input type="file" id="uploadInput2" accept="image/*" onchange="previewImage(event, 'uploadBox2')" />
+                                    <div id="uploadBox2" class="placeholder">
+                                        <p>+</p>
+                                        <p>저녁 식단</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="popup-inbody">
+                            <p class="p-popup-inbody">오늘의 인바디</p>
+                            <div class="popup-inbody-input">
+                                <div class="check-icon popup-inbody-check">
+                                    <button type="submit">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                            <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="popup-input popup-height">
+                                    <p>키</p> <!--마이페이지에서 한 번 설정하면 자동으로 반영되게끔-->
+                                    <input type="text" class="inbody-input input-height" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"/>
+                                    <p>cm</p>
+                                </div>        
+                                <div class="popup-input popup-weight">
+                                    <p>체중</p>
+                                    <input type="text" class="inbody-input input-weight" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"/>
+                                    <p>kg</p>
+                                </div>
+                                <div class="popup-input popup-muscle-mass">
+                                    <p>골격근량</p>
+                                    <input type="text" class="inbody-input input-muscle-mass" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"/>
+                                    <p>kg</p>
+                                </div>
+                                <div class="popup-input popup-fat">
+                                    <p>체지방량</p>
+                                    <input type="text" class="inbody-input input-fat" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"/>
+                                    <p>kg</p>
+                                </div>
+                                <div class="popup-input popup-bmi">
+                                    <p>BMI</p>
+                                    <input type="text" class="inbody-input input-bmi" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"/>
+                                    <p>kg/m<sup>2</sup></p>
+                                </div>
+                                <div class="popup-input popup-fat-percentage">
+                                    <p>체지방률</p>
+                                    <input type="text" class="inbody-input input-fat-percentage" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"/>
+                                    <p>%</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>  
                 </div>
             </div>

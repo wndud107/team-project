@@ -5,9 +5,11 @@ const daysTag = document.querySelector(".days"),
       prevNextIcon = document.querySelectorAll(".icons span"),
       monthPicker = document.getElementById("monthPicker"),
       datePicker = document.getElementById("datePicker"),
-    popup = document.getElementById("popup"),
-    popupDate = document.getElementById("popup-date"),
-    closePopup = document.querySelector(".close");
+        popup = document.getElementById("popup"),
+        popupDate = document.getElementById("popup-date"),
+        closePopup = document.querySelector(".close"),
+        addExercisePopup = document.getElementById(".popup-choice-exercise"),
+        addExerciseButton = document.querySelectorAll(".btn-add-exercise");
 
 
 // 새로운 날짜, 현재 연도 및 월 가져오기
@@ -118,4 +120,23 @@ function previewImage(event, boxId) {
     reader.readAsDataURL(input.files[0]);
 }
 
+document.addEventListener("DOMContentLoaded", function() {
+    const addExercisePopup = document.getElementById("popup-choice-exercise");
+    const closePopup = document.querySelector(".close2");
 
+    // "운동 추가하기" 버튼 클릭 시 팝업 창 표시
+    document.querySelectorAll('.btn-add').forEach(button => {
+        button.addEventListener('click', () => {
+            addExercisePopup.classList.add('show');
+        });
+    });
+
+    // 닫기 버튼 클릭 시 팝업 창 닫기
+    closePopup.addEventListener('click', () => {
+        // 디버깅: 클릭 이벤트 확인
+        console.log("Close button clicked");
+        addExercisePopup.classList.remove('show');
+    });
+
+
+});

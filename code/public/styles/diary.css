@@ -415,51 +415,6 @@ input[type="month"]:focus {
   text-shadow: -1px 0 rgb(255, 255, 255), 0 1px rgb(255, 255, 255), 1px 0 rgb(255, 255, 255), 0 -1px rgb(255, 255, 255);
 }
 
-/* 오늘의 운동 */
-.p-popup-exercise{
-  position: absolute;
-  left: 20px;
-  top: 42px;
-  font-weight: 600;
-  font-size: 18px;
-}
-
-.popup-content-1{
-  position: relative;
-}
-
-.popup-content-2 {
-  position: absolute;
-  top: 280px;
-}
-
-/* 팝업창 운동 섹션 */
-.popup-exercise {
-  display: flex;
-  position: absolute;
-  top: 72px;
-  left: 20px;
-  width: 480px;
-  height: 130px;
-  background-color: #ffffff;
-  border-radius: 5px;
-  overflow: auto;
-}
-
-.btn-add-exercise {
-  /* color: transparent;  */
-  display: flex;
-  background: none; 
-  border: none;
-
-}
-.btn-add-exercise svg {
-  width: 23px;
-  height: 23px;
-}
-.p-add-exercise{
-font-size: 18px;
-}
 
 /* 팝업창 식단 섹션 */
 /* 식단 전체 */
@@ -645,3 +600,128 @@ font-size: 18px;
  
 }
 
+
+
+/* 오늘의 운동 */
+.p-popup-exercise{
+  position: absolute;
+  left: 20px;
+  top: 42px;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.popup-content-1{
+  position: relative;
+}
+
+.popup-content-2 {
+  position: absolute;
+  top: 280px;
+}
+
+/* 팝업창 운동 섹션 */
+.popup-exercise {
+  display: flex;
+  position: absolute;
+  top: 72px;
+  left: 20px;
+  width: 480px;
+  height: 130px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  overflow: auto;
+}
+
+.btn-add-exercise {
+  /* color: transparent;  */
+  display: flex;
+  background: none; 
+  border: none;
+
+}
+.btn-add-exercise svg {
+  width: 23px;
+  height: 23px;
+}
+.p-add-exercise{
+font-size: 18px;
+margin-left: 5px;
+}
+
+.btn-add {
+  display: flex;
+  width: 200px;
+  height: 30px;
+  margin: 10px;
+  /* border: solid 1px ; */
+  /* border-radius: 5px; */
+  /* border-color: #0b99a9; */
+}
+
+
+.popup-choice-exercise{
+  display: none;
+  
+}
+
+.popup-choice-exercise.show {
+  display: block;
+  position: absolute;
+  top: 115px;
+  left: 30px;
+  width: 280px;
+  height: 100px;
+  border: 3px;
+  background-color: rgb(255, 255, 255);
+  border: solid #0b99a9;
+  border-radius: 5px;
+  z-index: 1000;
+}
+
+/* 닫기 버튼 */
+.close2 {
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  right: 10px;
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close2:hover,
+.close2:focus {
+  /* color: black; */
+  color: #0b99a9;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.choice-exercise{
+  display: flex;
+  margin: 10px;
+}
+
+.select-exercise{
+  width: 150px;
+  height: 25px;
+  font-size: 12px;
+  font-weight: 600;
+  background-color: hsl(0, 0%, 95%);
+  border-radius: 5px;
+  margin-left: 5px;
+  border: 1px solid #0b99a9;
+}
+
+.count-exercise{
+  display: flex;
+}
+
+.input-count-exercise{
+  width: 25px;
+  height: 25px;
+  border-radius: 10px;
+  border: 1px solid #0b99a9;
+}

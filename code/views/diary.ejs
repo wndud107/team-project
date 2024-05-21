@@ -79,7 +79,7 @@
                         <p class="p-popup-exercise">오늘의 운동</p>
                         <p id="popup-date"></p>
                         <div class="popup-exercise">
-
+                            <ul id="exercise-list"></ul>
                             <div id="btn-add-exercise" class="btn-add-exercise">
                                 <span class = "btn-add" >
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
@@ -99,11 +99,11 @@
                         </span>
                         <div class="choice-exercise">
                             <p>운동 선택</p>
-                            <select name="" id="" class="select-exercise">
+                            <select name="" id="exercise-select" class="select-exercise">
                                 <optgroup label="하체">
-                                    <option value="">컨벤셔널 데드리프트</option>
-                                    <option value="">바벨 백스쿼트</option>
-                                    <option value="">스미스머신 스플릿 스쿼트</option>
+                                    <option value="컨벤셔널 데드리프트">컨벤셔널 데드리프트</option>
+                                    <option value="바벨 백스쿼트">바벨 백스쿼트</option>
+                                    <option value="스미스머신 스플릿 스쿼트">스미스머신 스플릿 스쿼트</option>
                                     <option value="">스미스머신 데드리프트</option>
                                     <option value="">스미스머신 스쿼트</option>
                                     <option value="">덤벨 런지</option>
@@ -403,8 +403,15 @@
                             </select>
                         </div>
                         <div class="count-exercise">
-                            <input type="text" class="input-count-exercise" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"><p>회 x </p> <input type="text" class="input-count-exercise" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"> <p>세트</p>
+                            <input type="number" id="reps" class="input-count-exercise" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"  min="1" max="3000"><p>회 x </p> 
+                            <input type="number" id="sets" class="input-count-exercise" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"  min="1" max="3000"> <p>세트</p>
                         </div>
+                
+                            <button id="add-exercise-button">추가</button>
+             
+                        <!-- <div class="count-exercise">
+                            <input type="text" class="input-count-exercise" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"><p>회 x </p> <input type="text" class="input-count-exercise" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"> <p>세트</p>
+                        </div> -->
                     </div>
                     <div class="popup-content-2">
                         <div class="popup-diet">

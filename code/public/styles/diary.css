@@ -466,7 +466,7 @@ input[type="month"]:focus {
   height: 100%; */
   width: 220px;
   /* height: 150px; 스크롤바 생성시 */
-  height: 122px;
+  height: 123px;
   object-fit: cover;
   border-radius: 5px;
  margin-top: 5px;

@@ -1,59 +1,53 @@
+
+
 let months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
 const daysTag = document.querySelector(".days"),
-      currentYearElement = document.querySelector(".current-year"),
-      currentMonthElement = document.querySelector(".current-month"),
-      prevNextIcon = document.querySelectorAll(".icons span"),
-      monthPicker = document.getElementById("monthPicker"),
-      datePicker = document.getElementById("datePicker"),
-        popup = document.getElementById("popup"),
-        popupDate = document.getElementById("popup-date"),
-        closePopup = document.querySelector(".close"),
-        addExercisePopup = document.getElementById(".popup-choice-exercise"),
-        addExerciseButton = document.querySelectorAll(".btn-add-exercise");
+    currentYearElement = document.querySelector(".current-year"),
+    currentMonthElement = document.querySelector(".current-month"),
+    prevNextIcon = document.querySelectorAll(".icons span"),
+    monthPicker = document.getElementById("monthPicker"),
+    datePicker = document.getElementById("datePicker"),
+    popup = document.getElementById("popup"),
+    popupDate = document.getElementById("popup-date"),
+    closePopup = document.querySelector(".close");
 
-
-// 새로운 날짜, 현재 연도 및 월 가져오기
 let date = new Date(),
     currYear = date.getFullYear(),
     currMonth = date.getMonth(),
     selectedDate = date.getDate();
 
 const renderCalendar = () => {
-    let firstDayofMonth = new Date(currYear, currMonth, 1).getDay(), // 월의 첫 번째 날 가져오기
-        lastDateofMonth = new Date(currYear, currMonth + 1, 0).getDate(), // 월의 마지막 날짜 가져오기
-        lastDayofMonth = new Date(currYear, currMonth, lastDateofMonth).getDay(), // 월의 마지막 날 가져오기
-        lastDateofLastMonth = new Date(currYear, currMonth, 0).getDate(); // 이전 월의 마지막 날짜 가져오기
-     let liTag = "";
+    let firstDayofMonth = new Date(currYear, currMonth, 1).getDay(),
+        lastDateofMonth = new Date(currYear, currMonth + 1, 0).getDate(),
+        lastDayofMonth = new Date(currYear, currMonth, lastDateofMonth).getDay(),
+        lastDateofLastMonth = new Date(currYear, currMonth, 0).getDate();
+    let liTag = "";
 
-    for (let i = firstDayofMonth; i > 0; i--) { // 이전 월의 마지막 날 li 생성
+    for (let i = firstDayofMonth; i > 0; i--) {
         liTag += `<li class="inactive">${lastDateofLastMonth - i + 1}</li>`;
     }
 
-    for (let i = 1; i <= lastDateofMonth; i++) { // 현재 월의 모든 날짜 li 생성
-        // 현재 날짜, 월 및 연도가 일치하는 경우 li에 active 클래스 추가
+    for (let i = 1; i <= lastDateofMonth; i++) {
         let isToday = i === new Date().getDate() && currMonth === new Date().getMonth()
             && currYear === new Date().getFullYear() ? "active" : "";
-        // 선택된 날짜에 selected 클래스 추가
-        let isSelected = i === selectedDate && currMonth === date.getMonth() 
+        let isSelected = i === selectedDate && currMonth === date.getMonth()
             && currYear === date.getFullYear() ? "selected" : "";
-        liTag += `<li class="${isToday} ${isSelected}">${i}</li>`;   
+        liTag += `<li class="${isToday} ${isSelected}">${i}</li>`;
     }
 
-    for (let i = lastDayofMonth; i < 6; i++) { // 다음 월의 첫 번째 날 li 생성
+    for (let i = lastDayofMonth; i < 6; i++) {
         liTag += `<li class="inactive">${i - lastDayofMonth + 1}</li>`
     }
-    currentYearElement.innerText = `${currYear}년 \n`; // 연도 텍스트 설정
-    currentMonthElement.innerText = `${months[currMonth]}`; // 월 텍스트 설정
+    currentYearElement.innerText = `${currYear}년 \n`;
+    currentMonthElement.innerText = `${months[currMonth]}`;
     daysTag.innerHTML = liTag;
 
-    // 날짜 클릭 이벤트 추가
     document.querySelectorAll('.days li').forEach(day => {
         day.addEventListener('click', (event) => {
             const target = event.target;
             if (!target.classList.contains('inactive')) {
                 selectedDate = parseInt(target.textContent);
                 date = new Date(currYear, currMonth, selectedDate);
-                // datePicker.value = date.toISOString().split('T')[0];
                 popupDate.innerText = ` ${months[currMonth]} ${selectedDate}일`;
                 popup.classList.add('show');
                 renderCalendar();
@@ -64,21 +58,19 @@ const renderCalendar = () => {
 
 renderCalendar();
 
-prevNextIcon.forEach(icon => { // 이전 및 다음 아이콘 가져오기
-    icon.addEventListener("click", () => { // 두 아이콘에 클릭 이벤트 추가
-        // 클릭된 아이콘이 이전 아이콘이면 현재 월을 1 감소, 그렇지 않으면 1 증가
+prevNextIcon.forEach(icon => {
+    icon.addEventListener("click", () => {
         currMonth = icon.id === "prev" ? currMonth - 1 : currMonth + 1;
 
-        if (currMonth < 0 || currMonth > 11) { // 현재 월이 0보다 작거나 11보다 큰 경우
-            // 현재 연도 및 월의 새 날짜를 생성하고 이를 날짜 값으로 전달
+        if (currMonth < 0 || currMonth > 11) {
             date = new Date(currYear, currMonth, selectedDate);
-            currYear = date.getFullYear(); // 새 날짜 연도로 현재 연도 업데이트
-            currMonth = date.getMonth(); // 새 날짜 월로 현재 월 업데이트
+            currYear = date.getFullYear();
+            currMonth = date.getMonth();
         } else {
-            date = new Date(currYear, currMonth, selectedDate); // 현재 날짜를 날짜 값으로 전달
+            date = new Date(currYear, currMonth, selectedDate);
         }
-        monthPicker.value = `${currYear}-${String(currMonth + 1).padStart(2, '0')}`; // 월 선택기 업데이트
-        renderCalendar(); // renderCalendar 함수 호출
+        monthPicker.value = `${currYear}-${String(currMonth + 1).padStart(2, '0')}`;
+        renderCalendar();
     });
 });
 
@@ -93,7 +85,6 @@ if (datePicker) {
     });
 }
 
-// 월 선택기의 값이 변경될 때 달력 업데이트
 monthPicker.addEventListener('change', (event) => {
     const [year, month] = event.target.value.split('-');
     currYear = parseInt(year);
@@ -107,8 +98,6 @@ closePopup.addEventListener('click', () => {
 
 monthPicker.value = `${currYear}-${String(currMonth + 1).padStart(2, '0')}`;
 
-
-
 function previewImage(event, boxId) {
     const input = event.target;
     const reader = new FileReader();
@@ -120,23 +109,81 @@ function previewImage(event, boxId) {
     reader.readAsDataURL(input.files[0]);
 }
 
+
 document.addEventListener("DOMContentLoaded", function() {
     const addExercisePopup = document.getElementById("popup-choice-exercise");
     const closePopup = document.querySelector(".close2");
+    const addExerciseButton = document.getElementById("btn-add-exercise");
+    const addExerciseFormButton = document.getElementById("add-exercise-button");
+    const exerciseList = document.getElementById("exercise-list");
+
+    // 요소 선택 확인
+    console.log("addExercisePopup:", addExercisePopup);
+    console.log("closePopup:", closePopup);
+    console.log("addExerciseButton:", addExerciseButton);
+    console.log("addExerciseFormButton:", addExerciseFormButton);
+    console.log("exerciseList:", exerciseList);
 
     // "운동 추가하기" 버튼 클릭 시 팝업 창 표시
-    document.querySelectorAll('.btn-add').forEach(button => {
-        button.addEventListener('click', () => {
+    if (addExerciseButton) {
+        addExerciseButton.addEventListener('click', () => {
+            console.log("Add exercise button clicked");
             addExercisePopup.classList.add('show');
         });
-    });
+    } else {
+        console.error("Add exercise button not found");
+    }
 
     // 닫기 버튼 클릭 시 팝업 창 닫기
-    closePopup.addEventListener('click', () => {
-        // 디버깅: 클릭 이벤트 확인
-        console.log("Close button clicked");
-        addExercisePopup.classList.remove('show');
+    if (closePopup) {
+        closePopup.addEventListener('click', () => {
+            console.log("Close button clicked");
+            addExercisePopup.classList.remove('show');
+        });
+    } else {
+        console.error("Close button not found");
+    }
+
+    // 팝업 창 외부 클릭 시 팝업 창 닫기
+    window.addEventListener('click', (event) => {
+        if (event.target == addExercisePopup) {
+            console.log("Outside popup clicked");
+            addExercisePopup.classList.remove('show');
+        }
     });
 
+    // 팝업에서 운동 추가하기
+    if (addExerciseFormButton) {
+        addExerciseFormButton.addEventListener('click', () => {
+            const exerciseSelect = document.getElementById("exercise-select");
+            const reps = document.getElementById("reps");
+            const sets = document.getElementById("sets");
 
+            // 요소 선택 확인
+            console.log("exerciseSelect:", exerciseSelect);
+            console.log("reps:", reps);
+            console.log("sets:", sets);
+
+            if (exerciseSelect && reps && sets) {
+                if (exerciseSelect.value && reps.value && sets.value) {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = `${exerciseSelect.value} \n 
+                                             ⃝ ${reps.value}회 x ${sets.value}세트`;
+                    exerciseList.appendChild(listItem);
+
+                    // 팝업 창 닫기 및 초기화
+                    addExercisePopup.classList.remove('show');
+                    exerciseSelect.value = "";
+                    reps.value = "";
+                    sets.value = "";
+                } else {
+                    alert("모든 항목을 입력해주세요.");
+                }
+            } else {
+                console.error("One or more elements not found");
+            }
+        });
+    } else {
+        console.error("Add exercise form button not found");
+    }
 });

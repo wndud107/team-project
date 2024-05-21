@@ -464,11 +464,12 @@ input[type="month"]:focus {
 .image-upload-box img {
   /* width: 100%;
   height: 100%; */
-  width: 230px;
+  width: 220px;
   /* height: 150px; 스크롤바 생성시 */
-  height: 100px;
+  height: 122px;
   object-fit: cover;
   border-radius: 5px;
+ margin-top: 5px;
 }
 
 .image-upload-box input[type="file"] {

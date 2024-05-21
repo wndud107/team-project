@@ -464,12 +464,11 @@ input[type="month"]:focus {
 .image-upload-box img {
   /* width: 100%;
   height: 100%; */
-  width: 220px;
+  width: 230px;
   /* height: 150px; 스크롤바 생성시 */
-  height: 123px;
+  height: 100px;
   object-fit: cover;
   border-radius: 5px;
- margin-top: 5px;
 }
 
 .image-upload-box input[type="file"] {
@@ -702,7 +701,7 @@ margin-left: 5px;
 
 .choice-exercise{
   display: flex;
-  margin: 10px;
+  margin: 15px;
 }
 
 .select-exercise{
@@ -718,11 +717,43 @@ margin-left: 5px;
 
 .count-exercise{
   display: flex;
+  margin: 15px;
 }
 
+.count-exercise p {
+  margin: 0 5px;
+}
+
+
 .input-count-exercise{
-  width: 25px;
+  width: 35px;
   height: 25px;
   border-radius: 10px;
-  border: 1px solid #0b99a9;
+  border: 1.5px solid #0b99a9;
+  padding-left: 5px;
+}
+
+/* input=num 화살표 없애기 */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* 운동 '추가' 버튼 */
+#add-exercise-button{
+  padding: 5px;
+  position: absolute;
+  top: 55px;
+  left: 210px;
+  font-weight: 600;
+  width: 55px;
+  height: 30px;
+  border-radius: 20px;
+  /* border-color: #0b99a9; */
+  background-color: #ffffff;
+}
+
+#add-exercise-button:hover{
+  background-color: #0b99a945;
 }

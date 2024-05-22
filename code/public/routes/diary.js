@@ -167,9 +167,12 @@ document.addEventListener("DOMContentLoaded", function() {
             if (exerciseSelect && reps && sets) {
                 if (exerciseSelect.value && reps.value && sets.value) {
                     const listItem = document.createElement("li");
-                    listItem.textContent = `${exerciseSelect.value} \n 
-                                             ⃝ ${reps.value}회 x ${sets.value}세트`;
+                    listItem.innerText = `  ◯ ${exerciseSelect.value}  [  ${reps.value}회 x ${sets.value}세트  ] ` ;
+                    const separator = document.createElement("hr");
                     exerciseList.appendChild(listItem);
+                    exerciseList.appendChild(separator);
+                    
+                
 
                     // 팝업 창 닫기 및 초기화
                     addExercisePopup.classList.remove('show');
@@ -187,3 +190,4 @@ document.addEventListener("DOMContentLoaded", function() {
         console.error("Add exercise form button not found");
     }
 });
+

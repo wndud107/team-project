@@ -56,6 +56,55 @@ const renderCalendar = () => {
     });
 }
 
+//새로 추가한 부분
+const fetchDataForDate = (date) => {
+    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    fetch(`/meals?date=${formattedDate}`)
+        .then(response => response.json())
+        .then(data => {
+            updatePopupContent(data, 'meals');
+        })
+        .catch(error => console.error('Error fetching meals:', error));
+
+    fetch(`/exercises?date=${formattedDate}`)
+        .then(response => response.json())
+        .then(data => {
+            updatePopupContent(data, 'exercises');
+        })
+        .catch(error => console.error('Error fetching exercises:', error));
+}
+
+const updatePopupContent = (data, type) => {
+    if (type === 'meals') {
+        const mealContainers = {
+            아침: document.getElementById('uploadBox1'),
+            점심: document.getElementById('uploadBox2'),
+            저녁: document.getElementById('uploadBox3')
+        };
+
+        for (let key in mealContainers) {
+            mealContainers[key].innerHTML = `<p>+</p><p>${key} 식단</p>`;
+        }
+
+        data.forEach(meal => {
+            if (mealContainers[meal.mealType]) {
+                mealContainers[meal.mealType].innerHTML = `<img src="/uploads/${meal.filename}" alt="${meal.mealType} 식단">`;
+            }
+        });
+    } else if (type === 'exercises') {
+        const exerciseList = document.getElementById('exercise-list');
+        exerciseList.innerHTML = ''; // 초기화
+
+        data.forEach(exercise => {
+            const listItem = document.createElement("li");
+            listItem.innerText = `  ◯ ${exercise.exercise}  [  ${exercise.reps}회 x ${exercise.sets}세트  ] `;
+            const separator = document.createElement("hr");
+            exerciseList.appendChild(listItem);
+            exerciseList.appendChild(separator);
+        });
+    }
+} //여기까지
+
 renderCalendar();
 
 prevNextIcon.forEach(icon => {
@@ -164,6 +213,7 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log("reps:", reps);
             console.log("sets:", sets);
 
+            //여기서부터 추가가
             if (exerciseSelect && reps && sets) {
                 if (exerciseSelect.value && reps.value && sets.value) {
                     const listItem = document.createElement("li");
@@ -171,23 +221,75 @@ document.addEventListener("DOMContentLoaded", function() {
                     const separator = document.createElement("hr");
                     exerciseList.appendChild(listItem);
                     exerciseList.appendChild(separator);
-                    
-                
 
-                    // 팝업 창 닫기 및 초기화
-                    addExercisePopup.classList.remove('show');
-                    exerciseSelect.value = "";
-                    reps.value = "";
-                    sets.value = "";
+                    const formattedDate = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
+
+                    fetch('/save-exercise', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            date: formattedDate,
+                            exercise: exerciseSelect.value,
+                            reps: reps.value,
+                            sets: sets.value
+                        })
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        console.log('Exercise saved successfully:', data);
+                        addExercisePopup.classList.remove('show');
+                        exerciseSelect.value = "";
+                        reps.value = "";
+                        sets.value = "";
+                        fetchDataForDate(selectedDate); // 운동 데이터를 다시 로드하여 업데이트
+                    })
+                    .catch(error => {
+                        console.error('Error saving exercise:', error);
+                    });
                 } else {
                     alert("모든 항목을 입력해주세요.");
                 }
-            } else {
-                console.error("One or more elements not found");
             }
         });
-    } else {
-        console.error("Add exercise form button not found");
     }
+
+    document.getElementById('uploadInput1').addEventListener('change', (event) => uploadImage(event, 'uploadBox1'));
+    document.getElementById('uploadInput2').addEventListener('change', (event) => uploadImage(event, 'uploadBox2'));
+    document.getElementById('uploadInput3').addEventListener('change', (event) => uploadImage(event, 'uploadBox3'));
 });
 
+function uploadImage(event, boxId) {
+    const input = event.target;
+    const file = input.files[0];
+    const formData = new FormData();
+    formData.append('photo', file);
+
+    const formattedDate = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
+    formData.append('date', formattedDate);
+
+    const mealType = boxId === 'uploadBox1' ? '아침' : boxId === 'uploadBox2' ? '점심' : '저녁';
+    formData.append('mealType', mealType);
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const uploadBox = document.getElementById(boxId);
+            uploadBox.innerHTML = `<img src="${reader.result}" alt="Uploaded Image">`;
+        };
+        reader.readAsDataURL(file);
+
+        fetch('/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log('Image uploaded successfully:', data);
+        })
+        .catch(error => {
+            console.error('Error uploading image:', error);
+        });
+    }
+} //여기까지

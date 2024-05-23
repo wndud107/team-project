@@ -1,8 +1,9 @@
 const { MongoClient } = require('mongodb');
-const url = 'mongodb+srv://Songhyojun:9O4KbqHDe8dqGsvm@cluster80502.o9ppw6e.mongodb.net/';
+const url = 'mongodb+srv://songhyojun:jySM0DpoGblpnTIW@songhyojun.tvwku08.mongodb.net/';
 let mydb;
 
 const express = require('express');
+const bcrypt = require('bcryptjs');
 const fs = require('fs');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -124,7 +125,6 @@ app.get('/complete-LP', function(req, res) {
   res.render('complete-LP');
 });
 
-// 다른 라우트들...
 
 app.get('/diary', function(req, res) {
   res.render('diary');
@@ -134,7 +134,6 @@ app.get('/update-free-board', function(req, res) {
   res.render('update-free-board');
 });
 
-// ... 나머지 라우트들
 app.get('/update-end-board', function(req,res){
   res.render('update-end-board');
 });
@@ -153,6 +152,26 @@ app.get('/update-child-board', function(req,res){
 
 app.get('/free-board', function(req,res){
   res.render('free-board');
+});
+
+app.get('/child-board', function(req,res){
+  res.render('child-board');
+});
+
+app.get('/end-board', function(req,res){
+  res.render('end-board');
+});
+
+app.get('/info-board', function(req,res){
+  res.render('info-board');
+});
+
+app.get('/ghwm-board', function(req,res){
+  res.render('ghwm-board');
+});
+
+app.get('/main-board', function(req,res){
+  res.render('main-board');
 });
 
 app.get('/list_leg', function (req, res) {
@@ -189,4 +208,8 @@ app.get('/list_weight', function (req, res) {
 
 app.get('/list_etc', function (req, res) {
   res.render('list_etc');
+});
+
+app.get('/my-page', function (req, res) {
+  res.render('my-page');
 });

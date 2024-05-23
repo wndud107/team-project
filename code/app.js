@@ -167,7 +167,17 @@ app.get('/complete-LP', function(req, res) {
 
 
 app.get('/diary', function(req, res) {
-  res.render('diary');
+  if (!req.session.user) {
+    // 로그인되어 있지 않으면 알림창을 띄우고 로그인 페이지로 리다이렉트
+    res.send('<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>');
+  } else {
+    // 로그인되어 있으면 다이어리 페이지로 이동
+    res.render('diary');
+  }
+});
+
+app.get('/main-board', function(req, res) {
+  res.render('main-board');
 });
 
 app.get('/update-board', function(req, res) {
@@ -178,6 +188,7 @@ app.get('/update-free-board', function(req, res) {
   res.render('update-free-board');
 });
 
+// ... 나머지 라우트들
 app.get('/update-end-board', function(req,res){
   res.render('update-end-board');
 });
@@ -194,8 +205,14 @@ app.get('/update-child-board', function(req,res){
   res.render('update-child-board');
 });
 
-app.get('/list_leg', function(req, res) {
-  res.render('list_leg');
+app.get('/list_leg', (req, res) => {
+  if (!req.session.user) {
+    // 로그인되어 있지 않으면 알림창을 띄우고 로그인 페이지로 리다이렉트
+    res.send('<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>');
+  } else {
+    // 로그인되어 있으면 페이지를 렌더링
+    res.render('list_leg');
+  }
 });
 
 app.get('/list_chest', function (req, res) {
@@ -230,14 +247,15 @@ app.get('/list_etc', function (req, res) {
   res.render('list_etc');
 });
 
-app.get('/my-page', function (req, res) {
+app.post('/my-page', function (req, res) {
   res.render('my-page');
-});
+})
 
-app.post('/save-info-board', function (req, res) {
+app.post('/save-free-board', function (req, res) {
   console.log(req.body.title);
   console.log(req.body.file);
   console.log(req.body.content);
+
   // 세션에서 사용자 정보 가져오기
   const user = req.session.user;
 
@@ -246,17 +264,141 @@ app.post('/save-info-board', function (req, res) {
     return res.send('<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>');
   }
 
-  // 현재 날짜를 YYYY-MM-DD 형식으로 생성
-  const currentDate = new Date().toISOString().split('T')[0];
+  // 현재 날짜와 시간을 생성
+  const currentDate = new Date();
 
   //몽고DB에 데이터 저장하기
-  mydb.collection('User_board').insertOne(
+  mydb.collection('free_board').insertOne(
     {title: req.body.title, file: req.body.file, content:req.body.content, author:user.id, date: currentDate}
   ).then(result=> {
     console.log(result);
     console.log('데이터 추가 성공')
-    // 데이터를 추가한 후, 다시 free-board 페이지로 리다이렉트
+    // 데이터를 추가한 후, 다시 info-board 페이지로 리다이렉트
     res.redirect("/free-board");
+  })
+  .catch(error => {
+    console.error('Error inserting data into MongoDB:', error);
+    res.status(500).send('Internal Server Error');
+  });
+});
+
+app.post('/save-info-board', function (req, res) {
+  console.log(req.body.title);
+  console.log(req.body.file);
+  console.log(req.body.content);
+
+  // 세션에서 사용자 정보 가져오기
+  const user = req.session.user;
+
+  // 사용자가 로그인되어 있지 않다면 알림창을 띄우고 로그인 페이지로 리다이렉트
+  if (!user) {
+    return res.send('<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>');
+  }
+
+  // 현재 날짜와 시간을 생성
+  const currentDate = new Date();
+
+  //몽고DB에 데이터 저장하기
+  mydb.collection('info_board').insertOne(
+    {title: req.body.title, file: req.body.file, content:req.body.content, author:user.id, date: currentDate}
+  ).then(result=> {
+    console.log(result);
+    console.log('데이터 추가 성공')
+    // 데이터를 추가한 후, 다시 info-board 페이지로 리다이렉트
+    res.redirect("/info-board");
+  })
+  .catch(error => {
+    console.error('Error inserting data into MongoDB:', error);
+    res.status(500).send('Internal Server Error');
+  });
+});
+
+app.post('/save-end-board', function (req, res) {
+  console.log(req.body.title);
+  console.log(req.body.file);
+  console.log(req.body.content);
+
+  // 세션에서 사용자 정보 가져오기
+  const user = req.session.user;
+
+  // 사용자가 로그인되어 있지 않다면 알림창을 띄우고 로그인 페이지로 리다이렉트
+  if (!user) {
+    return res.send('<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>');
+  }
+
+  // 현재 날짜와 시간을 생성
+  const currentDate = new Date();
+
+  //몽고DB에 데이터 저장하기
+  mydb.collection('end_board').insertOne(
+    {title: req.body.title, file: req.body.file, content:req.body.content, author:user.id, date: currentDate}
+  ).then(result=> {
+    console.log(result);
+    console.log('데이터 추가 성공')
+    // 데이터를 추가한 후, 다시 info-board 페이지로 리다이렉트
+    res.redirect("/end-board");
+  })
+  .catch(error => {
+    console.error('Error inserting data into MongoDB:', error);
+    res.status(500).send('Internal Server Error');
+  });
+});
+
+app.post('/save-child-board', function (req, res) {
+  console.log(req.body.title);
+  console.log(req.body.file);
+  console.log(req.body.content);
+
+  // 세션에서 사용자 정보 가져오기
+  const user = req.session.user;
+
+  // 사용자가 로그인되어 있지 않다면 알림창을 띄우고 로그인 페이지로 리다이렉트
+  if (!user) {
+    return res.send('<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>');
+  }
+
+  // 현재 날짜와 시간을 생성
+  const currentDate = new Date();
+
+  //몽고DB에 데이터 저장하기
+  mydb.collection('child_board').insertOne(
+    {title: req.body.title, file: req.body.file, content:req.body.content, author:user.id, date: currentDate}
+  ).then(result=> {
+    console.log(result);
+    console.log('데이터 추가 성공')
+    // 데이터를 추가한 후, 다시 info-board 페이지로 리다이렉트
+    res.redirect("/child-board");
+  })
+  .catch(error => {
+    console.error('Error inserting data into MongoDB:', error);
+    res.status(500).send('Internal Server Error');
+  });
+});
+
+app.post('/save-ghwm-board', function (req, res) {
+  console.log(req.body.title);
+  console.log(req.body.file);
+  console.log(req.body.content);
+
+  // 세션에서 사용자 정보 가져오기
+  const user = req.session.user;
+
+  // 사용자가 로그인되어 있지 않다면 알림창을 띄우고 로그인 페이지로 리다이렉트
+  if (!user) {
+    return res.send('<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>');
+  }
+
+  // 현재 날짜와 시간을 생성
+  const currentDate = new Date();
+
+  //몽고DB에 데이터 저장하기
+  mydb.collection('ghwm_board').insertOne(
+    {title: req.body.title, file: req.body.file, content:req.body.content, author:user.id, date: currentDate}
+  ).then(result=> {
+    console.log(result);
+    console.log('데이터 추가 성공')
+    // 데이터를 추가한 후, 다시 info-board 페이지로 리다이렉트
+    res.redirect("/ghwm-board");
   })
   .catch(error => {
     console.error('Error inserting data into MongoDB:', error);
@@ -270,9 +412,30 @@ function formatDate(date) {
   return new Date(date).toLocaleDateString('ko-KR', options);
 }
 
+app.get('/info-board', (req, res) => {
+  // Fetch data from MongoDB collection and sort by date in descending order
+  mydb.collection('info_board').find().sort({ date: -1 }).toArray()
+    .then(data => {
+      // 날짜를 변환하여 뷰에 전달
+      const formattedData = data.map(item => {
+        return {
+          title: item.title,
+          author: item.author,
+          // 변환된 날짜를 전달
+          date: formatDate(item.date)
+        };
+      });
+      res.render('info-board', { data: formattedData }); // Pass the sorted and formatted data to the view
+    })
+    .catch(error => {
+      console.error('Error fetching data from MongoDB:', error);
+      res.status(500).send('Internal Server Error');
+    });
+});
+
 app.get('/free-board', (req, res) => {
   // Fetch data from MongoDB collection and sort by date in descending order
-  mydb.collection('User_board').find().sort({ date: -1 }).toArray()
+  mydb.collection('free_board').find().sort({ date: -1 }).toArray()
     .then(data => {
       // 날짜를 변환하여 뷰에 전달
       const formattedData = data.map(item => {
@@ -284,6 +447,69 @@ app.get('/free-board', (req, res) => {
         };
       });
       res.render('free-board', { data: formattedData }); // Pass the sorted and formatted data to the view
+    })
+    .catch(error => {
+      console.error('Error fetching data from MongoDB:', error);
+      res.status(500).send('Internal Server Error');
+    });
+});
+
+app.get('/end-board', (req, res) => {
+  // Fetch data from MongoDB collection and sort by date in descending order
+  mydb.collection('end_board').find().sort({ date: -1 }).toArray()
+    .then(data => {
+      // 날짜를 변환하여 뷰에 전달
+      const formattedData = data.map(item => {
+        return {
+          title: item.title,
+          author: item.author,
+          // 변환된 날짜를 전달
+          date: formatDate(item.date)
+        };
+      });
+      res.render('end-board', { data: formattedData }); // Pass the sorted and formatted data to the view
+    })
+    .catch(error => {
+      console.error('Error fetching data from MongoDB:', error);
+      res.status(500).send('Internal Server Error');
+    });
+});
+
+app.get('/child-board', (req, res) => {
+  // Fetch data from MongoDB collection and sort by date in descending order
+  mydb.collection('child_board').find().sort({ date: -1 }).toArray()
+    .then(data => {
+      // 날짜를 변환하여 뷰에 전달
+      const formattedData = data.map(item => {
+        return {
+          title: item.title,
+          author: item.author,
+          // 변환된 날짜를 전달
+          date: formatDate(item.date)
+        };
+      });
+      res.render('child-board', { data: formattedData }); // Pass the sorted and formatted data to the view
+    })
+    .catch(error => {
+      console.error('Error fetching data from MongoDB:', error);
+      res.status(500).send('Internal Server Error');
+    });
+});
+
+app.get('/ghwm-board', (req, res) => {
+  // Fetch data from MongoDB collection and sort by date in descending order
+  mydb.collection('ghwm_board').find().sort({ date: -1 }).toArray()
+    .then(data => {
+      // 날짜를 변환하여 뷰에 전달
+      const formattedData = data.map(item => {
+        return {
+          title: item.title,
+          author: item.author,
+          // 변환된 날짜를 전달
+          date: formatDate(item.date)
+        };
+      });
+      res.render('ghwm-board', { data: formattedData }); // Pass the sorted and formatted data to the view
     })
     .catch(error => {
       console.error('Error fetching data from MongoDB:', error);

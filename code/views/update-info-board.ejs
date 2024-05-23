@@ -27,10 +27,10 @@
         </aside>
         <main class="main-content">
             <h1>정보게시판 글쓰기</h1>
-            <form>
-                <input type="text" placeholder="제목을 입력해 주세요." class="title-input">
-                <input type="file" placeholder="파일" class="file-input">
-                <textarea placeholder="내용을 입력해 주세요."></textarea>
+            <form action="/save-info-board" method="post">
+                <input type="text" name="title" placeholder="제목을 입력해 주세요." class="title-input">
+                <input type="file" name="file" placeholder="파일" class="file-input">
+                <textarea placeholder="내용을 입력해 주세요." name="content"></textarea>
                 <button type="submit">등록</button>
             </form>
         </main>

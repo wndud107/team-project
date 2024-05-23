@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const fs = require("fs");
 const path = require("path");
 const bodyParser = require("body-parser");
-const db = require('./data/database');  // getDb 모듈을 가져옵니다.
+const db = require('./data/database'); 
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));

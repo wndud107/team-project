@@ -10,9 +10,13 @@
         <aside class="sidebar">
             <div class="profile">
                 <div class="profile-image"><img src="" alt="..."></div>
-                <div class="profile-name">...</div>
-                <button class="profile-button">내 정보</button>
-                <button class="profile-button">로그아웃</button>
+                <div class="profile-name"><%= user ? user.name : '' %></div>
+                <form method="POST" action="/my-page">
+                    <button class="profile-button">내 정보</button>
+                </form>
+                <form method="POST" action="/logout">
+                    <button class="profile-button">로그아웃</button>
+                </form>
             </div>
             <hr>
             <div class="menu">
@@ -43,3 +47,4 @@
     </script>
 </body>
 </html>
+

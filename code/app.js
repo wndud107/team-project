@@ -9,12 +9,29 @@ const path = require('path');
 const bodyParser = require('body-parser');
 
 const app = express();
+
+// express-session 미들웨어 설정
+let session = require('express-session');
+app.use(session({
+  secret: 'dkufe8938493j4e08349u', // 세션 암호화에 사용되는 비밀 키
+  resave: false, // 변경되지 않은 세션도 다시 저장할지 여부
+  saveUninitialized: true // 초기화되지 않은 세션을 저장할지 여부
+}))
+
+// body-parser 미들웨어 설정
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }));
+
+// 사용자 정보를 모든 템플릿에 전달하는 미들웨어
+app.use((req, res, next) => {
+  res.locals.user = req.session.user;
+  next();
+});
 
 MongoClient.connect(url, )
   .then(client => {
@@ -37,7 +54,14 @@ app.get('/index', function(req, res) {
 });
 
 app.get('/login', function(req, res) {
-  res.render('login', { message: null });
+  console.log(req.session);
+  if(req.session.user){
+    console.log('세션 유지');
+    res.send('로그인 되었습니다.');
+  }else{
+    res.render('login', { message: null });
+  }
+  
 });
 
 app.post('/login', function(req, res) {
@@ -45,12 +69,28 @@ app.post('/login', function(req, res) {
   mydb.collection('User_info').findOne({ id_join: userid, pw_join: userpw }) // 컬렉션 이름 확인
     .then(user => {
       if (user) {
+        req.session.user = {
+          id: user.id_join,
+          name: user.name_join
+        }
+        console.log('새로운 로그인')
         res.render('index', { user });
       } else {
         res.render('login', { message: '아이디 또는 비밀번호를 잘못 입력했습니다.' });
       }
     })
     .catch(error => console.error('Error finding user:', error));
+});
+
+app.post('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.redirect('/');
+    }
+    res.clearCookie('connect.sid');
+    res.send('<script>alert("로그아웃 되었습니다."); window.location.href = "/login";</script>');
+    console.log('로그아웃')
+  });
 });
 
 app.get('/join', function(req, res) {
@@ -130,6 +170,10 @@ app.get('/diary', function(req, res) {
   res.render('diary');
 });
 
+app.get('/update-board', function(req, res) {
+  res.render('update-free-board');
+});
+
 app.get('/update-free-board', function(req, res) {
   res.render('update-free-board');
 });
@@ -150,31 +194,7 @@ app.get('/update-child-board', function(req,res){
   res.render('update-child-board');
 });
 
-app.get('/free-board', function(req,res){
-  res.render('free-board');
-});
-
-app.get('/child-board', function(req,res){
-  res.render('child-board');
-});
-
-app.get('/end-board', function(req,res){
-  res.render('end-board');
-});
-
-app.get('/info-board', function(req,res){
-  res.render('info-board');
-});
-
-app.get('/ghwm-board', function(req,res){
-  res.render('ghwm-board');
-});
-
-app.get('/main-board', function(req,res){
-  res.render('main-board');
-});
-
-app.get('/list_leg', function (req, res) {
+app.get('/list_leg', function(req, res) {
   res.render('list_leg');
 });
 
@@ -212,4 +232,46 @@ app.get('/list_etc', function (req, res) {
 
 app.get('/my-page', function (req, res) {
   res.render('my-page');
+});
+
+app.post('/save-info-board', function (req, res) {
+  console.log(req.body.title);
+  console.log(req.body.file);
+  console.log(req.body.content);
+  // 세션에서 사용자 정보 가져오기
+  const user = req.session.user;
+
+  // 사용자가 로그인되어 있지 않다면 알림창을 띄우고 로그인 페이지로 리다이렉트
+  if (!user) {
+    return res.send('<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>');
+  }
+
+  // 현재 날짜를 YYYY-MM-DD 형식으로 생성
+  const currentDate = new Date().toISOString().split('T')[0];
+
+  //몽고DB에 데이터 저장하기
+  mydb.collection('User_board').insertOne(
+    {title: req.body.title, file: req.body.file, content:req.body.content, author:user.id, date: currentDate}
+  ).then(result=> {
+    console.log(result);
+    console.log('데이터 추가 성공')
+    // 데이터를 추가한 후, 다시 free-board 페이지로 리다이렉트
+    res.redirect("/free-board");
+  })
+  .catch(error => {
+    console.error('Error inserting data into MongoDB:', error);
+    res.status(500).send('Internal Server Error');
+  });
+});
+
+app.get('/free-board', (req, res) => {
+  // Fetch data from MongoDB collection, sorted by date in descending order
+  mydb.collection('User_board').find().sort({ date: -1 }).toArray()
+    .then(data => {
+      res.render('free-board', { data }); // Pass the data to the view
+    })
+    .catch(error => {
+      console.error('Error fetching data from MongoDB:', error);
+      res.status(500).send('Internal Server Error');
+    });
 });

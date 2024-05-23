@@ -10,9 +10,11 @@
         <aside class="sidebar">
             <div class="profile">
                 <div class="profile-image"><img src="" alt="..."></div>
-                <div class="profile-name">김글미</div>
+                <div class="profile-name"><%= user ? user.name : '' %></div>
                 <button class="profile-button">내 정보</button>
-                <button class="profile-button">로그아웃</button>
+                <form method="POST" action="/logout">
+                    <button type="submit" class="profile-button">로그아웃</button>
+                </form>
             </div>
             <hr>
             <div class="menu">
@@ -36,81 +38,13 @@
                     </tr>
                 </thead>
                 <tbody>
+                <% for(let i = 0; i < data.length; i++){ %>
                     <tr>
-                        <td>‘사이트 체스트’ 포즈 잡는법</td>
-                        <td>매클</td>
-                        <td>2024-04-05</td>
+                        <td><%= data[i].title %></a></td>
+                        <td><%= data[i].author %></td>
+                        <td><%= data[i].date %></td>
                     </tr>
-                    <tr>
-                        <td>‘사이트 덤벨’ 포즈 잡는법</td>
-                        <td>알렉스</td>
-                        <td>2024-04-04</td>
-                    </tr>
-                    <tr>
-                        <td>The Complete Center Prep Guide (Layne Norton) - 보디빌딩 시합 준비 관련 서적 추천</td>
-                        <td>민병관</td>
-                        <td>2024-04-02</td>
-                    </tr>
-                    <tr>
-                        <td>레인 노트의 대체 영향 팁</td>
-                        <td>나기평</td>
-                        <td>2024-04-01</td>
-                    </tr>
-                    <tr>
-                        <td>다이어트 정체기를 깨뜨리는 방법</td>
-                        <td>흘로저자</td>
-                        <td>2024-03-26</td>
-                    </tr>
-                    <tr>
-                        <td>허리와 목 통증을 위한 최고의 운동 8가지</td>
-                        <td>만근주</td>
-                        <td>2024-03-21</td>
-                    </tr>
-                    <tr>
-                        <td>운동하고 5배 파워업 근육 잘 안 클까? 호르몬의 연속성 관계</td>
-                        <td>김철수</td>
-                        <td>2024-03-13</td>
-                    </tr>
-                    <tr>
-                        <td>‘저리고자’ 다이어트를 들렀다... “식대로 끝난다”는 연구 결과</td>
-                        <td>활도</td>
-                        <td>2024-03-09</td>
-                    </tr>
-                    <tr>
-                        <td>운동보다 식단이 중요한 이유</td>
-                        <td>wineli</td>
-                        <td>2024-03-09</td>
-                    </tr>
-                    <tr>
-                        <td>초보자를 위한 운동텀(루틴) - 1년 (ver.24)</td>
-                        <td>현린</td>
-                        <td>2024-03-08</td>
-                    </tr>
-                    <tr>
-                        <td>이제 막 다이어트 계획 세우시는 분들을 위한 초보자 추천 운동 루틴</td>
-                        <td>alsqud</td>
-                        <td>2024-03-07</td>
-                    </tr>
-                    <tr>
-                        <td>티몬 10배 할인 쿠폰 감정 세리 새니오 (1명 900건)</td>
-                        <td>qorfvk502</td>
-                        <td>2024-03-02</td>
-                    </tr>
-                    <tr>
-                        <td>하이온 액티브 소고기 18일 72,060개 (팩당 1,153)</td>
-                        <td>whdrkd822</td>
-                        <td>2024-03-02</td>
-                    </tr>
-                    <tr>
-                        <td>2023년도 치트고사 자격검정 및 연수 시행계획 공고</td>
-                        <td>amnesia53</td>
-                        <td>2024-02-23</td>
-                    </tr>
-                    <tr>
-                        <td>생체급 가처분 답전진시료</td>
-                        <td>overwatchBB</td>
-                        <td>2024-02-19</td>
-                    </tr>
+                <% } %>
                 </tbody>
             </table>
         </main>

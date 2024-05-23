@@ -7,8 +7,24 @@ const bcrypt = require('bcryptjs');
 const fs = require('fs');
 const path = require('path');
 const bodyParser = require('body-parser');
+const multer = require('multer');
 
 const app = express();
+
+// multer 설정
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = 'public/uploads/';
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+const upload = multer({ storage });
 
 // express-session 미들웨어 설정
 let session = require('express-session');
@@ -165,7 +181,7 @@ app.get('/complete-LP', function(req, res) {
   res.render('complete-LP');
 });
 
-
+//다이어리부분
 app.get('/diary', function(req, res) {
   if (!req.session.user) {
     // 로그인되어 있지 않으면 알림창을 띄우고 로그인 페이지로 리다이렉트
@@ -175,6 +191,75 @@ app.get('/diary', function(req, res) {
     res.render('diary');
   }
 });
+
+app.post('/save-exercise', (req, res) => {
+  const { date, exercise, reps, sets } = req.body;
+  mydb.collection('User_diary').insertOne({ date, exercise, reps, sets })
+      .then(result => {
+          res.send('Exercise saved successfully');
+      })
+      .catch(error => {
+          console.error('Error saving exercise:', error);
+          res.status(500).send('Error saving exercise');
+      });
+});
+
+app.get('/exercises', (req, res) => {
+  const { date } = req.query;
+  mydb.collection('User_diary').find({ date }).toArray()
+      .then(exercises => {
+          res.json(exercises);
+      })
+      .catch(error => {
+          console.error('Error fetching exercises:', error);
+          res.status(500).send('Error fetching exercises');
+      });
+});
+
+app.post('/upload', (req, res) => {
+  const form = new formidable.IncomingForm();
+  form.uploadDir = path.join(__dirname, 'public', 'uploads');
+  form.keepExtensions = true;
+
+  form.parse(req, (err, fields, files) => {
+      if (err) {
+          console.error('Error uploading file:', err);
+          return res.status(500).send('Error uploading file');
+      }
+
+      const { date, mealType } = fields;
+      const oldPath = files.photo.path;
+      const newPath = path.join(form.uploadDir, files.photo.name);
+
+      fs.rename(oldPath, newPath, (err) => {
+          if (err) {
+              console.error('Error renaming file:', err);
+              return res.status(500).send('Error renaming file');
+          }
+
+          mydb.collection('Meals').insertOne({ date, mealType, filename: files.photo.name })
+              .then(result => {
+                  res.send('File uploaded and data saved successfully');
+              })
+              .catch(error => {
+                  console.error('Error saving data:', error);
+                  res.status(500).send('Error saving data');
+              });
+      });
+  });
+});
+
+app.get('/meals', (req, res) => {
+  const { date } = req.query;
+  mydb.collection('Meals').find({ date }).toArray()
+      .then(meals => {
+          res.json(meals);
+      })
+      .catch(error => {
+          console.error('Error fetching meals:', error);
+          res.status(500).send('Error fetching meals');
+      });
+}); //다이어리부분
 
 app.get('/main-board', function(req, res) {
   res.render('main-board');

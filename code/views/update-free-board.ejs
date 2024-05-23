@@ -10,9 +10,13 @@
         <aside class="sidebar">
             <div class="profile">
                 <div class="profile-image"><img src="" alt="..."></div>
-                <div class="profile-name">...</div>
-                <button class="profile-button">내 정보</button>
-                <button class="profile-button">로그아웃</button>
+                <div class="profile-name"><%= user ? user.name : '' %></div>
+                <form method="POST" action="/my-page">
+                    <button class="profile-button">내 정보</button>
+                </form>
+                <form method="POST" action="/logout">
+                    <button class="profile-button">로그아웃</button>
+                </form>
             </div>
             <hr>
             <div class="menu">
@@ -27,10 +31,10 @@
         </aside>
         <main class="main-content">
             <h1>자유게시판 글쓰기</h1>
-            <form>
-                <input type="text" placeholder="제목을 입력해 주세요." class="title-input">
-                <input type="file" placeholder="파일" class="file-input">
-                <textarea placeholder="내용을 입력해 주세요."></textarea>
+            <form action="/save-free-board" method="post">
+                <input type="text" name="title" placeholder="제목을 입력해 주세요." class="title-input">
+                <input type="file" name="file" placeholder="파일" class="file-input">
+                <textarea placeholder="내용을 입력해 주세요." name="content"></textarea>
                 <button type="submit">등록</button>
             </form>
         </main>

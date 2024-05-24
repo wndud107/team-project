@@ -9,7 +9,7 @@ const fs = require("fs");
 const path = require("path");
 const bodyParser = require("body-parser");
 const multer = require("multer");
-
+const { getDb } = require("./data/database");
 const app = express();
 
 // multer 설정
@@ -85,23 +85,35 @@ app.get("/login", function (req, res) {
 app.post("/login", async function (req, res) {
   const { userid, userpw } = req.body;
   try {
-    const user = await mydb.collection("User_info").findOne({ id_join: userid, pw_join: userpw });
-    if (user) {
+    const db = getDb();
+    const user = await db.collection("User_info").findOne({ id_join: userid });
+
+    if (!user) {
+      return res.render("login", {
+        message: "아이디 또는 비밀번호를 잘못 입력했습니다.",
+      });
+    }
+
+    const passwordEqual = await bcrypt.compare(userpw, user.pw_join);
+
+    if (passwordEqual) {
       req.session.user = {
         id: user.id_join,
         name: user.name_join,
       };
       console.log("새로운 로그인");
-      res.redirect("/index");
+      return res.redirect("/index");
     } else {
-      res.render("login", {
+      return res.render("login", {
         message: "아이디 또는 비밀번호를 잘못 입력했습니다.",
       });
     }
   } catch (error) {
     console.error("Error finding user:", error);
+    return res.status(500).send("Internal Server Error");
   }
 });
+
 
 app.get("/logout", (req, res) => {
   req.session.destroy((err) => {
@@ -127,7 +139,7 @@ app.post("/join", async function (req, res) {
   const name_join = userData.name_join;
   const birth_join = userData.birth_join;
   const telnumber_join = userData.telnumber_join;
-  const join_gender = userData['join-gender'];
+  const join_gender = userData["join-gender"];
 
   const hashedPassword = await bcrypt.hash(pw_join, 12);
 
@@ -137,7 +149,7 @@ app.post("/join", async function (req, res) {
     name_join: name_join,
     birth_join: birth_join,
     telnumber_join: telnumber_join,
-    ['join-gender']: join_gender
+    ["join-gender"]: join_gender,
   };
 
   try {
@@ -162,7 +174,9 @@ app.post("/looking-for-id", async function (req, res) {
   const { username, usertel } = req.body;
 
   try {
-    const user = await mydb.collection("User_info").findOne({ name_join: username, telnumber_join: usertel });
+    const user = await mydb
+      .collection("User_info")
+      .findOne({ name_join: username, telnumber_join: usertel });
     if (user) {
       res.render("complete-LI", { userId: user.id_join });
     } else {
@@ -183,7 +197,9 @@ app.post("/looking-for-pw", async function (req, res) {
   const { userid, username } = req.body;
 
   try {
-    const user = await mydb.collection("User_info").findOne({ id_join: userid, name_join: username });
+    const user = await mydb
+      .collection("User_info")
+      .findOne({ id_join: userid, name_join: username });
     if (user) {
       res.render("complete-LP", { userPw: user.pw_join });
     } else {
@@ -220,7 +236,9 @@ app.get("/diary", function (req, res) {
 app.post("/save-exercise", async (req, res) => {
   const { date, exercise, reps, sets } = req.body;
   try {
-    await mydb.collection("User_diary").insertOne({ date, exercise, reps, sets });
+    await mydb
+      .collection("User_diary")
+      .insertOne({ date, exercise, reps, sets });
     res.send("Exercise saved successfully");
   } catch (error) {
     console.error("Error saving exercise:", error);
@@ -231,7 +249,10 @@ app.post("/save-exercise", async (req, res) => {
 app.get("/exercises", async (req, res) => {
   const { date } = req.query;
   try {
-    const exercises = await mydb.collection("User_diary").find({ date }).toArray();
+    const exercises = await mydb
+      .collection("User_diary")
+      .find({ date })
+      .toArray();
     res.json(exercises);
   } catch (error) {
     console.error("Error fetching exercises:", error);
@@ -261,7 +282,9 @@ app.post("/upload", (req, res) => {
       }
 
       try {
-        await mydb.collection("Meals").insertOne({ date, mealType, filename: files.photo.name });
+        await mydb
+          .collection("Meals")
+          .insertOne({ date, mealType, filename: files.photo.name });
         res.send("File uploaded and data saved successfully");
       } catch (error) {
         console.error("Error saving data:", error);
@@ -355,18 +378,25 @@ app.get("/list_etc", function (req, res) {
 });
 
 app.get("/my-page", async function (req, res) {
+  const user = req.session.user;
 
   if (!user) {
-    return res.send('<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>');
+    return res.send(
+      '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
+    );
   }
 
   try {
-    const userData = await mydb.collection("User_info").findOne({ id_join: user.id });
+    const userData = await mydb
+      .collection("User_info")
+      .findOne({ id_join: user.id });
 
     if (userData) {
       res.render("my-page", { user: userData });
     } else {
-      res.send('<script>alert("사용자 정보를 불러오는 데 실패했습니다."); window.location.href = "/";</script>');
+      res.send(
+        '<script>alert("사용자 정보를 불러오는 데 실패했습니다."); window.location.href = "/";</script>'
+      );
     }
   } catch (error) {
     console.error("Error fetching user data:", error);
@@ -563,7 +593,11 @@ function formatDate(date) {
 app.get("/info-board", async (req, res) => {
   // Fetch data from MongoDB collection and sort by date in descending order
   try {
-    const data = await mydb.collection("info_board").find().sort({ date: -1 }).toArray();
+    const data = await mydb
+      .collection("info_board")
+      .find()
+      .sort({ date: -1 })
+      .toArray();
     // 날짜를 변환하여 뷰에 전달
     const formattedData = data.map((item) => {
       return {
@@ -583,7 +617,11 @@ app.get("/info-board", async (req, res) => {
 app.get("/free-board", async (req, res) => {
   // Fetch data from MongoDB collection and sort by date in descending order
   try {
-    const data = await mydb.collection("free_board").find().sort({ date: -1 }).toArray();
+    const data = await mydb
+      .collection("free_board")
+      .find()
+      .sort({ date: -1 })
+      .toArray();
     // 날짜를 변환하여 뷰에 전달
     const formattedData = data.map((item) => {
       return {
@@ -603,7 +641,11 @@ app.get("/free-board", async (req, res) => {
 app.get("/end-board", async (req, res) => {
   // Fetch data from MongoDB collection and sort by date in descending order
   try {
-    const data = await mydb.collection("end_board").find().sort({ date: -1 }).toArray();
+    const data = await mydb
+      .collection("end_board")
+      .find()
+      .sort({ date: -1 })
+      .toArray();
     // 날짜를 변환하여 뷰에 전달
     const formattedData = data.map((item) => {
       return {
@@ -623,7 +665,11 @@ app.get("/end-board", async (req, res) => {
 app.get("/child-board", async (req, res) => {
   // Fetch data from MongoDB collection and sort by date in descending order
   try {
-    const data = await mydb.collection("child_board").find().sort({ date: -1 }).toArray();
+    const data = await mydb
+      .collection("child_board")
+      .find()
+      .sort({ date: -1 })
+      .toArray();
     // 날짜를 변환하여 뷰에 전달
     const formattedData = data.map((item) => {
       return {
@@ -643,7 +689,11 @@ app.get("/child-board", async (req, res) => {
 app.get("/ghwm-board", async (req, res) => {
   // Fetch data from MongoDB collection and sort by date in descending order
   try {
-    const data = await mydb.collection("ghwm_board").find().sort({ date: -1 }).toArray();
+    const data = await mydb
+      .collection("ghwm_board")
+      .find()
+      .sort({ date: -1 })
+      .toArray();
     // 날짜를 변환하여 뷰에 전달
     const formattedData = data.map((item) => {
       return {

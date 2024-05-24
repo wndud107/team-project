@@ -1,73 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <%- include('includes/head') %>
-    <link rel="stylesheet" href="styles/my-page.css">
-</head>
-<body>
+    <link rel="stylesheet" href="styles/my-page.css" />
+  </head>
+  <body>
     <%- include('includes/header') %>
     <main>
-        <div class="mypage-container">
-            <div class="header">
-                <h1>My Page</h1>
-            </div>
-            <div class="profile">
-                <div class="photo">
-                    <div class="photo-placeholder" id="photo-placeholder"></div>
-                    <p>회원님을 알릴 수 있는 사진을 등록해 주세요.<br>등록된 사진은 회원님의 게시물이나 댓글들에 사용됩니다.</p>
-                    <input type="file" id="fileInput" style="display:none;" />
-                    <button id="photo-btn" class="btn" onclick="document.getElementById('fileInput').click();">사진 변경</button>
-                </div>
-                
-                <script>
-                document.getElementById('fileInput').addEventListener('change', function(event) {
-                    const file = event.target.files[0];
-                    const reader = new FileReader();
-                
-                    reader.onload = function(e) {
-                        document.getElementById('photo-placeholder').style.backgroundImage = `url(${e.target.result})`;
-                    };
-                
-                    if (file) {
-                        reader.readAsDataURL(file);
-                    }
-                });
-                </script>
-                
-                <div class="info">
-                    <div class="info-row">
-                        <label>아이디</label>
-                        <span><%=user.id_join%></span>
-                        <button class="btn">아이디 변경</button>
-                    </div>
-                    <div class="info-row">
-                        <label>비밀번호</label>
-                        <span><%= user.pw_join %></span>
-                        <button class="btn">비밀번호 변경</button>
-                    </div>
-                    <div class="info-row">
-                        <label>이름(실명)</label>
-                        <span><%=user.name_join%></span>
-                        <button class="btn">이름 수정</button>
-                    </div>
-                    <div class="info-row">
-                        <label>닉네임</label>
-                        <span><%=user.id_join%></span>
-                        <button class="btn">닉네임 변경</button>
-                    </div>
-                    <div class="info-row">
-                        <label>생년월일</label>
-                        <span><%=user.birth_join%></span>
-                        <button class="btn">생년월일 변경</button>
-                    </div>
-                    <div class="info-row">
-                        <label>휴대전화</label>
-                        <span><%=user.telnumber_join%></span>
-                        <button class="btn">휴대전화 변경</button>
-                    </div>
-                </div>
-            </div>
+      <div class="mypage-container">
+        <div class="header">
+          <h1>My Page</h1>
         </div>
+        <div class="profile">
+          <div class="photo">
+            <div class="photo-placeholder" id="photo-placeholder"></div>
+            <p>
+              회원님을 알릴 수 있는 사진을 등록해 주세요.<br />등록된 사진은
+              회원님의 게시물이나 댓글들에 사용됩니다.
+            </p>
+            <input type="file" id="fileInput" style="display: none" />
+            <button
+              id="photo-btn"
+              class="btn"
+              onclick="document.getElementById('fileInput').click();"
+            >
+              사진 변경
+            </button>
+          </div>
+
+          <script>
+            document
+              .getElementById("fileInput")
+              .addEventListener("change", function (event) {
+                const file = event.target.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                  document.getElementById(
+                    "photo-placeholder"
+                  ).style.backgroundImage = `url(${e.target.result})`;
+                };
+
+                if (file) {
+                  reader.readAsDataURL(file);
+                }
+              });
+          </script>
+
+          <div class="info">
+            <div class="info-row">
+              <label>아이디</label>
+              <span><%= user.id_join %></span>
+              <button class="btn">아이디 변경</button>
+            </div>
+            <div class="info-row">
+              <label>비밀번호</label>
+              <span>******</span>
+              <button class="btn">비밀번호 변경</button>
+            </div>
+            <div class="info-row">
+              <label>이름(실명)</label>
+              <span><%= user.name_join %></span>
+              <button class="btn">이름 수정</button>
+            </div>
+            <div class="info-row">
+              <label>닉네임</label>
+              <span><%= user.id_join %></span>
+              <button class="btn">닉네임 변경</button>
+            </div>
+            <div class="info-row">
+              <label>생년월일</label>
+              <span><%= user.birth_join %></span>
+              <button class="btn">생년월일 변경</button>
+            </div>
+            <div class="info-row">
+              <label>휴대전화</label>
+              <span><%= user.telnumber_join %></span>
+              <button class="btn">휴대전화 변경</button>
+            </div>
+          </div>
+        </div>
+        <br />
+      </div>
+      <br />
+      <br />
+      <div class="mypage-container">
+        <h2>내 커뮤니티 활동</h2>
+        <% if (posts.length > 0) { %>
+        <ul>
+          <% posts.forEach(post => { %>
+          <li>
+            <strong>제목:</strong> <%= post.title %> <br />
+            <strong>작성일:</strong> <%= new
+            Date(post.date).toLocaleDateString() %> <br />
+            <strong>게시판:</strong> <%= post.board %>
+          </li>
+          <% }); %>
+        </ul>
+        <% } else { %>
+        <p>게시글이 없습니다.</p>
+        <% } %>
+      </div>
     </main>
-</body>
+  </body>
 </html>

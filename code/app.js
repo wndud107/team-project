@@ -390,8 +390,42 @@ app.get("/my-page", async function (req, res) {
       .collection("User_info")
       .findOne({ id_join: user.id });
 
+    const freeBoardPosts = await mydb
+      .collection("free_board")
+      .find({ author: user.id })
+      .toArray();
+
+    const endBoardPosts = await mydb
+      .collection("end_board")
+      .find({ author: user.id })
+      .toArray();
+
+    const ghwmBoardPosts = await mydb
+      .collection("ghwm_board")
+      .find({ author: user.id })
+      .toArray();
+
+      const infoBoardPosts = await mydb
+      .collection("ghwm_board")
+      .find({ author: user.id })
+      .toArray();
+
+      const childBoardPosts = await mydb
+      .collection("ghwm_board")
+      .find({ author: user.id })
+      .toArray();
+    // 각 게시판의 게시글들을 하나의 배열로 합치고 게시판 정보 추가
+    const userPosts = [
+      ...freeBoardPosts.map(post => ({ ...post, board: '자유게시판' })),
+      ...endBoardPosts.map(post => ({ ...post, board: '오운완게시판' })),
+      ...infoBoardPosts.map(post => ({ ...post, board: '정보게시판' })),
+      ...ghwmBoardPosts.map(post => ({ ...post, board: '헬린이게시판' })),
+      ...childBoardPosts.map(post => ({ ...post, board: 'G.H.W.M 게시판' })),
+
+    ];
+
     if (userData) {
-      res.render("my-page", { user: userData });
+      res.render("my-page", { user: userData, posts: userPosts });
     } else {
       res.send(
         '<script>alert("사용자 정보를 불러오는 데 실패했습니다."); window.location.href = "/";</script>'
@@ -402,6 +436,8 @@ app.get("/my-page", async function (req, res) {
     res.status(500).send("Internal Server Error");
   }
 });
+
+
 
 app.post("/save-free-board", async function (req, res) {
   console.log(req.body.title);

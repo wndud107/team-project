@@ -7,28 +7,7 @@
 <body>
     <%- include('includes/header')%>
     <div class="container">
-        <aside class="sidebar">
-            <div class="profile">
-                <div class="profile-image"><img src="" alt="..."></div>
-                <div class="profile-name"><%= user ? user.name : '' %></div>
-                <form method="POST" action="/my-page">
-                    <button class="profile-button">내 정보</button>
-                </form>
-                <form method="POST" action="/logout">
-                    <button class="profile-button">로그아웃</button>
-                </form>
-            </div>
-            <hr>
-            <div class="menu">
-                <ul>
-                    <li><a href="free-board">자유게시판</a></li>
-                    <li><a href="end-board">오운완게시판</a></li>
-                    <li><a href="info-board">정보게시판</a></li>
-                    <li><a href="child-board">헬린이게시판</a></li>
-                    <li><a href="ghwm-board">G.H.W.M 게시판</a></li>
-                </ul>
-            </div>
-        </aside>
+        <%- include('includes/aside')%>
         <main class="main-content">
             <h1>헬린이 게시판</h1>
             <table>

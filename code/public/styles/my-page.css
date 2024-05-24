@@ -31,12 +31,14 @@ nav a {
 
 main {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     padding: 40px;
 }
 
 .mypage-container {
     width: 50%;
+    margin: auto;
     background-color: #ffffff;
     padding: 40px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -60,10 +62,6 @@ main {
     background-color: #f0f0f0;
     border: 1px solid #ddd;
     cursor: pointer;
-}
-
-.profile {
-    /* display: flex; */
 }
 
 .photo {
@@ -138,4 +136,19 @@ main {
 #photo-btn {
     width: 80px;
     height: 30px;
+}
+
+.mypage-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.mypage-container ul li {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
+
+.mypage-container ul li strong {
+    display: inline-block;
+    width: 80px;
 }

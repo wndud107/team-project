@@ -52,6 +52,7 @@ header ul {
 
 header li {
     margin: 0 8px;
+    font-weight: bold;
 }
 
 .nav {         /* 상단 네비게이션 */

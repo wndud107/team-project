@@ -44,9 +44,8 @@ const renderCalendar = () => {
         day.addEventListener('click', (event) => {
             const target = event.target;
             if (!target.classList.contains('inactive')) {
-                selectedDate = parseInt(target.textContent);
-                date = new Date(currYear, currMonth, selectedDate);
-                popupDate.innerText = ` ${months[currMonth]} ${selectedDate}일`;
+                selectedDate = new Date(currYear, currMonth, parseInt(target.textContent));
+                popupDate.innerText = ` ${months[currMonth]} ${selectedDate.getDate()}일`;
                 popup.classList.add('show');
                 fetchDataForDate(selectedDate);
                 renderCalendar();
@@ -55,20 +54,19 @@ const renderCalendar = () => {
     });
 }
 
-//새로 추가한 부분
 const fetchDataForDate = (date) => {
     const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     fetch(`/meals?date=${formattedDate}`)
         .then(response => response.json())
         .then(data => {
-            updatePopupContent(data, 'meals');
+            updatePopupContent(data, 'meals'); //식단 데이터 업데이트
         })
         .catch(error => console.error('Error fetching meals:', error));
 
     fetch(`/exercises?date=${formattedDate}`)
         .then(response => response.json())
         .then(data => {
-            updatePopupContent(data, 'exercises');
+            updatePopupContent(data, 'exercises'); //운동 데이터 업데이트
         })
         .catch(error => console.error('Error fetching exercises:', error));
 }
@@ -102,7 +100,7 @@ const updatePopupContent = (data, type) => {
             exerciseList.appendChild(separator);
         });
     }
-} //여기까지
+}
 
 renderCalendar();
 
@@ -157,7 +155,6 @@ function previewImage(event, boxId) {
     reader.readAsDataURL(input.files[0]);
 }
 
-
 document.addEventListener("DOMContentLoaded", function() {
     const addExercisePopup = document.getElementById("popup-choice-exercise");
     const closePopup = document.querySelector(".close2");
@@ -172,35 +169,29 @@ document.addEventListener("DOMContentLoaded", function() {
     console.log("addExerciseFormButton:", addExerciseFormButton);
     console.log("exerciseList:", exerciseList);
 
-    // "운동 추가하기" 버튼 클릭 시 팝업 창 표시
     if (addExerciseButton) {
         addExerciseButton.addEventListener('click', () => {
             console.log("Add exercise button clicked");
             addExercisePopup.classList.add('show');
         });
-    } else {
-        console.error("Add exercise button not found");
     }
 
-    // 닫기 버튼 클릭 시 팝업 창 닫기
     if (closePopup) {
         closePopup.addEventListener('click', () => {
             console.log("Close button clicked");
             addExercisePopup.classList.remove('show');
         });
-    } else {
-        console.error("Close button not found");
     }
 
-    // 팝업 창 외부 클릭 시 팝업 창 닫기
+    //팝업 창 외부 클릭 시 팝업 창 닫기
     window.addEventListener('click', (event) => {
         if (event.target == addExercisePopup) {
-            console.log("Outside popup clicked");
             addExercisePopup.classList.remove('show');
         }
     });
 
-    // 팝업에서 운동 추가하기
+
+
     if (addExerciseFormButton) {
         addExerciseFormButton.addEventListener('click', () => {
             const exerciseSelect = document.getElementById("exercise-select");
@@ -212,11 +203,10 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log("reps:", reps);
             console.log("sets:", sets);
 
-            //여기서부터 추가가
             if (exerciseSelect && reps && sets) {
                 if (exerciseSelect.value && reps.value && sets.value) {
                     const listItem = document.createElement("li");
-                    listItem.innerText = `  ◯ ${exerciseSelect.value}  [  ${reps.value}회 x ${sets.value}세트  ] ` ;
+                    listItem.innerText = `  ◯ ${exerciseSelect.value}  [  ${reps.value}회 x ${sets.value}세트  ] `;
                     const separator = document.createElement("hr");
                     exerciseList.appendChild(listItem);
                     exerciseList.appendChild(separator);
@@ -259,6 +249,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('uploadInput3').addEventListener('change', (event) => uploadImage(event, 'uploadBox3'));
 });
 
+
 function uploadImage(event, boxId) {
     const input = event.target;
     const file = input.files[0];
@@ -291,4 +282,4 @@ function uploadImage(event, boxId) {
             console.error('Error uploading image:', error);
         });
     }
-} //여기까지
+}

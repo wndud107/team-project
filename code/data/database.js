@@ -1,29 +1,24 @@
-const mongodb = require("mongodb");
-const MongoClient = mongodb.MongoClient;
+const mongodb = require('mongodb');
 
+const MongoClient = mongodb.MongoClient;
 const url = "mongodb+srv://songhyojun:jySM0DpoGblpnTIW@songhyojun.tvwku08.mongodb.net/";
 
-let mydb;
+let database;
 
-MongoClient
-  .connect(url)
-  .then((client) => {
-    console.log("Connected to MongoDB");
-    mydb = client.db("User");
-  })
-  .catch((err) => {
-    console.error("MongoDB connection error:", err);
-  });
+async function connect() {
+  const client = await MongoClient.connect(url);
+  console.log('Connected to MongoDB');
+  database = client.db('User');
+}
 
 function getDb() {
-  if (!mydb) {
-    throw {
-      message: "먼저 연결 ㄱㄱ",
-    };
+  if (!database) {
+    throw { message: 'Database connection not established!' };
   }
-  return mydb;
+  return database;
 }
 
 module.exports = {
-  getDb,
+  connectToDatabase: connect,
+  getDb: getDb
 };

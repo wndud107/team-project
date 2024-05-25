@@ -1,5 +1,3 @@
-
-
 let months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
 const daysTag = document.querySelector(".days"),
     currentYearElement = document.querySelector(".current-year"),
@@ -50,6 +48,7 @@ const renderCalendar = () => {
                 date = new Date(currYear, currMonth, selectedDate);
                 popupDate.innerText = ` ${months[currMonth]} ${selectedDate}일`;
                 popup.classList.add('show');
+                fetchDataForDate(selectedDate);
                 renderCalendar();
             }
         });

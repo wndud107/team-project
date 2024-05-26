@@ -1,110 +1,205 @@
-main {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 40px;
+* {
+    margin:0;
 }
 
-.mypage-container {
-    width: 50%;
-    margin: auto;
-    background-color: #ffffff;
-    padding: 40px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+body {
+    font-family: 'Noto Sans Kr';
+    text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
-.header {
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+header {    
+    font-family : 'Oleo Script Swash Caps';
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-}
-
-.header h1 {
+    /* padding: 8px 64px; */
+    width: auto;
+    height: 80px;
+    box-sizing: border-box;
     margin: 0;
+    padding: 10px 20px;
+    background-color: rgb(11, 154, 167);
 }
 
-.header button {
-    padding: 5px 10px;
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
-    cursor: pointer;
+#logo-img{
+    /* font-size: 40px;
+    font-weight: 900; */
+    text-decoration: none;
+    width: 55px;
+    height:55px;
+    position: relative;
+    top: 17px;
+    bottom: 8px;
+
+}    
+
+.logo-text{
+    padding: 0.5px;
+    color: white;  
+    text-shadow: 1px 1px 2px rgb(0,0,0,0.2);
+    text-decoration: none;
+    font-size : 28px;
+    position: relative;
+    bottom: 15px;
+    
 }
 
-.photo {
-    flex: 1;
+header ul {
+    display: flex; 
+}
+
+header li {
+    margin: 0 8px;
+    font-weight: bold;
+}
+
+.nav {         /* 상단 네비게이션 */
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 16px;
+    /* text-shadow: 1px 1px 2px rgb(0,0,0,0.2); */
+}
+
+.nav:hover {
+    color: #B6E8C2;
+}
+
+
+/* main 시작 */
+.container1 {
+    background-color: rgb(11, 154, 167);
+    border-top: 1px solid rgb(0, 53, 89);
+}
+
+.h2 {
+    /* color: rgb(0, 53, 89); */
+    color:white;
+    text-align: left;
+    padding-left: 50px;
+    padding-top: 10px;
+    font-size: 35px;
+    text-shadow: 1.5px 1.5px 6px rgb(0,0,0,0.2);
+}
+
+.profile {
+    padding-left: 20px;
+    padding-top: 20px;
+    display: flex;
+    justify-content:center;
+}
+
+.profile .photo {
     text-align: center;
     margin-bottom: 50px;
 }
 
-.photo-placeholder {
+.profile .photo-placeholder {
     width: 150px;
     height: 150px;
     background-color: #ddd;
     border-radius: 50%;
     margin: 0 auto 30px;
-    background-size: cover; /* Ensures the image covers the entire area */
-    background-position: center; /* Centers the image */
+    background-size: cover;
+    background-position: center;
 }
 
-.photo p {
-    margin: -10px auto 20px;
+.profile .photo p {
     font-size: 13px;
 }
 
-.info {
-    flex: 2;
-    padding-left: 20px;
+.container2 {
+    display: flex;
+    justify-content:space-around;
 }
 
-.info-row {
+.nickname-box {
+    margin-left: -50px;
+}
+
+.nickname-box h3 {
+    font-size: 30px;
+    color: white;
+}
+
+.nickname-box a,
+.D-DAY a {
+    font-size: 15px;
+    text-decoration: none;
+    color: rgb(76, 76, 76);
+}
+
+.nickname-box a:hover,.D-DAY a:hover {
+    color: #B6E8C2;
+}
+
+.D-DAY {
+    margin-top: 20px;
+    margin-right: 100px;
+    color: white;
+}
+
+.D-DAY h2{
+    font-size: 120px;
+    text-align: left;
+}
+
+.User_info {
+    width: 60%;
+    margin: 40px auto;
+}
+
+.User_info h2 {
+    font-weight: bold;
+    padding-bottom: 20px;
+    border-bottom: 3px solid rgb(55, 196, 170);
+    padding-left: 10px;
+    text-align: left;
+}
+
+.basic-info {
+    margin-top: 20px;
+}
+
+.User_info .info-row {
     display: flex;
-    align-items: center;
     justify-content: space-between;
     margin-bottom: 10px;
 }
 
-.info-row label {
-    width: 150px;
-    font-weight: bold;
-    text-align: left;
+.User_info .info-row label {
+    width: 100px;
 }
 
-.info-row span {
+.User_info .info-row span {
     flex: 1;
-    text-align: left;
+    font-weight: bold;
 }
 
-.info-row .btn,
+.User_info .info-row .btn,
 .btn {
-    width: 100px; /* Set a fixed width for buttons */
-    height: 40px; /* Set a fixed height for buttons */
+    width: 120px;
+    height: 30px;
     background-color: rgb(11, 154, 167);
     border: 1px solid #ddd;
     cursor: pointer;
     color: white;
     border-radius: 6px;
+    font-weight: bold;
     text-align: center;
 }
 
-
-
-.info-row .btn:hover,
+.User_info .info-row .btn:hover,
 .btn:hover {
     background-color: rgb(55, 196, 170);
-}
-
-/* .info-row .certified {
-    color: rgb(0, 0, 255);
-    text-decoration: none;
-    margin-left: 5px;
-} */
-
-#photo-btn {
-    width: 80px;
-    height: 30px;
 }
 
 .mypage-container ul {
@@ -113,8 +208,7 @@ main {
 }
 
 .mypage-container ul li {
-    border-bottom: 1px solid #ddd;
-    padding: 10px 0;
+    padding: 0;
 }
 
 .mypage-container ul li strong {

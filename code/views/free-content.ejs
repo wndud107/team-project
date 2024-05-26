@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('includes/head') %>
+</head>
+<body>
+  <%- include('includes/header') %>
+  <main class="main-content">
+    <h1>자유게시판 내용</h1>
+    <div>
+      <h2><%= data.title %></h2>
+      <p>작성자: <%= data.author %></p>
+      <p>작성일: <%= data.date %></p>
+      <div><%= data.content %></div>
+    </div>
+  </main>
+</body>
+</html>

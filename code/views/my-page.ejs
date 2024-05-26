@@ -1,106 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <%- include('includes/head') %>
-    <link rel="stylesheet" href="styles/my-page.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Sans&family=Oleo+Script+Swash+Caps:wght@400;700&family=Oswald:wght@700&family=Roboto:wght@400;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Sans&family=Noto+Sans+KR:wght@100..900&family=Oleo+Script+Swash+Caps:wght@400;700&family=Oswald:wght@700&family=Roboto:wght@400;900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Healancaler</title>
+    <link rel="stylesheet" href="styles/mypage.css" />
   </head>
   <body>
-    <%- include('includes/header') %>
-    <main>
-      <div class="mypage-container">
-        <div class="header">
-          <h1>My Page</h1>
-        </div>
-        <div class="profile">
-          <div class="photo">
-            <div class="photo-placeholder" id="photo-placeholder"></div>
-            <p>
-              회원님을 알릴 수 있는 사진을 등록해 주세요.<br />등록된 사진은
-              회원님의 게시물이나 댓글들에 사용됩니다.
-            </p>
-            <input type="file" id="fileInput" style="display: none" />
-            <button
-              id="photo-btn"
-              class="btn"
-              onclick="document.getElementById('fileInput').click();"
-            >
-              사진 변경
-            </button>
-          </div>
+    <%-include('includes/header')%>
 
-          <script>
-            document
-              .getElementById("fileInput")
-              .addEventListener("change", function (event) {
+    <main>
+        <div class="container1">
+            <h2 class="h2">My Page</h2>
+            <div class="container2">
+                <div class="profile">
+                    <div class="photo"> 
+                        <div class="photo-placeholder" id="photo-placeholder"></div>
+                        <p>
+                            회원님을 알릴 수 있는 사진을 등록해 주세요.<br/>등록된 사진은
+                            회원님의 게시물이나 댓글들에 사용됩니다.
+                        </p>
+                        <input type="file" id="fileInput" style="display: none"/>
+                        <button onclick="document.getElementById('fileInput').click();">
+                           사진 변경
+                        </button>
+                    </div>
+                    <div class="nickname-box">
+                            <h3>NickName</h3>
+                            <a href="change-nickname">닉네임 변경</a>
+                    </div>
+                </div>
+
+                <div class="D-DAY">
+                    <h3>목표 몸무게 50kg</h3>
+                    <h2>D-DAY</h2>
+                    <a href="#">D-DAY 설정</a>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.getElementById("fileInput").addEventListener("change", function (event) {
                 const file = event.target.files[0];
                 const reader = new FileReader();
 
                 reader.onload = function (e) {
-                  document.getElementById(
-                    "photo-placeholder"
-                  ).style.backgroundImage = `url(${e.target.result})`;
+                    document.getElementById("photo-placeholder").style.backgroundImage = `url(${e.target.result})`;
                 };
 
                 if (file) {
-                  reader.readAsDataURL(file);
+                    reader.readAsDataURL(file);
                 }
-              });
-          </script>
+            });
+        </script>
 
-          <div class="info">
-            <div class="info-row">
-              <label>아이디</label>
-              <span><%= user.id_join %></span>
-              <button class="btn">아이디 변경</button>
+        <div class="User_info">
+            <h2>회원 정보</h2>
+            <div class="basic-info">
+                <div class="info-row">
+                    <label>아이디</label>
+                    <span><%= user.id_join %></span>
+                    <button class="btn">아이디 변경</button>
+                </div>
+                <div class="info-row">
+                    <label>비밀번호</label>
+                    <span>********</span>
+                    <button class="btn">비밀번호 변경</button>
+                </div>
+                <div class="info-row">
+                    <label>이름(실명)</label>
+                    <span><%= user.name_join %></span>
+                    <button class="btn">이름 수정</button>
+                </div>
+                <div class="info-row">
+                    <label>닉네임</label>
+                    <span><%= user.nickname_join %></span>
+                    <button class="btn">닉네임 변경</button>
+                </div>
+                <div class="info-row">
+                    <label>생년월일</label>
+                    <span><%= user.birth_join %></span>
+                    <button class="btn">생년월일 변경</button>
+                </div>
+                <div class="info-row">
+                    <label>휴대전화</label>
+                    <span><%= user.telnumber_join %></span>
+                    <button class="btn">휴대전화 변경</button>
+                </div>
+                <div class="info-row">
+                    <label>키</label>
+                    <span><%= user.height_join %></span>
+                    <button class="btn">키 변경</button>
+                </div>
+                <div class="info-row">
+                    <label>몸무게</label>
+                    <span><%= user.weight_join %></span>
+                    <button class="btn">몸무게 변경</button>
+                </div>
             </div>
-            <div class="info-row">
-              <label>비밀번호</label>
-              <span>******</span>
-              <button class="btn">비밀번호 변경</button>
-            </div>
-            <div class="info-row">
-              <label>이름(실명)</label>
-              <span><%= user.name_join %></span>
-              <button class="btn">이름 수정</button>
-            </div>
-            <div class="info-row">
-              <label>닉네임</label>
-              <span><%= user.id_join %></span>
-              <button class="btn">닉네임 변경</button>
-            </div>
-            <div class="info-row">
-              <label>생년월일</label>
-              <span><%= user.birth_join %></span>
-              <button class="btn">생년월일 변경</button>
-            </div>
-            <div class="info-row">
-              <label>휴대전화</label>
-              <span><%= user.telnumber_join %></span>
-              <button class="btn">휴대전화 변경</button>
-            </div>
-          </div>
         </div>
-        <br />
-      </div>
-      <br />
-      <br />
-      <div class="mypage-container">
-        <h2>내 커뮤니티 활동</h2>
-        <% if (posts.length > 0) { %>
-        <ul>
-          <% posts.forEach(post => { %>
-          <li>
-            <strong>제목:</strong> <%= post.title %> <br />
-            <strong>작성일:</strong> <%= new
-            Date(post.date).toLocaleDateString() %> <br />
-            <strong>게시판:</strong> <%= post.board %>
-          </li>
-          <% }); %>
-        </ul>
-        <% } else { %>
-        <p>게시글이 없습니다.</p>
-        <% } %>
-      </div>
     </main>
   </body>
 </html>

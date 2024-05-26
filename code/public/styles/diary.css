@@ -311,14 +311,12 @@ input[type="month"]:focus {
 .D-day {
   position: absolute;
   top: 0;
-  left: 240px;
-  width: 245px;
+  width: 510px;
   height: 220px;
   background-color: rgb(255, 255, 255);  
   border-radius: 5px;
   outline: auto;
   outline-color: #e1e1e1;
-  margin-left: 25px;
 }
 
 .graph {

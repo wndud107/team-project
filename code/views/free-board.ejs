@@ -21,7 +21,7 @@
                 <tbody>
                     <% for(let i = 0; i < data.length; i++){ %>
                         <tr>
-                            <td><%= data[i].title %></a></td>
+                            <td><a href="/free-content/<%= data[i]._id %>"><%= data[i].title %></a></td>
                             <td><%= data[i].author %></td>
                             <td><%= data[i].date %></td>
                         </tr>

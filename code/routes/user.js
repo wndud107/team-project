@@ -195,8 +195,43 @@ router.get('/meals', async (req, res) => {
   }
 });
 
-router.get('/main-board', function (req, res) {
-  res.render('main-board');
+router.get('/main-board', async (req, res) => {
+  try {
+    const freeBoardPosts = await db.getDb().collection('free_board')
+      .find()
+      .sort({ date: -1 })  // 날짜 기준 내림차순 정렬
+      .limit(4)            // 최신 게시글 4개로 제한
+      .toArray();
+
+    const endBoardPosts = await db.getDb().collection('end_board')
+      .find()
+      .sort({ date: -1 })  // 날짜 기준 내림차순 정렬
+      .limit(4)            // 최신 게시글 4개로 제한
+      .toArray();
+    
+    const infoBoardPosts = await db.getDb().collection('info_board')
+      .find()
+      .sort({ date: -1 })  // 날짜 기준 내림차순 정렬
+      .limit(4)            // 최신 게시글 4개로 제한
+      .toArray();
+
+    const childBoardPosts = await db.getDb().collection('child_board')
+      .find()
+      .sort({ date: -1 })  // 날짜 기준 내림차순 정렬
+      .limit(4)            // 최신 게시글 4개로 제한
+      .toArray();
+
+    const ghwmBoardPosts = await db.getDb().collection('ghwm_board')
+      .find()
+      .sort({ date: -1 })  // 날짜 기준 내림차순 정렬
+      .limit(4)            // 최신 게시글 4개로 제한
+      .toArray();
+
+    res.render('main-board', { freeBoardPosts, endBoardPosts, infoBoardPosts, childBoardPosts, ghwmBoardPosts });
+  } catch (error) {
+    console.error('Error fetching board posts:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 router.get('/update-board', function (req, res) {
@@ -442,6 +477,7 @@ router.get('/free-board', async (req, res) => {
   try {
     const data = await db.getDb().collection('free_board').find().sort({ date: -1 }).toArray();
     const formattedData = data.map((item) => ({
+      _id: item._id,
       title: item.title,
       author: item.author,
       date: formatDate(item.date),

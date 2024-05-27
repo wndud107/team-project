@@ -34,46 +34,61 @@
                 <div class="board">
                     <h2>자유게시판</h2>
                     <ul>
-                        <li><a href="#">...</a></li>
-                        <li><a href="#">...</a></li>
-                        <li><a href="#">...</a></li>
-                        <li><a href="#">...</a></li>
+                        <% if (freeBoardPosts && freeBoardPosts.length > 0) { %>
+                            <% freeBoardPosts.forEach(function(post) { %>
+                                <li><a href="/free-content/<%= post._id %>"><%= post.title %></a></li>
+                            <% }) %>
+                        <% } else { %>
+                            <li>게시물이 없습니다.</li>
+                        <% } %>
                     </ul>
                 </div>
                 <div class="board">
                     <h2>오운완게시판</h2>
                     <ul>
-                        <li><a href="#">...</a></li>
-                        <li><a href="#">...</a></li>
-                        <li><a href="#">...</a></li>
-                        <li><a href="#">...</a></li>
+                        <% if (endBoardPosts && endBoardPosts.length > 0) { %>
+                            <% endBoardPosts.forEach(function(post) { %>
+                                <li><a href="/end-content/<%= post._id %>"><%= post.title %></a></li>
+                            <% }) %>
+                        <% } else { %>
+                            <li>게시물이 없습니다.</li>
+                        <% } %>
                     </ul>
                 </div>
                 <div class="board">
                     <h2>정보게시판</h2>
                     <ul>
-                        <li><a href="#">...</a></li>
-                        <li><a href="#">...</a></li>
-                        <li><a href="#">...</a></li>
-                        <li><a href="#">...</a></li>
+                        <% if (infoBoardPosts && infoBoardPosts.length > 0) { %>
+                            <% infoBoardPosts.forEach(function(post) { %>
+                                <li><a href="/info-content/<%= post._id %>"><%= post.title %></a></li>
+                            <% }) %>
+                        <% } else { %>
+                            <li>게시물이 없습니다.</li>
+                        <% } %>
                     </ul>
                 </div>
                 <div class="board">
                     <h2>헬린이게시판</h2>
                     <ul>
-                        <li><a href="#">...</a></li>
-                        <li><a href="#">...</a></li>
-                        <li><a href="#">...</a></li>
-                        <li><a href="#">...</a></li>
+                        <% if (childBoardPosts && childBoardPosts.length > 0) { %>
+                            <% childBoardPosts.forEach(function(post) { %>
+                                <li><a href="/child-content/<%= post._id %>"><%= post.title %></a></li>
+                            <% }) %>
+                        <% } else { %>
+                            <li>게시물이 없습니다.</li>
+                        <% } %>
                     </ul>
                 </div>
                 <div class="board">
                     <h2>G.H.W.M 게시판</h2>
                     <ul>
-                        <li><a href="#">...</a></li>
-                        <li><a href="#">...</a></li>
-                        <li><a href="#">...</a></li>
-                        <li><a href="#">...</a></li>
+                        <% if (ghwmBoardPosts && ghwmBoardPosts.length > 0) { %>
+                            <% ghwmBoardPosts.forEach(function(post) { %>
+                                <li><a href="/ghwm-content/<%= post._id %>"><%= post.title %></a></li>
+                            <% }) %>
+                        <% } else { %>
+                            <li>게시물이 없습니다.</li>
+                        <% } %>
                     </ul>
                 </div>
                 <div class="board">

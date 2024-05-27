@@ -1,0 +1,190 @@
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 240px;
+    padding: 20px;
+    background-color: #f7f7f7;
+    border-right: 1px solid #e0e0e0;
+}
+
+.profile {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-image {
+    width: 100px;
+    height: 100px;
+    background-color: #ccc;
+    margin: 0 auto;
+    border-radius: 50%;
+}
+
+.profile-name {
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.profile-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    background-color: #ddd;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.profile-button:hover {
+    background-color: rgb(55, 196, 170);
+    border-color: rgb(55, 196, 170);
+}
+
+.main-content h1 {
+    color: rgb(11, 154, 167);
+    margin-bottom: 20px;
+}
+
+.upper-profile p {
+    color: rgb(11, 154, 167);
+}
+
+.menu {
+    margin-top: 20px;
+}
+
+.menu ul {
+    list-style: none;
+    padding: 0;
+}
+
+.menu ul li {
+    margin-bottom: 10px;
+}
+
+.menu ul li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+}
+
+.menu ul li a:hover {
+    color:  rgb(11, 154, 167);
+}
+
+.main-content {
+    flex: 1;
+    padding: 40px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f7f7f7;
+    color: rgb(11, 154, 167);
+}
+
+td {
+    background-color: #fff;
+}
+
+tbody tr:nth-child(even) td {
+    background-color: #f7f7f7;
+}
+
+.btn {
+    margin-top: 20px;
+}
+
+.main-board {
+    border: 0.3px solid rgb(0,53,89);
+}
+
+.upper-part {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.upper-part,
+.content {
+    padding: 0 30px;
+}
+
+.upper-profile {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.upper-date {
+    color: rgba(0,53,89,0.5);
+}
+
+.title {
+    color: rgb(0,53,89);
+    font-size: 40px;
+    text-align: left;
+    margin:0;
+    margin-top: 10px;
+}
+
+.contents {
+    color: rgb(0,53,89);
+    font-size: 20px;
+    text-align: left;
+    padding: 20px 0;
+}
+
+.comment-part {
+    padding:0;
+}
+
+.comment {
+    border: 0.3px solid rgb(0,53,89);
+    width: 100%;
+    padding: 15px 30px; 
+    border-top: none;
+    font-size: 14px;
+    box-sizing: border-box; 
+}
+
+.comment::placeholder {
+    color: rgb(55, 196, 170);
+}
+
+.go-to-board {
+    float: left;
+}
+
+.go-to-board button {
+    margin-top: 8px;
+    padding: 8px 20px;
+    margin-left: 15px;
+    background-color: rgb(11, 154, 167);
+    border: 1px solid rgb(11, 154, 167);
+    border-radius: 4px;
+    color: white; 
+    font-size: 15px;
+}
+
+.go-to-board button:hover {
+    background-color: rgb(55, 196, 170);
+    border: 1px solid rgb(55, 196, 170);
+}

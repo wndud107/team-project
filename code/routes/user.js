@@ -8,6 +8,20 @@ const db = require("../data/database");
 
 const router = express.Router();
 
+let multer = require('multer');
+
+let storage = multer.diskStorage({
+  destination : function(req, file, done){
+    done(null, './public/image')
+  },
+  filename : function(req, file, done){
+    done(null, file.originalname)
+  }
+})
+
+let upload = multer({storage : storage});
+let imagepath = '';
+
 router.get("/", function (req, res) {
   res.render("index");
 });
@@ -417,10 +431,10 @@ router.post("/save-free-board", async function (req, res) {
   try {
     await db.getDb().collection("free_board").insertOne({
       title: req.body.title,
-      file: req.body.file,
       content: req.body.content,
       author: user.id,
       date: currentDate,
+      path: imagepath
     });
     res.redirect("/free-board");
   } catch (error) {
@@ -443,10 +457,10 @@ router.post("/save-info-board", async function (req, res) {
   try {
     await db.getDb().collection("info_board").insertOne({
       title: req.body.title,
-      file: req.body.file,
       content: req.body.content,
       author: user.id,
       date: currentDate,
+      path: imagepath
     });
     res.redirect("/info-board");
   } catch (error) {
@@ -469,10 +483,10 @@ router.post("/save-end-board", async function (req, res) {
   try {
     await db.getDb().collection("end_board").insertOne({
       title: req.body.title,
-      file: req.body.file,
       content: req.body.content,
       author: user.id,
       date: currentDate,
+      path: imagepath
     });
     res.redirect("/end-board");
   } catch (error) {
@@ -495,10 +509,10 @@ router.post("/save-child-board", async function (req, res) {
   try {
     await db.getDb().collection("child_board").insertOne({
       title: req.body.title,
-      file: req.body.file,
       content: req.body.content,
       author: user.id,
       date: currentDate,
+      path: imagepath
     });
     res.redirect("/child-board");
   } catch (error) {
@@ -521,10 +535,10 @@ router.post("/save-ghwm-board", async function (req, res) {
   try {
     await db.getDb().collection("ghwm_board").insertOne({
       title: req.body.title,
-      file: req.body.file,
       content: req.body.content,
       author: user.id,
       date: currentDate,
+      path: imagepath
     });
     res.redirect("/ghwm-board");
   } catch (error) {
@@ -547,6 +561,7 @@ router.get("/info-board", async (req, res) => {
       .sort({ date: -1 })
       .toArray();
     const formattedData = data.map((item) => ({
+      _id: item._id,
       title: item.title,
       author: item.author,
       date: formatDate(item.date),
@@ -588,6 +603,7 @@ router.get("/end-board", async (req, res) => {
       .sort({ date: -1 })
       .toArray();
     const formattedData = data.map((item) => ({
+      _id: item._id,
       title: item.title,
       author: item.author,
       date: formatDate(item.date),
@@ -608,6 +624,7 @@ router.get("/child-board", async (req, res) => {
       .sort({ date: -1 })
       .toArray();
     const formattedData = data.map((item) => ({
+      _id: item._id,
       title: item.title,
       author: item.author,
       date: formatDate(item.date),
@@ -628,6 +645,7 @@ router.get("/ghwm-board", async (req, res) => {
       .sort({ date: -1 })
       .toArray();
     const formattedData = data.map((item) => ({
+      _id: item._id,
       title: item.title,
       author: item.author,
       date: formatDate(item.date),
@@ -797,5 +815,9 @@ router.post('/change-pw', async function(req, res) {
   }
 });
 
+router.post('/photo', upload.single('picture'), function(req, res) {
+  console.log(req.file.path);
+  imagepath = '/image/' + req.file.filename; // 파일 경로를 올바르게 설정합니다.
+});
 
 module.exports = router;

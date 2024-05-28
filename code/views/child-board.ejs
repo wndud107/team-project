@@ -1,37 +1,71 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
-    <%- include('includes/head')%>
-    <link rel="stylesheet" href="styles/board.css">
+  <%- include('includes/head') %>
+  <link rel="stylesheet" href="/styles/board-content.css">
 </head>
 <body>
-    <%- include('includes/header')%>
-    <div class="container">
-        <%- include('includes/aside')%>
-        <main class="main-content">
-            <h1>헬린이 게시판</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>제목</th>
-                        <th>작성자</th>
-                        <th>작성일</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% for(let i = 0; i < data.length; i++){ %>
-                        <tr>
-                            <td><a href="/child-content/<%= data[i]._id %>"><%= data[i].title %></a></td>
-                            <td><%= data[i].author %></td>
-                            <td><%= data[i].date %></td>
-                        </tr>
-                    <% } %>
-                </tbody>
-            </table>
-            <div class="btn">
-                <a href="/update-child-board" class="btn btn-primary" id="update-board">작성하기</a>
-            </div>
-        </main>
-    </div>
+  <%- include('includes/header') %>
+
+  <div class="container">
+
+    <%- include('includes/aside') %> 
+    <!-- 사이드바 -->
+
+    <!--게시판-->
+    <main class="main-content">
+      <h1>헬린이 게시판</h1>
+      <div class="main-board">
+
+        <!--upper-->
+        <div class="upper-part"> 
+          <div class="upper-profile">
+            <img src="" alt="user-img">
+            <p> <%= data.author %></p>
+          </div>
+          <p class="upper-date">작성일 : <span id="formatted-date"></span></p>
+        </div>
+
+        <!--content-->
+        <div class="content">
+          <h2 class="title"><%= data.title %></h2>
+          <p class="contents"><%= data.content %></p>
+          <% if (data.path) { %>
+            <img src="<%= data.path %>" width="400"/><p></p>
+          <% } %>
+        </div>
+      </div>
+
+      <!--comment-->
+      <div class="comment-part">
+        <form action="get-comment">
+          <input class="comment" type="text" placeholder="댓글을 입력하세요">
+        </form>
+      </div>
+
+      <div class="go-to-board">
+        <form action="go-to-board">
+          <button>글 목록</button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Date formatting function
+    function formatDate(date) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return new Date(date).toLocaleDateString('ko-KR', options);
+    }
+
+    // Get the raw date from server-rendered content
+    const rawDate = "<%= data.date %>";
+    
+    // Format the date
+    const formattedDate = formatDate(rawDate);
+
+    // Insert the formatted date into the document
+    document.getElementById('formatted-date').textContent = formattedDate;
+  </script>
 </body>
 </html>

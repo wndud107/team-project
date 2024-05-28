@@ -12,14 +12,22 @@
             <h1>자유게시판 글쓰기</h1>
             <form action="/save-free-board" method="post">
                 <input type="text" name="title" placeholder="제목을 입력해 주세요." class="title-input">
-                <input type="file" name="file" placeholder="파일" class="file-input">
+
+                <div class="file-input-container">
+                    <input type="file" name="picture" accept="image/*" placeholder="파일" class="file-input" form="file-form">
+                    <button type="button" class="attach-button" onclick="document.getElementById('file-form').submit()">첨부</button>
+                </div>
+                
                 <textarea placeholder="내용을 입력해 주세요." name="content"></textarea>
-                <button type="submit">등록</button>
+                <button type="submit" class="button">등록</button>
+            </form>
+            
+            <form id="file-form" action="/photo" method="POST" enctype="multipart/form-data" class="file-form">
             </form>
         </main>
     </div>
     <script>
-        document.getElementById('file-input').addEventListener('change', function() {
+        document.querySelector('.file-input').addEventListener('change', function() {
             var fileName = this.files[0] ? this.files[0].name : '선택된 파일 없음';
             document.querySelector('.file-name').textContent = fileName;
         });

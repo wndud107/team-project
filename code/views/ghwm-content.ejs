@@ -30,6 +30,9 @@
         <div class="content">
           <h2 class="title"><%= data.title %></h2>
           <p class="contents"><%= data.content %></p>
+          <% if (data.path) { %>
+            <img src="<%= data.path %>" width="400"/><p></p>
+          <% } %>
         </div>
       </div>
 

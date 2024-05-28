@@ -639,6 +639,8 @@ router.get("/ghwm-board", async (req, res) => {
   }
 });
 
+// 게시물보기
+
 router.get("/free-content/:id", async function (req, res) {
   const id = req.params.id;
 
@@ -655,6 +657,106 @@ router.get("/free-content/:id", async function (req, res) {
 
     if (post) {
       res.render("free-content", { data: post });
+    } else {
+      res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+  } catch (error) {
+    console.error("Error fetching content:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+router.get("/end-content/:id", async function (req, res) {
+  const id = req.params.id;
+
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
+  }
+
+  try {
+    const post = await db
+      .getDb()
+      .collection("end_board")
+      .findOne({ _id: new ObjectId(id) });
+
+    if (post) {
+      res.render("end-content", { data: post });
+    } else {
+      res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+  } catch (error) {
+    console.error("Error fetching content:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+router.get("/child-content/:id", async function (req, res) {
+  const id = req.params.id;
+
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
+  }
+
+  try {
+    const post = await db
+      .getDb()
+      .collection("child_board")
+      .findOne({ _id: new ObjectId(id) });
+
+    if (post) {
+      res.render("child-content", { data: post });
+    } else {
+      res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+  } catch (error) {
+    console.error("Error fetching content:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+router.get("/info-content/:id", async function (req, res) {
+  const id = req.params.id;
+
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
+  }
+
+  try {
+    const post = await db
+      .getDb()
+      .collection("info_board")
+      .findOne({ _id: new ObjectId(id) });
+
+    if (post) {
+      res.render("info-content", { data: post });
+    } else {
+      res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+  } catch (error) {
+    console.error("Error fetching content:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+router.get("/ghwm-content/:id", async function (req, res) {
+  const id = req.params.id;
+
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
+  }
+
+  try {
+    const post = await db
+      .getDb()
+      .collection("ghwm_board")
+      .findOne({ _id: new ObjectId(id) });
+
+    if (post) {
+      res.render("ghwm-content", { data: post });
     } else {
       res.status(404).send("게시물을 찾을 수 없습니다.");
     }

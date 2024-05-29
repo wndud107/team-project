@@ -152,7 +152,34 @@ tbody tr:nth-child(even) td {
     padding: 20px 0;
 }
 
+.edit-delete-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+#edit-text {
+    color: #4e4e4e;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+#edit-text:hover {
+    color: #414141;
+}
+
+#delete-text {
+    color: #e74c3c;
+    cursor: pointer;
+}
+
+#delete-text:hover {
+    color: #c0392b;
+}
+
 .comment-part {
+    margin-top: 8px;
     padding:0;
 }
 
@@ -188,4 +215,3 @@ tbody tr:nth-child(even) td {
     background-color: rgb(55, 196, 170);
     border: 1px solid rgb(55, 196, 170);
 }
-

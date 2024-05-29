@@ -3,6 +3,7 @@
 <head>
     <%- include('includes/head')%>
     <link rel="stylesheet" href="/styles/update-board.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <%- include('includes/header')%>
@@ -14,23 +15,41 @@
                 <input type="text" name="title" placeholder="제목을 입력해 주세요." class="title-input" value="<%= data.title %>">
 
                 <div class="file-input-container">
-                    <input type="file" name="picture" accept="image/*" placeholder="파일" class="file-input" form="file-form">
-                    <button type="button" class="attach-button" onclick="document.getElementById('file-form').submit()">첨부</button>
+                    <input type="file" name="picture" accept="image/*" class="file-input">
+                    <button type="button" class="attach-button" onclick="uploadFile()">첨부</button>
                 </div>
                 
                 <textarea placeholder="내용을 입력해 주세요." name="content"><%= data.content %></textarea>
                 <button type="submit" class="button">수정</button>
             </form>
-            
-            <form id="file-form" action="/photo" method="POST" enctype="multipart/form-data" class="file-form">
-            </form>
         </main>
     </div>
     <script>
-        document.querySelector('.file-input').addEventListener('change', function() {
-            var fileName = this.files[0] ? this.files[0].name : '선택된 파일 없음';
-            document.querySelector('.file-name').textContent = fileName;
-        });
+        function uploadFile() {
+            var formData = new FormData();
+            var fileInput = document.querySelector('.file-input');
+            var file = fileInput.files[0];
+            if (file) {
+                formData.append('picture', file);
+
+                $.ajax({
+                    url: '/photo',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        alert('파일이 업로드되었습니다.');
+                        // 파일 업로드 성공 후 작성하던 화면으로 돌아옴
+                    },
+                    error: function(error) {
+                        alert('파일 업로드에 실패했습니다.');
+                    }
+                });
+            } else {
+                alert('파일을 선택해 주세요.');
+            }
+        }
     </script>
 </body>
 </html>

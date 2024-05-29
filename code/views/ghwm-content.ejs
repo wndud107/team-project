@@ -3,6 +3,7 @@
 <head>
   <%- include('includes/head') %>
   <link rel="stylesheet" href="/styles/board-content.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
   <%- include('includes/header') %>
@@ -34,6 +35,14 @@
             <img src="<%= data.path %>" width="400"/><p></p>
           <% } %>
         </div>
+
+        <!-- 로그인한 사용자가 작성자와 일치할 경우 수정/삭제 텍스트 표시 -->
+        <% if (user && user.id === data.author) { %>
+          <div class="edit-delete-container">
+            <p id="edit-text" data-id="<%= data._id %>">수정</p>
+            <p id="delete-text" data-id="<%= data._id %>">삭제</p>
+          </div>
+        <% } %>
       </div>
 
       <!--comment-->
@@ -66,6 +75,31 @@
 
     // Insert the formatted date into the document
     document.getElementById('formatted-date').textContent = formattedDate;
+
+    // Delete text click event
+    $('#delete-text').on('click', function() {
+      const postId = $(this).data('id');
+
+      if (confirm('정말로 삭제하시겠습니까?')) {
+        $.ajax({
+          url: '/delete-ghwm-post/' + postId,
+          type: 'DELETE',
+          success: function(result) {
+            alert('삭제되었습니다.');
+            window.location.href = '/ghwm-board';
+          },
+          error: function(err) {
+            alert('삭제 중 오류가 발생했습니다.');
+          }
+        });
+      }
+    });
+
+    // Edit text click event
+    $('#edit-text').on('click', function() {
+      const postId = $(this).data('id');
+      window.location.href = '/edit-ghwm-board/' + postId;
+    });
   </script>
 </body>
 </html>

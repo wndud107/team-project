@@ -1,53 +1,9 @@
-body{
+body{
   font-family: 'Noto Sans Kr';
-}
-.sidebar {
-  position: absolute;
-  left: 0;
-  width: 240px;
-  height: 750px;
-  padding: 20px;
-  background-color: #f7f7f7;
-  border-right: 1px solid #e0e0e0;
-}
-
-.profile {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.profile-image {
-  width: 100px;
-  height: 100px;
-  background-color: #ccc;
-  margin: 0 auto;
-  border-radius: 50%;
-}
-
-.profile-name {
-  margin: 10px 0;
-  font-weight: bold;
-}
-
-.profile-button {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: none;
-  background-color: #ddd;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.profile-button:hover {
-  background-color: rgb(55, 196, 170);
-  border-color: rgb(55, 196, 170);
 }
 
 
 .year-month{
-  /* margin-top: 40px; */
   font-family: 'Noto Sans Kr';
 }
 .current-date {
@@ -63,6 +19,7 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #0b99a9;
 }
 
 .btn-month {
@@ -75,17 +32,27 @@ body{
   background-color: #ffffff;
 }
 
-.bi{
+.btn-month:hover{
+  background-color: #0b99a944;
+  /* color: white; */
+  color: #07656f;
+}
+
+/* 운동 추가하기 버튼 */
+.bi-plus-circle{
   position: relative;
   top: 2px;
   width: 25px;
   height: 25px;
+  /* color: #7d7d7d; */
   color: #0b99a9;
 }
+.bi-plus-circle:hover{
+  /* color: #0b99a9; */
+}
 
-.btn-month:hover{
-  background-color: #0b99a944;
-  color: white;
+.p-add-exercise:hover{
+  text-shadow: #0b99a9;
 }
 
 .bi-caret-left {
@@ -101,6 +68,7 @@ body{
 .calendar .year-month {
     display: flex;
     align-items: center;
+    /* justify-content: space-between; */
     margin-bottom: 30px;
   }
 
@@ -185,8 +153,6 @@ body{
     text-align: center;
 }
 
-
-
 .days li.selected {
     position: relative;
 }
@@ -197,6 +163,7 @@ body{
   }
 
 .weeks {
+    /* margin-top: 10px; */
     margin-bottom: 5px;
 }
 .current-year {
@@ -250,28 +217,28 @@ input[type="month"]:focus {
   top: 15px;
 }
 
+
 .container {
-  width: 100%;
-  position: relative;
-  height: 750px;
   margin: 0 auto;
   display: flex;
+  justify-content: center;
   background-color: #ffffff;
+  align-items: center;
+  height: calc(100vh-55px);  /* 전체화면 - 헤더 영역 크기 */
+  margin-top: 5vh;
 }
 
 
 .calendar {
-  /* display: inline; */
+    display: inline;
+    /* width: 100%; */
     width: 480px;
     background: #fff;
     padding: 25px;
     border-color: #0b99a9;
-    position: relative;
-    margin-right: 50px;
-    margin-left: 400px;
-    margin-top: 20px;
+    margin-left: 15px;
+}
 
-  }
 
   /* 캘린더 요일 밑 줄 */
   .hr-calendar {
@@ -287,13 +254,12 @@ input[type="month"]:focus {
 
 /* 캘린더 오른쪽 영역 */
 .calendar-right {
-  position: absolute;
-  left: 900px;
-  top: 90px;
   width: 510px;
   height: 610px;
   border: 4px;
-  margin: 30px 40px;
+  margin: 0 40px;
+  position: relative;  /*팝업창의 위치상 부모요소*/
+  top: 25px;
 }
 
 
@@ -373,6 +339,7 @@ input[type="month"]:focus {
   top: 12px;
   font-size: 23px;
   font-weight: 700;
+  /* color: hsl(0, 0%, 100%); */
   letter-spacing: 1px;
   color: hsl(0, 0%, 0%);
   text-shadow: -1px 0 rgb(255, 255, 255), 0 1px rgb(255, 255, 255), 1px 0 rgb(255, 255, 255), 0 -1px rgb(255, 255, 255);
@@ -425,7 +392,10 @@ input[type="month"]:focus {
 }
 
 .image-upload-box img {
+  /* width: 100%;
+  height: 100%; */
   width: 220px;
+  /* height: 150px; 스크롤바 생성시 */
   height: 123px;
   object-fit: cover;
   border-radius: 5px;
@@ -469,30 +439,7 @@ input[type="month"]:focus {
   height: 410px;
   text-align: left;
 }
-/* 인바디 체크 버튼 */
-.check-icon button{
-  position: absolute;
-  left: 195px;
-  top: -5px;
-  color: transparent; 
-  background: none; 
-  border: none; 
-}
-.check-icon button.selected::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 20px;
-  height: 20px;
-  background-color: #bedfe4; /* 원 색상 */
-  border-radius: 50%;
-  z-index: -1;
-  display: inline-block;
-  line-height: 20px;
-  text-align: center;
-}
+
 
 /* 오늘의 인바디 */
 .p-popup-inbody{
@@ -598,7 +545,6 @@ input[type="month"]:focus {
 .btn-add-exercise {
   background: none; 
   border: none;
-
 }
 .btn-add-exercise svg {
   width: 23px;
@@ -655,7 +601,6 @@ input[type="month"]:focus {
 
 .close2:hover,
 .close2:focus {
-  /* color: black; */
   color: #0b99a9;
   text-decoration: none;
   cursor: pointer;
@@ -683,18 +628,21 @@ input[type="month"]:focus {
   border: 1px solid #0b99a9;
 }
 
-/* 회x세트 토탈 */
+/* 회 세트 토탈 */
 .count-exercise{
   display: flex;
   position: absolute;
   top: 55px;
   left: 17px;
+  /* margin: 30px; */
 }
 
 .count-exercise p {
   margin: 0 5px;
+  /* position: absolute; */
+  /* top: 20px;
+  left: 20px; */
 }
-
 
 .input-count-exercise{
   width: 35px;
@@ -736,7 +684,7 @@ hr{
 }
 
 #exercise-list li{
-  margin: 5px;
+  margin: 5px 10px;
 }
 
 select optgroup{
@@ -744,3 +692,26 @@ select optgroup{
   font-size: 20px;
   font-weight: 600;
 }
+
+
+
+/* 인바디 저장 버튼 */
+.save-inbody {
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  right: 10px;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.bi-check-lg{
+  width: 25px;
+  height: 25px;
+  color: #aaaaaa;
+}
+.bi-check-lg:hover{
+  color: #0b99a9;
+
+}
+

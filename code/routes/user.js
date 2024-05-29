@@ -20,7 +20,6 @@ let storage = multer.diskStorage({
 })
 
 let upload = multer({storage : storage});
-let imagepath = '';
 
 router.get("/", function (req, res) {
   res.render("index");
@@ -422,7 +421,8 @@ router.post("/my-page", async function (req, res) {
 });
 
 router.post("/save-free-board", async function (req, res) {
-  let imagepath = '';
+  let imagepath = ''; // 요청 시작 부분에서 imagepath를 초기화합니다.
+
   const user = req.session.user;
 
   if (!user) {
@@ -434,6 +434,11 @@ router.post("/save-free-board", async function (req, res) {
   const currentDate = new Date();
 
   try {
+    // 이미지 경로가 세션에 저장된 경우 가져옴
+    if (req.session.imagepath) {
+      imagepath = req.session.imagepath;
+    }
+
     await db.getDb().collection("free_board").insertOne({
       title: req.body.title,
       content: req.body.content,
@@ -441,6 +446,10 @@ router.post("/save-free-board", async function (req, res) {
       date: currentDate,
       path: imagepath
     });
+
+    // 게시물이 저장된 후 이미지 경로 초기화
+    req.session.imagepath = null;
+
     res.redirect("/free-board");
   } catch (error) {
     console.error("Error inserting data into MongoDB:", error);
@@ -449,7 +458,8 @@ router.post("/save-free-board", async function (req, res) {
 });
 
 router.post("/save-info-board", async function (req, res) {
-  let imagepath = '';
+  let imagepath = ''; // 요청 시작 부분에서 imagepath를 초기화합니다.
+
   const user = req.session.user;
 
   if (!user) {
@@ -461,6 +471,11 @@ router.post("/save-info-board", async function (req, res) {
   const currentDate = new Date();
 
   try {
+    // 이미지 경로가 세션에 저장된 경우 가져옴
+    if (req.session.imagepath) {
+      imagepath = req.session.imagepath;
+    }
+
     await db.getDb().collection("info_board").insertOne({
       title: req.body.title,
       content: req.body.content,
@@ -468,6 +483,10 @@ router.post("/save-info-board", async function (req, res) {
       date: currentDate,
       path: imagepath
     });
+
+    // 게시물이 저장된 후 이미지 경로 초기화
+    req.session.imagepath = null;
+
     res.redirect("/info-board");
   } catch (error) {
     console.error("Error inserting data into MongoDB:", error);
@@ -476,7 +495,8 @@ router.post("/save-info-board", async function (req, res) {
 });
 
 router.post("/save-end-board", async function (req, res) {
-  let imagepath = '';
+  let imagepath = ''; // 요청 시작 부분에서 imagepath를 초기화합니다.
+
   const user = req.session.user;
 
   if (!user) {
@@ -488,6 +508,11 @@ router.post("/save-end-board", async function (req, res) {
   const currentDate = new Date();
 
   try {
+    // 이미지 경로가 세션에 저장된 경우 가져옴
+    if (req.session.imagepath) {
+      imagepath = req.session.imagepath;
+    }
+
     await db.getDb().collection("end_board").insertOne({
       title: req.body.title,
       content: req.body.content,
@@ -495,6 +520,10 @@ router.post("/save-end-board", async function (req, res) {
       date: currentDate,
       path: imagepath
     });
+
+    // 게시물이 저장된 후 이미지 경로 초기화
+    req.session.imagepath = null;
+
     res.redirect("/end-board");
   } catch (error) {
     console.error("Error inserting data into MongoDB:", error);
@@ -503,7 +532,8 @@ router.post("/save-end-board", async function (req, res) {
 });
 
 router.post("/save-child-board", async function (req, res) {
-  let imagepath = '';
+  let imagepath = ''; // 요청 시작 부분에서 imagepath를 초기화합니다.
+
   const user = req.session.user;
 
   if (!user) {
@@ -515,6 +545,11 @@ router.post("/save-child-board", async function (req, res) {
   const currentDate = new Date();
 
   try {
+    // 이미지 경로가 세션에 저장된 경우 가져옴
+    if (req.session.imagepath) {
+      imagepath = req.session.imagepath;
+    }
+
     await db.getDb().collection("child_board").insertOne({
       title: req.body.title,
       content: req.body.content,
@@ -522,6 +557,10 @@ router.post("/save-child-board", async function (req, res) {
       date: currentDate,
       path: imagepath
     });
+
+    // 게시물이 저장된 후 이미지 경로 초기화
+    req.session.imagepath = null;
+
     res.redirect("/child-board");
   } catch (error) {
     console.error("Error inserting data into MongoDB:", error);
@@ -530,7 +569,8 @@ router.post("/save-child-board", async function (req, res) {
 });
 
 router.post("/save-ghwm-board", async function (req, res) {
-  let imagepath = '';
+  let imagepath = ''; // 요청 시작 부분에서 imagepath를 초기화합니다.
+
   const user = req.session.user;
 
   if (!user) {
@@ -542,6 +582,11 @@ router.post("/save-ghwm-board", async function (req, res) {
   const currentDate = new Date();
 
   try {
+    // 이미지 경로가 세션에 저장된 경우 가져옴
+    if (req.session.imagepath) {
+      imagepath = req.session.imagepath;
+    }
+
     await db.getDb().collection("ghwm_board").insertOne({
       title: req.body.title,
       content: req.body.content,
@@ -549,6 +594,10 @@ router.post("/save-ghwm-board", async function (req, res) {
       date: currentDate,
       path: imagepath
     });
+
+    // 게시물이 저장된 후 이미지 경로 초기화
+    req.session.imagepath = null;
+
     res.redirect("/ghwm-board");
   } catch (error) {
     console.error("Error inserting data into MongoDB:", error);
@@ -752,6 +801,7 @@ router.get("/edit-free-board/:id", async function (req, res) {
 router.post("/update-free-board/:id", async function (req, res) {
   const id = req.params.id;
   const { title, content } = req.body;
+  let imagepath = req.session.imagepath || ''; // 세션에 저장된 imagepath 사용
 
   // Check if the id is a valid ObjectId
   if (!ObjectId.isValid(id)) {
@@ -774,6 +824,9 @@ router.post("/update-free-board/:id", async function (req, res) {
       { _id: new ObjectId(id) },
       { $set: { title: title, content: content, path: imagepath } }
     );
+
+    // 게시물 수정 후 이미지 경로 초기화
+    req.session.imagepath = null;
 
     res.redirect("/free-content/" + id);
   } catch (error) {
@@ -869,6 +922,7 @@ router.get("/edit-end-board/:id", async function (req, res) {
 router.post("/update-end-board/:id", async function (req, res) {
   const id = req.params.id;
   const { title, content } = req.body;
+  let imagepath = req.session.imagepath || ''; // 세션에 저장된 imagepath 사용
 
   // Check if the id is a valid ObjectId
   if (!ObjectId.isValid(id)) {
@@ -891,6 +945,9 @@ router.post("/update-end-board/:id", async function (req, res) {
       { _id: new ObjectId(id) },
       { $set: { title: title, content: content, path: imagepath } }
     );
+
+    // 게시물 수정 후 이미지 경로 초기화
+    req.session.imagepath = null;
 
     res.redirect("/end-content/" + id);
   } catch (error) {
@@ -986,6 +1043,7 @@ router.get("/edit-child-board/:id", async function (req, res) {
 router.post("/update-child-board/:id", async function (req, res) {
   const id = req.params.id;
   const { title, content } = req.body;
+  let imagepath = req.session.imagepath || ''; // 세션에 저장된 imagepath 사용
 
   // Check if the id is a valid ObjectId
   if (!ObjectId.isValid(id)) {
@@ -1008,6 +1066,9 @@ router.post("/update-child-board/:id", async function (req, res) {
       { _id: new ObjectId(id) },
       { $set: { title: title, content: content, path: imagepath } }
     );
+
+    // 게시물 수정 후 이미지 경로 초기화
+    req.session.imagepath = null;
 
     res.redirect("/child-content/" + id);
   } catch (error) {
@@ -1103,6 +1164,7 @@ router.get("/edit-info-board/:id", async function (req, res) {
 router.post("/update-info-board/:id", async function (req, res) {
   const id = req.params.id;
   const { title, content } = req.body;
+  let imagepath = req.session.imagepath || ''; // 세션에 저장된 imagepath 사용
 
   // Check if the id is a valid ObjectId
   if (!ObjectId.isValid(id)) {
@@ -1125,6 +1187,9 @@ router.post("/update-info-board/:id", async function (req, res) {
       { _id: new ObjectId(id) },
       { $set: { title: title, content: content, path: imagepath } }
     );
+
+    // 게시물 수정 후 이미지 경로 초기화
+    req.session.imagepath = null;
 
     res.redirect("/info-content/" + id);
   } catch (error) {
@@ -1220,6 +1285,7 @@ router.get("/edit-ghwm-board/:id", async function (req, res) {
 router.post("/update-ghwm-board/:id", async function (req, res) {
   const id = req.params.id;
   const { title, content } = req.body;
+  let imagepath = req.session.imagepath || ''; // 세션에 저장된 imagepath 사용
 
   // Check if the id is a valid ObjectId
   if (!ObjectId.isValid(id)) {
@@ -1242,6 +1308,9 @@ router.post("/update-ghwm-board/:id", async function (req, res) {
       { _id: new ObjectId(id) },
       { $set: { title: title, content: content, path: imagepath } }
     );
+
+    // 게시물 수정 후 이미지 경로 초기화
+    req.session.imagepath = null;
 
     res.redirect("/ghwm-content/" + id);
   } catch (error) {
@@ -1282,8 +1351,15 @@ router.post('/change-pw', async function(req, res) {
 });
 
 router.post('/photo', upload.single('picture'), function(req, res) {
-  console.log(req.file.path);
-  imagepath = '/image/' + req.file.filename; // 파일 경로를 올바르게 설정합니다.
+  if (req.file) {
+    console.log(req.file.path);
+    // 세션에 이미지 경로 저장
+    req.session.imagepath = '/image/' + req.file.filename;
+    res.status(200).send('File uploaded');
+  } else {
+    res.status(400).send('No file uploaded');
+  }
 });
+
 
 module.exports = router;

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <%- include('includes/head')%>
+    <link rel="stylesheet" href="/styles/update-board.css">
+</head>
+<body>
+    <%- include('includes/header')%>
+    <div class="container">
+        <%- include('includes/aside')%>
+        <main class="main-content">
+            <h1>오운완게시판 글 수정하기</h1>
+            <form action="/update-end-board/<%= data._id %>" method="post">
+                <input type="text" name="title" placeholder="제목을 입력해 주세요." class="title-input" value="<%= data.title %>">
+
+                <div class="file-input-container">
+                    <input type="file" name="picture" accept="image/*" placeholder="파일" class="file-input" form="file-form">
+                    <button type="button" class="attach-button" onclick="document.getElementById('file-form').submit()">첨부</button>
+                </div>
+                
+                <textarea placeholder="내용을 입력해 주세요." name="content"><%= data.content %></textarea>
+                <button type="submit" class="button">수정</button>
+            </form>
+            
+            <form id="file-form" action="/photo" method="POST" enctype="multipart/form-data" class="file-form">
+            </form>
+        </main>
+    </div>
+    <script>
+        document.querySelector('.file-input').addEventListener('change', function() {
+            var fileName = this.files[0] ? this.files[0].name : '선택된 파일 없음';
+            document.querySelector('.file-name').textContent = fileName;
+        });
+    </script>
+</body>
+</html>

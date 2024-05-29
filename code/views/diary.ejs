@@ -4,29 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%- include('includes/head') %>
-    <link rel="stylesheet" href="styles/shared.css" />
-    <link rel="stylesheet" href="styles/diary.css">
-    <script src="routes/diary.js" defer></script>
+    <link rel="stylesheet" href="/styles/shared.css" />
+    <link rel="stylesheet" href="/styles/diary.css">
+    <script src="/scripts/diary.js" defer></script>
 
 </head>
 <body>
     <%- include('includes/header') %>
+ 
     <div class = "container">
-        <aside class="sidebar">
-            <div class="profile">
-                <div class="profile-image"></div>
-                <div class="profile-name"><%= user ? user.name : '' %></div>
-                <form method="GET" action="/my-page">
-                    <button type="submit" class="profile-button">내 정보</button>
-                </form>
-                <form method="GET" action="/logout">
-                    <button type="submit" class="profile-button">로그아웃</button>
-                </form>
-            </div>
-        </aside>
-        <!-- 캘린더 -->
-        <div class="calendar">
-            <!-- 달력 상단 부분 -->
+            <!-- 캘린더 -->
+            <div class="calendar">
+                <!-- 달력 상단 부분 -->
                 <div class="year-month">
                     <div class="current-date">
                         <span class="current-year"></span>
@@ -36,19 +25,19 @@
                     <!-- 달력 넘기기 버튼 -->
                     <div class="icons">
                         <span id="prev" class="btn-month btn-left">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-caret-left" viewBox="0 0 16 16">
                             <path d="M10 12.796V3.204L4.519 8zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753"/>
                             </svg>
                         </span>
                         <span id="next" class="btn-month btn-right">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-caret-right" viewBox="0 0 16 16">
                             <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753"/>
                             </svg>
                         </span>
                     </div>
+               
                 </div>
-            
-            <!-- 달력 부분 -->
+                <!-- 달력 부분 -->
                 <div class="weeks-days">
                     <ul class="weeks">
                         <li>일</li>
@@ -63,13 +52,18 @@
                     <ul class="days">
                     </ul>
                 </div>
-             </div>
+            
+            </div>
 
-             <!-- 우측 내용 -->
-            <div class="calendar-right">  
+            <!-- 우측 내용 -->
+            <div class="calendar-right">
                 <div class="D-day">
+                    <p>D-day</p>
+                    <p></p>
+                    <p></p>
                 </div>   
-                <div class="graph">
+                    <div class="graph">
+                    <p>graph</p>
                 </div>
                 <!-- 팝업 창 -->
                 <div id="popup" class="popup">
@@ -90,6 +84,7 @@
                             </div> 
                         </div>
                     </div>
+
                     <div id="popup-choice-exercise" class="popup-choice-exercise">
                         <span>
                             <svg class="close2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
@@ -97,7 +92,7 @@
                             </svg>
                         </span>
                         <div class="choice-exercise">
-                            <p>운동 선택</p>
+                            <p class="p-choice-exercise">운동 선택</p>
                             <select name="" id="exercise-select" class="select-exercise">
                                 <optgroup label="하체" style="font-size: larger; font-weight: 600; color: rgb(55, 196, 170);">
                                     <option value="컨벤셔널 데드리프트">컨벤셔널 데드리프트</option>
@@ -404,12 +399,9 @@
                             <input type="number" id="reps" class="input-count-exercise" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"  min="1" max="3000"><p>회 x </p> 
                             <input type="number" id="sets" class="input-count-exercise" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"  min="1" max="3000"> <p>세트</p>
                         </div>
-                
-                            <button id="add-exercise-button">추가</button>
-             
-                        <!-- <div class="count-exercise">
-                            <input type="text" class="input-count-exercise" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"><p>회 x </p> <input type="text" class="input-count-exercise" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"> <p>세트</p>
-                        </div> -->
+            
+                        <button id="add-exercise-button">추가</button>
+
                     </div>
                     <div class="popup-content-2">
                         <div class="popup-diet">
@@ -441,13 +433,11 @@
                         <div class="popup-inbody">
                             <p class="p-popup-inbody">오늘의 인바디</p>
                             <div class="popup-inbody-input">
-                                <div class="check-icon popup-inbody-check">
-                                    <button type="submit">
+                                    <span class="save-inbody">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
                                             <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
                                         </svg>
-                                    </button>
-                                </div>
+                                    </span>
                                 <div class="popup-input popup-height">
                                     <p>키</p> <!--마이페이지에서 한 번 설정하면 자동으로 반영되게끔-->
                                     <input type="text" class="inbody-input input-height" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"/>
@@ -483,7 +473,7 @@
                     </div>  
                 </div>
             </div>
-        </div>
     </div>
+
 </body>
 </html>

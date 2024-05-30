@@ -85,9 +85,7 @@ const updatePopupContent = (data, type) => {
         };
 
         for (let key in mealContainers) {
-            if (mealContainers[key]) {
-                mealContainers[key].innerHTML = `<p>+</p><p>${key} 식단</p>`;
-            }
+            mealContainers[key].innerHTML = `<p>+</p><p>${key} 식단</p>`;
         }
 
         data.forEach(meal => {
@@ -97,17 +95,43 @@ const updatePopupContent = (data, type) => {
         });
     } else if (type === 'exercises') {
         const exerciseList = document.getElementById('exercise-list');
-        if (exerciseList) {
-            exerciseList.innerHTML = ''; // 초기화
+        exerciseList.innerHTML = ''; // 초기화
 
-            data.forEach(exercise => {
-                const listItem = document.createElement("li");
-                listItem.innerText = `  ◯ ${exercise.exercise}  [  ${exercise.reps}회 x ${exercise.sets}세트  ] `;
-                const separator = document.createElement("hr");
-                exerciseList.appendChild(listItem);
-                exerciseList.appendChild(separator);
+        data.forEach(exercise => {
+            const listItem = document.createElement("li");
+            listItem.innerHTML = `
+                <span>
+                    ${exercise.exercise} [${exercise.reps}회 x ${exercise.sets}세트]
+                    <button class="delete-exercise">삭제</button>
+                </span>
+            `;
+            exerciseList.appendChild(listItem);
+
+            // 삭제 버튼 클릭 이벤트 추가
+            const deleteButton = listItem.querySelector('.delete-exercise');
+            deleteButton.addEventListener('click', () => {
+                fetch(`/delete-exercise`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        date: exercise.date,
+                        exercise: exercise.exercise,
+                        reps: exercise.reps,
+                        sets: exercise.sets,
+                    })
+                })
+                .then(response => response.text())
+                .then(data => {
+                    console.log('Exercise deleted successfully:', data);
+                    exerciseList.removeChild(listItem);
+                })
+                .catch(error => {
+                    console.error('Error deleting exercise:', error);
+                });
             });
-        }
+        });
     }
 }
 

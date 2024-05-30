@@ -8,18 +8,18 @@ const db = require("../data/database");
 
 const router = express.Router();
 
-let multer = require("multer");
+let multer = require('multer');
 
 let storage = multer.diskStorage({
-  destination: function (req, file, done) {
-    done(null, "./public/image");
+  destination : function(req, file, done){
+    done(null, './public/image')
   },
-  filename: function (req, file, done) {
-    done(null, file.originalname);
-  },
-});
+  filename : function(req, file, done){
+    done(null, file.originalname)
+  }
+})
 
-let upload = multer({ storage: storage });
+let upload = multer({storage : storage});
 
 router.get("/", function (req, res) {
   res.render("index");
@@ -82,13 +82,8 @@ router.post("/join", async function (req, res) {
     name_join,
     birth_join,
     telnumber_join,
-    height_join,
-    weight_join,
-    goal_weight_join,
-    d_day_join,
-    nickname_join
+    "join-gender": join_gender,
   } = req.body;
-
   const hashedPassword = await bcrypt.hash(pw_join, 12);
 
   try {
@@ -98,13 +93,9 @@ router.post("/join", async function (req, res) {
       name_join,
       birth_join,
       telnumber_join,
-      height_join,
-      weight_join,
-      goal_weight_join,
-      d_day_join,
-      nickname_join
+      join_gender,
     });
-    res.redirect("login");
+    res.redirect("complete-join");
   } catch (error) {
     console.error("Error inserting user:", error);
     res.status(500).send("Internal Server Error");
@@ -156,7 +147,7 @@ router.post("/looking-for-pw", async function (req, res) {
       res.render("complete-LP", { userPw: user.pw_join });
     } else {
       res.render("looking-for-pw", {
-        error: "해당 아이디 또는 이름이 일치하지 않습니다.",
+        error: "해당 아이디 또는 이름이 일치하지 않습니다",
       });
     }
   } catch (error) {
@@ -299,7 +290,6 @@ router.get("/main-board", async (req, res) => {
   }
 });
 
-
 router.get("/update-board", function (req, res) {
   res.render("update-free-board");
 });
@@ -325,13 +315,7 @@ router.get("/update-child-board", function (req, res) {
 });
 
 router.get("/list_leg", function (req, res) {
-  if (!req.session.user) {
-    res.send(
-      '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
-    );
-  } else {
-    res.render("list_leg");
-  }
+  res.render("list_leg");
 });
 
 router.get("/list_chest", function (req, res) {
@@ -366,130 +350,6 @@ router.get("/list_etc", function (req, res) {
   res.render("list_etc");
 });
 
-// router.get("/my-page", async function (req, res) {
-
-//   const user = req.session.user;
-  
-//   if (!user) {
-//     return res.send(
-//       '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
-//     );
-//   }
-
-//   try {
-//     const userData = await db
-//       .getDb()
-//       .collection("User_info")
-//       .findOne({ id_join: user.id });
-
-//     const freeBoardPosts = await db
-//       .getDb()
-//       .collection("free_board")
-//       .find({ author: user.id })
-//       .toArray();
-//     const endBoardPosts = await db
-//       .getDb()
-//       .collection("end_board")
-//       .find({ author: user.id })
-//       .toArray();
-//     const ghwmBoardPosts = await db
-//       .getDb()
-//       .collection("ghwm_board")
-//       .find({ author: user.id })
-//       .toArray();
-//     const infoBoardPosts = await db
-//       .getDb()
-//       .collection("info_board")
-//       .find({ author: user.id })
-//       .toArray();
-//     const childBoardPosts = await db
-//       .getDb()
-//       .collection("child_board")
-//       .find({ author: user.id })
-//       .toArray();
-
-//     const userPosts = [
-//       ...freeBoardPosts.map((post) => ({ ...post, board: "자유게시판" })),
-//       ...endBoardPosts.map((post) => ({ ...post, board: "오운완게시판" })),
-//       ...infoBoardPosts.map((post) => ({ ...post, board: "정보게시판" })),
-//       ...ghwmBoardPosts.map((post) => ({ ...post, board: "헬린이게시판" })),
-//       ...childBoardPosts.map((post) => ({ ...post, board: "G.H.W.M 게시판" })),
-//     ];
-
-//     if (userData) {
-//       res.render("my-page", { user: userData, posts: userPosts });
-//     } else {
-//       res.send(
-//         '<script>alert("사용자 정보를 불러오는 데 실패했습니다."); window.location.href = "/";</script>'
-//       );
-//     }
-//   } catch (error) {
-//     console.error("Error fetching user data:", error);
-//     res.status(500).send("Internal Server Error");
-//   }
-// });
-
-// router.post("/my-page", async function (req, res) {
-//   const user = req.session.user;
-
-//   if (!user) {
-//     return res.send(
-//       '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
-//     );
-//   }
-
-//   try {
-//     const userData = await db
-//       .getDb()
-//       .collection("User_info")
-//       .findOne({ id_join: user.id });
-
-//     const freeBoardPosts = await db
-//       .getDb()
-//       .collection("free_board")
-//       .find({ author: user.id })
-//       .toArray();
-//     const endBoardPosts = await db
-//       .getDb()
-//       .collection("end_board")
-//       .find({ author: user.id })
-//       .toArray();
-//     const ghwmBoardPosts = await db
-//       .getDb()
-//       .collection("ghwm_board")
-//       .find({ author: user.id })
-//       .toArray();
-//     const infoBoardPosts = await db
-//       .getDb()
-//       .collection("info_board")
-//       .find({ author: user.id })
-//       .toArray();
-//     const childBoardPosts = await db
-//       .getDb()
-//       .collection("child_board")
-//       .find({ author: user.id })
-//       .toArray();
-
-//     const userPosts = [
-//       ...freeBoardPosts.map((post) => ({ ...post, board: "자유게시판" })),
-//       ...endBoardPosts.map((post) => ({ ...post, board: "오운완게시판" })),
-//       ...infoBoardPosts.map((post) => ({ ...post, board: "정보게시판" })),
-//       ...ghwmBoardPosts.map((post) => ({ ...post, board: "헬린이게시판" })),
-//       ...childBoardPosts.map((post) => ({ ...post, board: "G.H.W.M 게시판" })),
-//     ];
-
-//     if (userData) {
-//       res.render("my-page", { user: userData, posts: userPosts });
-//     } else {
-//       res.send(
-//         '<script>alert("사용자 정보를 불러오는 데 실패했습니다."); window.location.href = "/";</script>'
-//       );
-//     }
-//   } catch (error) {
-//     console.error("Error fetching user data:", error);
-//     res.status(500).send("Internal Server Error");
-//   }
-// });
 
 router.post("/save-free-board", async function (req, res) {
   const user = req.session.user;
@@ -620,6 +480,14 @@ function formatDate(date) {
   const options = { year: "numeric", month: "2-digit", day: "2-digit" };
   return new Date(date).toLocaleDateString("ko-KR", options);
 }
+
+router.get('/check-login-status', function(req, res) {
+  if (req.session.user) {
+    res.json({ loggedIn: true });
+  } else {
+    res.json({ loggedIn: false });
+  }
+});
 
 router.get("/info-board", async (req, res) => {
   try {
@@ -760,651 +628,640 @@ router.get("/free-content/:id", async function (req, res) {
 
 
 router.delete("/delete-free-post/:id", async function (req, res) {
-const id = req.params.id;
+  const id = req.params.id;
 
-// Check if the id is a valid ObjectId
-if (!ObjectId.isValid(id)) {
-  return res.status(400).send("Invalid ID format");
-}
-
-try {
-  // Find the post
-  const post = await db.getDb().collection("free_board").findOne({ _id: new ObjectId(id) });
-
-  if (!post) {
-    return res.status(404).send("게시물을 찾을 수 없습니다.");
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
   }
 
-  // Check if the logged-in user is the author of the post
-  if (req.session.user.id !== post.author) {
-    return res.status(403).send("삭제 권한이 없습니다.");
+  try {
+    // Find the post
+    const post = await db.getDb().collection("free_board").findOne({ _id: new ObjectId(id) });
+
+    if (!post) {
+      return res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+
+    // Check if the logged-in user is the author of the post
+    if (req.session.user.id !== post.author) {
+      return res.status(403).send("삭제 권한이 없습니다.");
+    }
+
+    // Delete the post
+    await db.getDb().collection("free_board").deleteOne({ _id: new ObjectId(id) });
+
+    res.status(200).send("삭제되었습니다.");
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    res.status(500).send("Internal Server Error");
   }
-
-  // Delete the post
-  await db.getDb().collection("free_board").deleteOne({ _id: new ObjectId(id) });
-
-  res.status(200).send("삭제되었습니다.");
-} catch (error) {
-  console.error("Error deleting post:", error);
-  res.status(500).send("Internal Server Error");
-}
 });
 
 router.get("/edit-free-board/:id", async function (req, res) {
-const id = req.params.id;
+  const id = req.params.id;
 
-// Check if the id is a valid ObjectId
-if (!ObjectId.isValid(id)) {
-  return res.status(400).send("Invalid ID format");
-}
-
-try {
-  const post = await db.getDb().collection("free_board").findOne({ _id: new ObjectId(id) });
-
-  if (!post) {
-    return res.status(404).send("게시물을 찾을 수 없습니다.");
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
   }
 
-  // Check if the logged-in user is the author of the post
-  if (req.session.user.id !== post.author) {
-    return res.status(403).send("수정 권한이 없습니다.");
-  }
+  try {
+    const post = await db.getDb().collection("free_board").findOne({ _id: new ObjectId(id) });
 
-  res.render("edit-free-board", { data: post });
-} catch (error) {
-  console.error("Error fetching content:", error);
-  res.status(500).send("Internal Server Error");
-}
+    if (!post) {
+      return res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+
+    // Check if the logged-in user is the author of the post
+    if (req.session.user.id !== post.author) {
+      return res.status(403).send("수정 권한이 없습니다.");
+    }
+
+    res.render("edit-free-board", { data: post });
+  } catch (error) {
+    console.error("Error fetching content:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 router.post("/update-free-board/:id", async function (req, res) {
-const id = req.params.id;
-const { title, content } = req.body;
-let imagepath = req.session.imagepath || ''; // 세션에 저장된 imagepath 사용
+  const id = req.params.id;
+  const { title, content } = req.body;
+  let imagepath = req.session.imagepath || ''; // 세션에 저장된 imagepath 사용
 
-// Check if the id is a valid ObjectId
-if (!ObjectId.isValid(id)) {
-  return res.status(400).send("Invalid ID format");
-}
-
-try {
-  const post = await db.getDb().collection("free_board").findOne({ _id: new ObjectId(id) });
-
-  if (!post) {
-    return res.status(404).send("게시물을 찾을 수 없습니다.");
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
   }
 
-  // Check if the logged-in user is the author of the post
-  if (req.session.user.id !== post.author) {
-    return res.status(403).send("수정 권한이 없습니다.");
+  try {
+    const post = await db.getDb().collection("free_board").findOne({ _id: new ObjectId(id) });
+
+    if (!post) {
+      return res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+
+    // Check if the logged-in user is the author of the post
+    if (req.session.user.id !== post.author) {
+      return res.status(403).send("수정 권한이 없습니다.");
+    }
+
+    await db.getDb().collection("free_board").updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { title: title, content: content, path: imagepath } }
+    );
+
+    // 게시물 수정 후 이미지 경로 초기화
+    req.session.imagepath = null;
+
+    res.redirect("/free-content/" + id);
+  } catch (error) {
+    console.error("Error updating content:", error);
+    res.status(500).send("Internal Server Error");
   }
-
-  await db.getDb().collection("free_board").updateOne(
-    { _id: new ObjectId(id) },
-    { $set: { title: title, content: content, path: imagepath } }
-  );
-
-  // 게시물 수정 후 이미지 경로 초기화
-  req.session.imagepath = null;
-
-  res.redirect("/free-content/" + id);
-} catch (error) {
-  console.error("Error updating content:", error);
-  res.status(500).send("Internal Server Error");
-}
 });
 
 // 오운완게시판
 router.get("/end-content/:id", async function (req, res) {
-const id = req.params.id;
+  const id = req.params.id;
 
-// Check if the id is a valid ObjectId
-if (!ObjectId.isValid(id)) {
-  return res.status(400).send("Invalid ID format");
-}
-
-try {
-  const post = await db
-    .getDb()
-    .collection("end_board")
-    .findOne({ _id: new ObjectId(id) });
-
-  if (post) {
-    res.render("end-content", { data: post });
-  } else {
-    res.status(404).send("게시물을 찾을 수 없습니다.");
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
   }
-} catch (error) {
-  console.error("Error fetching content:", error);
-  res.status(500).send("Internal Server Error");
-}
+
+  try {
+    // Find the post by ID
+    const post = await db.getDb().collection("end_board").findOne({ _id: new ObjectId(id) });
+
+    if (post) {
+      // Increment view count
+      await db.getDb().collection("end_board").updateOne(
+        { _id: new ObjectId(id) },
+        { $inc: { view: 1 } }
+      );
+      res.render("end-content", { data: post, user: req.session.user });
+    } else {
+      console.log("No post found with id:", id);
+      res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+  } catch (error) {
+    console.error("Error fetching content:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 router.delete("/delete-end-post/:id", async function (req, res) {
-const id = req.params.id;
+  const id = req.params.id;
 
-// Check if the id is a valid ObjectId
-if (!ObjectId.isValid(id)) {
-  return res.status(400).send("Invalid ID format");
-}
-
-try {
-  // Find the post
-  const post = await db.getDb().collection("end_board").findOne({ _id: new ObjectId(id) });
-
-  if (!post) {
-    return res.status(404).send("게시물을 찾을 수 없습니다.");
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
   }
 
-  // Check if the logged-in user is the author of the post
-  if (req.session.user.id !== post.author) {
-    return res.status(403).send("삭제 권한이 없습니다.");
+  try {
+    // Find the post
+    const post = await db.getDb().collection("end_board").findOne({ _id: new ObjectId(id) });
+
+    if (!post) {
+      return res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+
+    // Check if the logged-in user is the author of the post
+    if (req.session.user.id !== post.author) {
+      return res.status(403).send("삭제 권한이 없습니다.");
+    }
+
+    // Delete the post
+    await db.getDb().collection("end_board").deleteOne({ _id: new ObjectId(id) });
+
+    res.status(200).send("삭제되었습니다.");
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    res.status(500).send("Internal Server Error");
   }
-
-  // Delete the post
-  await db.getDb().collection("end_board").deleteOne({ _id: new ObjectId(id) });
-
-  res.status(200).send("삭제되었습니다.");
-} catch (error) {
-  console.error("Error deleting post:", error);
-  res.status(500).send("Internal Server Error");
-}
 });
 
 router.get("/edit-end-board/:id", async function (req, res) {
-const id = req.params.id;
+  const id = req.params.id;
 
-// Check if the id is a valid ObjectId
-if (!ObjectId.isValid(id)) {
-  return res.status(400).send("Invalid ID format");
-}
-
-try {
-  const post = await db.getDb().collection("end_board").findOne({ _id: new ObjectId(id) });
-
-  if (!post) {
-    return res.status(404).send("게시물을 찾을 수 없습니다.");
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
   }
 
-  // Check if the logged-in user is the author of the post
-  if (req.session.user.id !== post.author) {
-    return res.status(403).send("수정 권한이 없습니다.");
-  }
+  try {
+    const post = await db.getDb().collection("end_board").findOne({ _id: new ObjectId(id) });
 
-  res.render("edit-end-board", { data: post });
-} catch (error) {
-  console.error("Error fetching content:", error);
-  res.status(500).send("Internal Server Error");
-}
+    if (!post) {
+      return res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+
+    // Check if the logged-in user is the author of the post
+    if (req.session.user.id !== post.author) {
+      return res.status(403).send("수정 권한이 없습니다.");
+    }
+
+    res.render("edit-end-board", { data: post });
+  } catch (error) {
+    console.error("Error fetching content:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 router.post("/update-end-board/:id", async function (req, res) {
-const id = req.params.id;
-const { title, content } = req.body;
-let imagepath = req.session.imagepath || ''; // 세션에 저장된 imagepath 사용
+  const id = req.params.id;
+  const { title, content } = req.body;
+  let imagepath = req.session.imagepath || ''; // 세션에 저장된 imagepath 사용
 
-// Check if the id is a valid ObjectId
-if (!ObjectId.isValid(id)) {
-  return res.status(400).send("Invalid ID format");
-}
-
-try {
-  const post = await db.getDb().collection("end_board").findOne({ _id: new ObjectId(id) });
-
-  if (!post) {
-    return res.status(404).send("게시물을 찾을 수 없습니다.");
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
   }
 
-  // Check if the logged-in user is the author of the post
-  if (req.session.user.id !== post.author) {
-    return res.status(403).send("수정 권한이 없습니다.");
+  try {
+    const post = await db.getDb().collection("end_board").findOne({ _id: new ObjectId(id) });
+
+    if (!post) {
+      return res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+
+    // Check if the logged-in user is the author of the post
+    if (req.session.user.id !== post.author) {
+      return res.status(403).send("수정 권한이 없습니다.");
+    }
+
+    await db.getDb().collection("end_board").updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { title: title, content: content, path: imagepath } }
+    );
+
+    // 게시물 수정 후 이미지 경로 초기화
+    req.session.imagepath = null;
+
+    res.redirect("/end-content/" + id);
+  } catch (error) {
+    console.error("Error updating content:", error);
+    res.status(500).send("Internal Server Error");
   }
-
-  await db.getDb().collection("end_board").updateOne(
-    { _id: new ObjectId(id) },
-    { $set: { title: title, content: content, path: imagepath } }
-  );
-
-  // 게시물 수정 후 이미지 경로 초기화
-  req.session.imagepath = null;
-
-  res.redirect("/end-content/" + id);
-} catch (error) {
-  console.error("Error updating content:", error);
-  res.status(500).send("Internal Server Error");
-}
 });
 
 // 헬린이게시판
 router.get("/child-content/:id", async function (req, res) {
-const id = req.params.id;
+  const id = req.params.id;
 
-// Check if the id is a valid ObjectId
-if (!ObjectId.isValid(id)) {
-  return res.status(400).send("Invalid ID format");
-}
-
-try {
-  const post = await db
-    .getDb()
-    .collection("child_board")
-    .findOne({ _id: new ObjectId(id) });
-
-  if (post) {
-    res.render("child-content", { data: post });
-  } else {
-    res.status(404).send("게시물을 찾을 수 없습니다.");
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
   }
-} catch (error) {
-  console.error("Error fetching content:", error);
-  res.status(500).send("Internal Server Error");
-}
+
+  try {
+    // Find the post by ID
+    const post = await db.getDb().collection("child_board").findOne({ _id: new ObjectId(id) });
+
+    if (post) {
+      // Increment view count
+      await db.getDb().collection("child_board").updateOne(
+        { _id: new ObjectId(id) },
+        { $inc: { view: 1 } }
+      );
+      res.render("child-content", { data: post, user: req.session.user });
+    } else {
+      console.log("No post found with id:", id);
+      res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+  } catch (error) {
+    console.error("Error fetching content:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 router.delete("/delete-child-post/:id", async function (req, res) {
-const id = req.params.id;
+  const id = req.params.id;
 
-// Check if the id is a valid ObjectId
-if (!ObjectId.isValid(id)) {
-  return res.status(400).send("Invalid ID format");
-}
-
-try {
-  // Find the post
-  const post = await db.getDb().collection("child_board").findOne({ _id: new ObjectId(id) });
-
-  if (!post) {
-    return res.status(404).send("게시물을 찾을 수 없습니다.");
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
   }
 
-  // Check if the logged-in user is the author of the post
-  if (req.session.user.id !== post.author) {
-    return res.status(403).send("삭제 권한이 없습니다.");
+  try {
+    // Find the post
+    const post = await db.getDb().collection("child_board").findOne({ _id: new ObjectId(id) });
+
+    if (!post) {
+      return res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+
+    // Check if the logged-in user is the author of the post
+    if (req.session.user.id !== post.author) {
+      return res.status(403).send("삭제 권한이 없습니다.");
+    }
+
+    // Delete the post
+    await db.getDb().collection("child_board").deleteOne({ _id: new ObjectId(id) });
+
+    res.status(200).send("삭제되었습니다.");
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    res.status(500).send("Internal Server Error");
   }
-
-  // Delete the post
-  await db.getDb().collection("child_board").deleteOne({ _id: new ObjectId(id) });
-
-  res.status(200).send("삭제되었습니다.");
-} catch (error) {
-  console.error("Error deleting post:", error);
-  res.status(500).send("Internal Server Error");
-}
 });
 
 router.get("/edit-child-board/:id", async function (req, res) {
-const id = req.params.id;
+  const id = req.params.id;
 
-// Check if the id is a valid ObjectId
-if (!ObjectId.isValid(id)) {
-  return res.status(400).send("Invalid ID format");
-}
-
-try {
-  const post = await db.getDb().collection("child_board").findOne({ _id: new ObjectId(id) });
-
-  if (!post) {
-    return res.status(404).send("게시물을 찾을 수 없습니다.");
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
   }
 
-  // Check if the logged-in user is the author of the post
-  if (req.session.user.id !== post.author) {
-    return res.status(403).send("수정 권한이 없습니다.");
-  }
+  try {
+    const post = await db.getDb().collection("child_board").findOne({ _id: new ObjectId(id) });
 
-  res.render("edit-child-board", { data: post });
-} catch (error) {
-  console.error("Error fetching content:", error);
-  res.status(500).send("Internal Server Error");
-}
+    if (!post) {
+      return res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+
+    // Check if the logged-in user is the author of the post
+    if (req.session.user.id !== post.author) {
+      return res.status(403).send("수정 권한이 없습니다.");
+    }
+
+    res.render("edit-child-board", { data: post });
+  } catch (error) {
+    console.error("Error fetching content:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 router.post("/update-child-board/:id", async function (req, res) {
-const id = req.params.id;
-const { title, content } = req.body;
-let imagepath = req.session.imagepath || ''; // 세션에 저장된 imagepath 사용
+  const id = req.params.id;
+  const { title, content } = req.body;
+  let imagepath = req.session.imagepath || ''; // 세션에 저장된 imagepath 사용
 
-// Check if the id is a valid ObjectId
-if (!ObjectId.isValid(id)) {
-  return res.status(400).send("Invalid ID format");
-}
-
-try {
-  const post = await db.getDb().collection("child_board").findOne({ _id: new ObjectId(id) });
-
-  if (!post) {
-    return res.status(404).send("게시물을 찾을 수 없습니다.");
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
   }
 
-  // Check if the logged-in user is the author of the post
-  if (req.session.user.id !== post.author) {
-    return res.status(403).send("수정 권한이 없습니다.");
+  try {
+    const post = await db.getDb().collection("child_board").findOne({ _id: new ObjectId(id) });
+
+    if (!post) {
+      return res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+
+    // Check if the logged-in user is the author of the post
+    if (req.session.user.id !== post.author) {
+      return res.status(403).send("수정 권한이 없습니다.");
+    }
+
+    await db.getDb().collection("child_board").updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { title: title, content: content, path: imagepath } }
+    );
+
+    // 게시물 수정 후 이미지 경로 초기화
+    req.session.imagepath = null;
+
+    res.redirect("/child-content/" + id);
+  } catch (error) {
+    console.error("Error updating content:", error);
+    res.status(500).send("Internal Server Error");
   }
-
-  await db.getDb().collection("child_board").updateOne(
-    { _id: new ObjectId(id) },
-    { $set: { title: title, content: content, path: imagepath } }
-  );
-
-  // 게시물 수정 후 이미지 경로 초기화
-  req.session.imagepath = null;
-
-  res.redirect("/child-content/" + id);
-} catch (error) {
-  console.error("Error updating content:", error);
-  res.status(500).send("Internal Server Error");
-}
 });
 
 // 정보게시판
 router.get("/info-content/:id", async function (req, res) {
-const id = req.params.id;
+  const id = req.params.id;
 
-// Check if the id is a valid ObjectId
-if (!ObjectId.isValid(id)) {
-  return res.status(400).send("Invalid ID format");
-}
-
-try {
-  const post = await db
-    .getDb()
-    .collection("info_board")
-    .findOne({ _id: new ObjectId(id) });
-
-  if (post) {
-    res.render("info-content", { data: post });
-  } else {
-    res.status(404).send("게시물을 찾을 수 없습니다.");
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
   }
-} catch (error) {
-  console.error("Error fetching content:", error);
-  res.status(500).send("Internal Server Error");
-}
+
+  try {
+    // Find the post by ID
+    const post = await db.getDb().collection("info_board").findOne({ _id: new ObjectId(id) });
+
+    if (post) {
+      // Increment view count
+      await db.getDb().collection("info_board").updateOne(
+        { _id: new ObjectId(id) },
+        { $inc: { view: 1 } }
+      );
+      res.render("info-content", { data: post, user: req.session.user });
+    } else {
+      console.log("No post found with id:", id);
+      res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+  } catch (error) {
+    console.error("Error fetching content:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 router.delete("/delete-info-post/:id", async function (req, res) {
-const id = req.params.id;
+  const id = req.params.id;
 
-// Check if the id is a valid ObjectId
-if (!ObjectId.isValid(id)) {
-  return res.status(400).send("Invalid ID format");
-}
-
-try {
-  // Find the post
-  const post = await db.getDb().collection("info_board").findOne({ _id: new ObjectId(id) });
-
-  if (!post) {
-    return res.status(404).send("게시물을 찾을 수 없습니다.");
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
   }
 
-  // Check if the logged-in user is the author of the post
-  if (req.session.user.id !== post.author) {
-    return res.status(403).send("삭제 권한이 없습니다.");
+  try {
+    // Find the post
+    const post = await db.getDb().collection("info_board").findOne({ _id: new ObjectId(id) });
+
+    if (!post) {
+      return res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+
+    // Check if the logged-in user is the author of the post
+    if (req.session.user.id !== post.author) {
+      return res.status(403).send("삭제 권한이 없습니다.");
+    }
+
+    // Delete the post
+    await db.getDb().collection("info_board").deleteOne({ _id: new ObjectId(id) });
+
+    res.status(200).send("삭제되었습니다.");
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    res.status(500).send("Internal Server Error");
   }
-
-  // Delete the post
-  await db.getDb().collection("info_board").deleteOne({ _id: new ObjectId(id) });
-
-  res.status(200).send("삭제되었습니다.");
-} catch (error) {
-  console.error("Error deleting post:", error);
-  res.status(500).send("Internal Server Error");
-}
 });
 
 router.get("/edit-info-board/:id", async function (req, res) {
-const id = req.params.id;
+  const id = req.params.id;
 
-// Check if the id is a valid ObjectId
-if (!ObjectId.isValid(id)) {
-  return res.status(400).send("Invalid ID format");
-}
-
-try {
-  const post = await db.getDb().collection("info_board").findOne({ _id: new ObjectId(id) });
-
-  if (!post) {
-    return res.status(404).send("게시물을 찾을 수 없습니다.");
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
   }
 
-  // Check if the logged-in user is the author of the post
-  if (req.session.user.id !== post.author) {
-    return res.status(403).send("수정 권한이 없습니다.");
-  }
+  try {
+    const post = await db.getDb().collection("info_board").findOne({ _id: new ObjectId(id) });
 
-  res.render("edit-info-board", { data: post });
-} catch (error) {
-  console.error("Error fetching content:", error);
-  res.status(500).send("Internal Server Error");
-}
+    if (!post) {
+      return res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+
+    // Check if the logged-in user is the author of the post
+    if (req.session.user.id !== post.author) {
+      return res.status(403).send("수정 권한이 없습니다.");
+    }
+
+    res.render("edit-info-board", { data: post });
+  } catch (error) {
+    console.error("Error fetching content:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 router.post("/update-info-board/:id", async function (req, res) {
-const id = req.params.id;
-const { title, content } = req.body;
-let imagepath = req.session.imagepath || ''; // 세션에 저장된 imagepath 사용
+  const id = req.params.id;
+  const { title, content } = req.body;
+  let imagepath = req.session.imagepath || ''; // 세션에 저장된 imagepath 사용
 
-// Check if the id is a valid ObjectId
-if (!ObjectId.isValid(id)) {
-  return res.status(400).send("Invalid ID format");
-}
-
-try {
-  const post = await db.getDb().collection("info_board").findOne({ _id: new ObjectId(id) });
-
-  if (!post) {
-    return res.status(404).send("게시물을 찾을 수 없습니다.");
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
   }
 
-  // Check if the logged-in user is the author of the post
-  if (req.session.user.id !== post.author) {
-    return res.status(403).send("수정 권한이 없습니다.");
+  try {
+    const post = await db.getDb().collection("info_board").findOne({ _id: new ObjectId(id) });
+
+    if (!post) {
+      return res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+
+    // Check if the logged-in user is the author of the post
+    if (req.session.user.id !== post.author) {
+      return res.status(403).send("수정 권한이 없습니다.");
+    }
+
+    await db.getDb().collection("info_board").updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { title: title, content: content, path: imagepath } }
+    );
+
+    // 게시물 수정 후 이미지 경로 초기화
+    req.session.imagepath = null;
+
+    res.redirect("/info-content/" + id);
+  } catch (error) {
+    console.error("Error updating content:", error);
+    res.status(500).send("Internal Server Error");
   }
-
-  await db.getDb().collection("info_board").updateOne(
-    { _id: new ObjectId(id) },
-    { $set: { title: title, content: content, path: imagepath } }
-  );
-
-  // 게시물 수정 후 이미지 경로 초기화
-  req.session.imagepath = null;
-
-  res.redirect("/info-content/" + id);
-} catch (error) {
-  console.error("Error updating content:", error);
-  res.status(500).send("Internal Server Error");
-}
 });
 
 // G.H.W.M. 게시판
 router.get("/ghwm-content/:id", async function (req, res) {
-const id = req.params.id;
+  const id = req.params.id;
 
-// Check if the id is a valid ObjectId
-if (!ObjectId.isValid(id)) {
-  return res.status(400).send("Invalid ID format");
-}
-
-try {
-  const post = await db
-    .getDb()
-    .collection("ghwm_board")
-    .findOne({ _id: new ObjectId(id) });
-
-  if (post) {
-    res.render("ghwm-content", { data: post });
-  } else {
-    res.status(404).send("게시물을 찾을 수 없습니다.");
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
   }
-} catch (error) {
-  console.error("Error fetching content:", error);
-  res.status(500).send("Internal Server Error");
-}
+
+  try {
+    // Find the post by ID
+    const post = await db.getDb().collection("ghwm_board").findOne({ _id: new ObjectId(id) });
+
+    if (post) {
+      // Increment view count
+      await db.getDb().collection("ghwm_board").updateOne(
+        { _id: new ObjectId(id) },
+        { $inc: { view: 1 } }
+      );
+      res.render("ghwm-content", { data: post, user: req.session.user });
+    } else {
+      console.log("No post found with id:", id);
+      res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+  } catch (error) {
+    console.error("Error fetching content:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 router.delete("/delete-ghwm-post/:id", async function (req, res) {
-const id = req.params.id;
+  const id = req.params.id;
 
-// Check if the id is a valid ObjectId
-if (!ObjectId.isValid(id)) {
-  return res.status(400).send("Invalid ID format");
-}
-
-try {
-  // Find the post
-  const post = await db.getDb().collection("ghwm_board").findOne({ _id: new ObjectId(id) });
-
-  if (!post) {
-    return res.status(404).send("게시물을 찾을 수 없습니다.");
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
   }
 
-  // Check if the logged-in user is the author of the post
-  if (req.session.user.id !== post.author) {
-    return res.status(403).send("삭제 권한이 없습니다.");
+  try {
+    // Find the post
+    const post = await db.getDb().collection("ghwm_board").findOne({ _id: new ObjectId(id) });
+
+    if (!post) {
+      return res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+
+    // Check if the logged-in user is the author of the post
+    if (req.session.user.id !== post.author) {
+      return res.status(403).send("삭제 권한이 없습니다.");
+    }
+
+    // Delete the post
+    await db.getDb().collection("ghwm_board").deleteOne({ _id: new ObjectId(id) });
+
+    res.status(200).send("삭제되었습니다.");
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    res.status(500).send("Internal Server Error");
   }
-
-  // Delete the post
-  await db.getDb().collection("ghwm_board").deleteOne({ _id: new ObjectId(id) });
-
-  res.status(200).send("삭제되었습니다.");
-} catch (error) {
-  console.error("Error deleting post:", error);
-  res.status(500).send("Internal Server Error");
-}
 });
 
 router.get("/edit-ghwm-board/:id", async function (req, res) {
-const id = req.params.id;
+  const id = req.params.id;
 
-// Check if the id is a valid ObjectId
-if (!ObjectId.isValid(id)) {
-  return res.status(400).send("Invalid ID format");
-}
-
-try {
-  const post = await db.getDb().collection("ghwm_board").findOne({ _id: new ObjectId(id) });
-
-  if (!post) {
-    return res.status(404).send("게시물을 찾을 수 없습니다.");
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
   }
 
-  // Check if the logged-in user is the author of the post
-  if (req.session.user.id !== post.author) {
-    return res.status(403).send("수정 권한이 없습니다.");
-  }
+  try {
+    const post = await db.getDb().collection("ghwm_board").findOne({ _id: new ObjectId(id) });
 
-  res.render("edit-ghwm-board", { data: post });
-} catch (error) {
-  console.error("Error fetching content:", error);
-  res.status(500).send("Internal Server Error");
-}
+    if (!post) {
+      return res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+
+    // Check if the logged-in user is the author of the post
+    if (req.session.user.id !== post.author) {
+      return res.status(403).send("수정 권한이 없습니다.");
+    }
+
+    res.render("edit-ghwm-board", { data: post });
+  } catch (error) {
+    console.error("Error fetching content:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 router.post("/update-ghwm-board/:id", async function (req, res) {
-const id = req.params.id;
-const { title, content } = req.body;
-let imagepath = req.session.imagepath || ''; // 세션에 저장된 imagepath 사용
+  const id = req.params.id;
+  const { title, content } = req.body;
+  let imagepath = req.session.imagepath || ''; // 세션에 저장된 imagepath 사용
 
-// Check if the id is a valid ObjectId
-if (!ObjectId.isValid(id)) {
-  return res.status(400).send("Invalid ID format");
-}
-
-try {
-  const post = await db.getDb().collection("ghwm_board").findOne({ _id: new ObjectId(id) });
-
-  if (!post) {
-    return res.status(404).send("게시물을 찾을 수 없습니다.");
+  // Check if the id is a valid ObjectId
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID format");
   }
 
-  // Check if the logged-in user is the author of the post
-  if (req.session.user.id !== post.author) {
-    return res.status(403).send("수정 권한이 없습니다.");
+  try {
+    const post = await db.getDb().collection("ghwm_board").findOne({ _id: new ObjectId(id) });
+
+    if (!post) {
+      return res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+
+    // Check if the logged-in user is the author of the post
+    if (req.session.user.id !== post.author) {
+      return res.status(403).send("수정 권한이 없습니다.");
+    }
+
+    await db.getDb().collection("ghwm_board").updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { title: title, content: content, path: imagepath } }
+    );
+
+    // 게시물 수정 후 이미지 경로 초기화
+    req.session.imagepath = null;
+
+    res.redirect("/ghwm-content/" + id);
+  } catch (error) {
+    console.error("Error updating content:", error);
+    res.status(500).send("Internal Server Error");
   }
-
-  await db.getDb().collection("ghwm_board").updateOne(
-    { _id: new ObjectId(id) },
-    { $set: { title: title, content: content, path: imagepath } }
-  );
-
-  // 게시물 수정 후 이미지 경로 초기화
-  req.session.imagepath = null;
-
-  res.redirect("/ghwm-content/" + id);
-} catch (error) {
-  console.error("Error updating content:", error);
-  res.status(500).send("Internal Server Error");
-}
 });
 
 router.get('/change-pw', function(req, res) {
-res.render('change-pw', { userError: null, pwError: null, message: null });
+  res.render('change-pw', { userError: null, pwError: null, message: null });
 });
 
 router.post('/change-pw', async function(req, res) {
-const { userid, username, user_new_pw, check_new_pw } = req.body;
+  const { userid, username, user_new_pw, check_new_pw } = req.body;
 
-try {
-  const user = await db.getDb().collection('User_info').findOne({ id_join: userid, name_join: username });
+  try {
+    const user = await db.getDb().collection('User_info').findOne({ id_join: userid, name_join: username });
 
-  if (!user) {
-    return res.render('change-pw', { userError: '해당 아이디와 이름이 일치하는 사용자가 없습니다.', pwError: null, message: null });
+    if (!user) {
+      return res.render('change-pw', { userError: '해당 아이디와 이름이 일치하는 사용자가 없습니다.', pwError: null, message: null });
+    }
+
+    if (user_new_pw !== check_new_pw) {
+      return res.render('change-pw', { userError: null, pwError: '신규 비밀번호의 재입력이 올바르지 않습니다.', message: null });
+    }
+
+    const hashedPassword = await bcrypt.hash(user_new_pw, 12);
+    await db.getDb().collection('User_info').updateOne(
+      { _id: user._id },
+      { $set: { pw_join: hashedPassword } }
+    );
+
+    res.send('<script>alert("비밀번호가 변경되었습니다."); window.location.href = "/login";</script>');
+  } catch (error) {
+    console.error('Error updating password:', error);
+    res.render('change-pw', { userError: null, pwError: null, message: '비밀번호를 변경하는 도중 오류가 발생했습니다.' });
   }
-
-  if (user_new_pw !== check_new_pw) {
-    return res.render('change-pw', { userError: null, pwError: '신규 비밀번호의 재입력이 올바르지 않습니다.', message: null });
-  }
-
-  const hashedPassword = await bcrypt.hash(user_new_pw, 12);
-  await db.getDb().collection('User_info').updateOne(
-    { _id: user._id },
-    { $set: { pw_join: hashedPassword } }
-  );
-
-  res.send('<script>alert("비밀번호가 변경되었습니다."); window.location.href = "/login";</script>');
-} catch (error) {
-  console.error('Error updating password:', error);
-  res.render('change-pw', { userError: null, pwError: null, message: '비밀번호를 변경하는 도중 오류가 발생했습니다.' });
-}
 });
 
 router.post('/photo', upload.single('picture'), function(req, res) {
-if (req.file) {
-  console.log(req.file.path);
-  // 세션에 이미지 경로 저장
-  req.session.imagepath = '/image/' + req.file.filename;
-  res.status(200).send('File uploaded');
-} else {
-  res.status(400).send('No file uploaded');
-}
-});
-
-// 인바디 데이터 저장 엔드포인트
-router.post("/save-inbody", async function (req, res) {
-if (!req.session.user) {
-  return res.status(401).send("로그인이 필요합니다.");
-}
-
-const user = req.session.user;
-
-try {
-  await db.getDb().collection("User_inbody").insertOne({
-    author : user.id,  
-    height : req.body.height,
-    weight: req.body.weight,
-    skeletalMuscleMass: req.body.muscle_mass,
-    bodyFatMass: req.body.fat,
-    bmi: req.body.bmi,
-    bodyFatPercentage: req.body.fat_percentage
-  });
-  res.redirect("/diary");
-} catch (error) {
-  console.error("인바디 데이터 저장 오류:", error);
-  res.status(500).send("인바디 데이터 저장 중 오류가 발생했습니다.");
-}
+  if (req.file) {
+    console.log(req.file.path);
+    // 세션에 이미지 경로 저장
+    req.session.imagepath = '/image/' + req.file.filename;
+    res.status(200).send('File uploaded');
+  } else {
+    res.status(400).send('No file uploaded');
+  }
 });
 
 module.exports = router;
-
-

@@ -18,7 +18,6 @@ let storage = multer.diskStorage({
     done(null, file.originalname);
   },
 });
-
 router.get("/my-page", async function (req, res) {
   const user = req.session.user;
 
@@ -34,42 +33,13 @@ router.get("/my-page", async function (req, res) {
       .collection("User_info")
       .findOne({ id_join: user.id });
 
-    const freeBoardPosts = await db
-      .getDb()
-      .collection("free_board")
-      .find({ author: user.id })
-      .toArray();
-    const endBoardPosts = await db
-      .getDb()
-      .collection("end_board")
-      .find({ author: user.id })
-      .toArray();
-    const ghwmBoardPosts = await db
-      .getDb()
-      .collection("ghwm_board")
-      .find({ author: user.id })
-      .toArray();
-    const infoBoardPosts = await db
-      .getDb()
-      .collection("info_board")
-      .find({ author: user.id })
-      .toArray();
-    const childBoardPosts = await db
-      .getDb()
-      .collection("child_board")
-      .find({ author: user.id })
-      .toArray();
-
-    const userPosts = [
-      ...freeBoardPosts.map((post) => ({ ...post, board: "free" })),
-      ...endBoardPosts.map((post) => ({ ...post, board: "end" })),
-      ...infoBoardPosts.map((post) => ({ ...post, board: "info" })),
-      ...ghwmBoardPosts.map((post) => ({ ...post, board: "child" })),
-      ...childBoardPosts.map((post) => ({ ...post, board: "ghwm" })),
-    ];
-
     if (userData) {
-      res.render("my-page", { user: userData, posts: userPosts });
+      // 목표 날짜와 현재 날짜의 차이를 계산하여 D-Day 구하기
+      const currentDate = new Date();
+      const goalDate = new Date(userData.goal_date_join);
+      const dDay = Math.ceil((goalDate - currentDate) / (1000 * 60 * 60 * 24));
+
+      res.render("my-page", { user: userData, dDay: dDay });
     } else {
       res.send(
         '<script>alert("사용자 정보를 불러오는 데 실패했습니다."); window.location.href = "/";</script>'
@@ -80,6 +50,7 @@ router.get("/my-page", async function (req, res) {
     res.status(500).send("Internal Server Error");
   }
 });
+
 
 router.post("/my-page", async function (req, res) {
   const user = req.session.user;
@@ -184,7 +155,7 @@ router.get("/my-board", async function (req, res) {
       ...endBoardPosts.map((post) => ({ ...post, board: "end", board_name:"오운완게시판" })),
       ...infoBoardPosts.map((post) => ({ ...post, board: "info", board_name: "정보게시판" })),
       ...ghwmBoardPosts.map((post) => ({ ...post, board: "ghwm", board_name: "G.H.W.M 게시판" })),
-      ...childBoardPosts.map((post) => ({ ...post, board: "child", board_name:"헬린이게시판" })),
+      ...childBoardPosts.map((post) => ({ ...post, board: "child", board_name: "헬린이게시판" })),
     ];
 
     res.render("my-board", { posts: userPosts });

@@ -12,14 +12,14 @@
         <% if (posts.length > 0) { %>
             <% posts.forEach(post => { %>
                 <div class="board">
-                    <h3><a href="/<%= posts.board %>-content/<%= posts._id %>"><%= posts.title %></a></h3>
+                    <h3><%= post.board_name%></h3>
+                    <h3><a href="/<%= post.board %>-content/:<%= post._id %>"><%= post.title %></a></h3>
                     <div class="low-element">
-                        <p>댓글 수: <%= posts.comments ? posts.comments.length : 0 %></p>
+                        <p>댓글 수: <%= post.comments ? post.comments.length : 0 %></p>
                         <span>|</span>
                         <p>작성일: <%= new Date(post.date).toLocaleDateString("ko-KR") %></p>
                     </div>
                 </div>
-                <hr>
             <% }) %>
         <% } else { %>
             <p>작성한 글이 없습니다.</p>

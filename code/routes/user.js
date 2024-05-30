@@ -313,13 +313,7 @@ router.get("/update-child-board", function (req, res) {
 });
 
 router.get("/list_leg", function (req, res) {
-  if (!req.session.user) {
-    res.send(
-      '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
-    );
-  } else {
-    res.render("list_leg");
-  }
+  res.render("list_leg");
 });
 
 router.get("/list_chest", function (req, res) {
@@ -609,6 +603,14 @@ function formatDate(date) {
   const options = { year: "numeric", month: "2-digit", day: "2-digit" };
   return new Date(date).toLocaleDateString("ko-KR", options);
 }
+
+router.get('/check-login-status', function(req, res) {
+  if (req.session.user) {
+    res.json({ loggedIn: true });
+  } else {
+    res.json({ loggedIn: false });
+  }
+});
 
 router.get("/info-board", async (req, res) => {
   try {

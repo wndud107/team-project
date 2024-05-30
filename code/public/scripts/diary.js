@@ -172,35 +172,23 @@ document.addEventListener("DOMContentLoaded", function() {
     const addExerciseFormButton = document.getElementById("add-exercise-button");
     const exerciseList = document.getElementById("exercise-list");
 
-    // 요소 선택 확인
-    console.log("addExercisePopup:", addExercisePopup);
-    console.log("closePopup:", closePopup);
-    console.log("addExerciseButton:", addExerciseButton);
-    console.log("addExerciseFormButton:", addExerciseFormButton);
-    console.log("exerciseList:", exerciseList);
-
     if (addExerciseButton) {
         addExerciseButton.addEventListener('click', () => {
-            console.log("Add exercise button clicked");
             addExercisePopup.classList.add('show');
         });
     }
 
     if (closePopup) {
         closePopup.addEventListener('click', () => {
-            console.log("Close button clicked");
             addExercisePopup.classList.remove('show');
         });
     }
 
-    //팝업 창 외부 클릭 시 팝업 창 닫기
     window.addEventListener('click', (event) => {
         if (event.target == addExercisePopup) {
             addExercisePopup.classList.remove('show');
         }
     });
-
-
 
     if (addExerciseFormButton) {
         addExerciseFormButton.addEventListener('click', () => {
@@ -208,37 +196,74 @@ document.addEventListener("DOMContentLoaded", function() {
             const reps = document.getElementById("reps");
             const sets = document.getElementById("sets");
 
-            // 요소 선택 확인
-            console.log("exerciseSelect:", exerciseSelect);
-            console.log("reps:", reps);
-            console.log("sets:", sets);
-
             if (exerciseSelect && reps && sets) {
                 if (exerciseSelect.value && reps.value && sets.value) {
-                    const listItem = document.createElement("li");
-                    listItem.innerText = `  ◯ ${exerciseSelect.value}  [  ${reps.value}회 x ${sets.value}세트  ] `;
-                    const separator = document.createElement("hr");
-                    exerciseList.appendChild(listItem);
-                    exerciseList.appendChild(separator);
-
                     const formattedDate = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
+
+                    const exerciseData = {
+                        date: formattedDate,
+                        exercise: exerciseSelect.value,
+                        reps: reps.value,
+                        sets: sets.value
+                    };
+
+                    console.log('Sending exercise data:', exerciseData);
 
                     fetch('/save-exercise', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({
-                            date: formattedDate,
-                            exercise: exerciseSelect.value,
-                            reps: reps.value,
-                            sets: sets.value
-                        })
+                        body: JSON.stringify(exerciseData)
                     })
-                    .then(response => response.text())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.text();
+                    })
                     .then(data => {
                         console.log('Exercise saved successfully:', data);
                         addExercisePopup.classList.remove('show');
+                        const listItem = document.createElement("li");
+                        listItem.innerHTML = `
+                            <span>
+                                ${exerciseSelect.value} [${reps.value}회 x ${sets.value}세트]
+                                <button class="delete-exercise">삭제</button>
+                            </span>
+                        `;
+                        exerciseList.appendChild(listItem);
+
+                        // 삭제 버튼 클릭 이벤트 추가
+                        const deleteButton = listItem.querySelector('.delete-exercise');
+                        deleteButton.addEventListener('click', () => {
+                            fetch(`/delete-exercise`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    date: formattedDate,
+                                    exercise: exerciseSelect.value,
+                                    reps: reps.value,
+                                    sets: sets.value
+                                })
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.text();
+                            })
+                            .then(data => {
+                                console.log('Exercise deleted successfully:', data);
+                                exerciseList.removeChild(listItem);
+                            })
+                            .catch(error => {
+                                console.error('Error deleting exercise:', error);
+                            });
+                        });
+
                         exerciseSelect.value = "";
                         reps.value = "";
                         sets.value = "";
@@ -253,7 +278,6 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     }
-
 
 });
     // document.getElementById('uploadInput1').addEventListener('change', (event) => uploadImage(event, 'uploadBox1'));

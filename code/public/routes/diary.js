@@ -85,7 +85,9 @@ const updatePopupContent = (data, type) => {
         };
 
         for (let key in mealContainers) {
-            mealContainers[key].innerHTML = `<p>+</p><p>${key} 식단</p>`;
+            if (mealContainers[key]) {
+                mealContainers[key].innerHTML = `<p>+</p><p>${key} 식단</p>`;
+            }
         }
 
         data.forEach(meal => {
@@ -95,17 +97,20 @@ const updatePopupContent = (data, type) => {
         });
     } else if (type === 'exercises') {
         const exerciseList = document.getElementById('exercise-list');
-        exerciseList.innerHTML = ''; // 초기화
+        if (exerciseList) {
+            exerciseList.innerHTML = ''; // 초기화
 
-        data.forEach(exercise => {
-            const listItem = document.createElement("li");
-            listItem.innerText = `  ◯ ${exercise.exercise}  [  ${exercise.reps}회 x ${exercise.sets}세트  ] `;
-            const separator = document.createElement("hr");
-            exerciseList.appendChild(listItem);
-            exerciseList.appendChild(separator);
-        });
+            data.forEach(exercise => {
+                const listItem = document.createElement("li");
+                listItem.innerText = `  ◯ ${exercise.exercise}  [  ${exercise.reps}회 x ${exercise.sets}세트  ] `;
+                const separator = document.createElement("hr");
+                exerciseList.appendChild(listItem);
+                exerciseList.appendChild(separator);
+            });
+        }
     }
 }
+
 
 renderCalendar();
 
@@ -249,10 +254,11 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    document.getElementById('uploadInput1').addEventListener('change', (event) => uploadImage(event, 'uploadBox1'));
-    document.getElementById('uploadInput2').addEventListener('change', (event) => uploadImage(event, 'uploadBox2'));
-    document.getElementById('uploadInput3').addEventListener('change', (event) => uploadImage(event, 'uploadBox3'));
+
 });
+    // document.getElementById('uploadInput1').addEventListener('change', (event) => uploadImage(event, 'uploadBox1'));
+    // document.getElementById('uploadInput2').addEventListener('change', (event) => uploadImage(event, 'uploadBox2'));
+    // document.getElementById('uploadInput3').addEventListener('change', (event) => uploadImage(event, 'uploadBox3'));
 
 
 function uploadImage(event, boxId) {
@@ -286,67 +292,11 @@ function uploadImage(event, boxId) {
         .catch(error => {
             console.error('Error uploading image:', error);
         });
+        
     }
 }
 
 
-document.addEventListener('DOMContentLoaded', () => {
-    const saveButton = document.querySelector('.save-inbody');
-    const dateInput = document.querySelector('.input-date');
-    const userIdInput = document.querySelector('.input-user-id');
 
-    // 달력에서 선택된 날짜를 업데이트하는 함수
-    function updateSelectedDate(date) {
-        dateInput.value = date;
-    }    
- 
     
-    // 인바디 데이터 저장
-if (saveButton) {
-    saveButton.addEventListener('click', () => {
-        const height = document.querySelector('.input-height').value;
-        const weight = document.querySelector('.input-weight').value;
-        const muscleMass = document.querySelector('.input-muscle-mass').value;
-        const fat = document.querySelector('.input-fat').value;
-        const bmi = document.querySelector('.input-bmi').value;
-        const fatPercentage = document.querySelector('.input-fat-percentage').value;
 
-        if (!height || !weight || !muscleMass || !fat || !bmi || !fatPercentage) {
-            alert('모든 항목을 입력해주세요.');
-            return;
-        }
-
-        const inbodyData = {
-            date: `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`, // 선택된 날짜 포함
-            height: parseFloat(height),
-            weight: parseFloat(weight),
-            skeletalMuscleMass: parseFloat(muscleMass), // 필드 이름 수정
-            bodyFatMass: parseFloat(fat), // 필드 이름 수정
-            bmi: parseFloat(bmi),
-            bodyFatPercentage: parseFloat(fatPercentage) // 필드 이름 수정
-        };
-
-        fetch('/save-inbody', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(inbodyData)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Inbody data saved successfully:', data);
-            alert('인바디 데이터가 저장되었습니다.');
-        })
-        .catch(error => {
-            console.error('Error saving inbody data:', error);
-            alert('인바디 데이터를 저장하는 동안 오류가 발생했습니다.');
-        });
-    });
-}
-});

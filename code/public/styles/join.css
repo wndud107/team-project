@@ -1,120 +1,119 @@
-.join_calendar {
-    position: absolute;
+.join-page2 { display: none; }
+.join-page1 { display: block; }
+
+h2 {  /* 로그인 박스 안 로고 */
+    font-family : 'Oleo Script Swash Caps';
+    text-align: center;
+    font-size: 35px;
+    position: relative;
+}
+
+form {    /* 로그인 박스 전체 */
+    position: relative;
+    margin: 0 auto;
+    /* margin-top: 200px; */
     width: 500px;
-    left: 50%; /* 부모 요소의 가로 중앙에 위치하기 위해 왼쪽 여백을 50%로 설정 */
-    transform: translateX(-50%); /* 이미지의 가로 중앙을 부모 요소의 중앙에 맞춤 */
-    margin: -140px auto; /* 수평 및 수직 가운데 정렬 */
+    height: 280px;
+    padding: 10px;
+    /* border: 1px solid rgb(0, 53, 89); */
+    border-radius: 12px;
+    text-align: center;
+    position: relative;
+    top: 120px;
+}
+
+form img {
+    position: absolute;
+    width: 80%; 
+    margin:auto;
+    right: 52px;
+    top: 10px;
     pointer-events: none;
 }
 
-div {
-    display: flex;
-    align-items: center;
-}
-
-#id_pw_join,#detail_join {
-    position: relative;
-    width: 350px;
-    border:2px solid lightgray;
-    border-radius: 5px;
-    margin: 50px auto;
-}
-
-#id_pw_join {
-    margin-top: 240px;
-}
-
-.basic_join,.detail_join {
-    width: 90%;
-    margin: 5px auto;
-    padding: 3px 0;
-    border: 0;
-}
-
-.basic_join:focus,
-.detail_join:focus {
-    outline: none; 
-    color: rgb(11, 154, 167);
-}
-
-input[placeholder] {
-    font:inherit;
-    font-size: 20px;
-}
-
-.img_join {
-    width: 25px;
-    padding: 10px;
-    margin: 0;
-}
-
-#select-gender {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-}
-
-.gender-label {
-    flex: 1;
-    display: inline-block;
-    cursor: pointer;
-    text-align: center;
-    padding: 10px 0;
-    border: 1px solid lightgray;
-}
-
-.gender-label:hover {
-    color: rgb(11, 154, 167);
-    font-weight: 600;
-    border-color: rgb(11, 154, 167);
-}
-
-#select-gender input[type="radio"] {
-    display: none; 
-}
-
-#select-gender input[type="radio"]:checked + label {
-    /* 선택된 상태의 label 스타일 */
-    font-weight: 600;
-    color: rgb(11, 154, 167);
-    border-color: rgb(11, 154, 167);
-}
-
-hr {
-    margin:0;
-    padding:0;
-}
-
-.btn-join {
-    margin: auto;
-    margin-top: 50px;
-    font:inherit;
-    font-weight: 700;
-    color: white;
+form input {   /* 아이디, 비밀번호 입력 박스 */
+    /* display: block; */
+    width: 300px;
+    height: 35px;
+    padding: 20px;
+    box-sizing: border-box;
+    margin: 4px auto;
+    margin-bottom: 8px;
+    border: 1.5px solid rgb(11, 154, 167);
     border-radius: 6px;
-    border: 1px solid lightgray;
-    background-color: rgb(11, 154, 167);
-    padding: 15px 30px;
-    box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    /* position: relative; 로고(h2) 기준 */
+    padding-left: 40px;
 }
 
-button:hover {
+form input:focus {      
+    border: 2px solid rgb(0, 53, 89);
+}
+
+form input[text] {
+    font-family: 'Noto Sans Kr';
+}
+
+#id {
+    background-image: url("/images/person.svg");
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
+#pw {
+    background-image: url("/images/lock.svg");
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
+#btn-login {    /* 로그인 버튼 */
+    font-weight: bold;
+    width: 300px;
+    height: 40px;
+    /* display: block; */
+    margin: auto;
+    margin-top: 5px;
+    /* padding: 16px 80px; */
+    position: relative;  /* 구조상 부모요소(pw입력박스) 기준으로 position 값 지정 */
+    top: 8px;
+    /* bottom: 20px; */
+    border-radius: 6px;
+    border: 1.5px solid rgb(11, 154, 167);
+    background-color:  rgb(11, 154, 167);
+    font-size: 18px;
+    color: white;
+}
+
+#btn-login:hover {
+    border: 1.5px solid  rgb(55, 196, 170);
     background-color: rgb(55, 196, 170);
     color: white;
-    border-color:  rgb(55, 196, 170);  
-    box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
 }
 
+#a-find-total {    /* 비밀번호 찾기 | 아이디 찾기 | 회원가입 */
 
-.return-to-login {
-    /* display: block; */
+    margin: auto;
     text-align: center;
-    text-decoration: none;
-    color: rgb(151, 151, 151);
-    margin: 15px auto;
+    padding-top: 32px;
+    font-size: 15px;
+    position: relative;
+    top: 110px;
 }
 
-.return-to-login:hover {
-    color: rgb(11, 154, 167);
+.a-find {
+    text-decoration: none;
+    color: gray;
+    padding: 16px;
 }
+
+.a-find:hover {
+    color: rgb(0, 53, 89);
+}
+
+
+/* svg {
+    position: absolute;
+    left: 35px;
+    top: 3px;
+    z-index: 1;
+    color: rgb(78, 77, 77);
+} */

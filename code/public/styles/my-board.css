@@ -1,0 +1,39 @@
+h1 {
+    margin: 100px auto 80px auto;
+    color: rgb(11, 154, 167);
+}
+
+.board-list {
+    margin: auto;
+    width: 1000px;
+    border: 1px solid rgb(11, 154, 167);
+}
+
+.board {
+    display: flex;
+    flex-direction: column;
+    align-items:flex-start;
+    margin-left: 25px;
+}
+
+.board h3 a {
+    text-decoration: none;
+}
+
+.low-element {
+    display:flex;
+    width: 100px;
+    margin: 10px auto 10px 40px;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+}
+
+.low-element {
+    margin: 0;
+}
+
+hr{
+    margin:0;
+    padding:0;
+}

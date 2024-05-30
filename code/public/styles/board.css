@@ -88,7 +88,7 @@ table a {
 }
 
 table a:hover {
-    color: #292929; 
+    color: rgb(11, 154, 167);
 }
 
 table, th, td {

@@ -210,6 +210,22 @@ router.get("/exercises", async (req, res) => {
   }
 });
 
+router.post("/delete-exercise", async function (req, res) {
+  const { date, exercise, reps, sets } = req.body;
+  try {
+    await db.getDb().collection("User_diary").deleteOne({
+      date,
+      exercise,
+      reps,
+      sets
+    });
+    res.send("Exercise deleted successfully");
+  } catch (error) {
+    console.error("Error deleting exercise:", error);
+    res.status(500).send("Error deleting exercise");
+  }
+});
+
 router.post("/upload", (req, res) => {
   const form = new formidable.IncomingForm();
   form.uploadDir = path.join(__dirname, "..", "public", "uploads");

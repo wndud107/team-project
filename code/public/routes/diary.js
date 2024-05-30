@@ -8,6 +8,7 @@ const daysTag = document.querySelector(".days"),
     popup = document.getElementById("popup"),
     popupDate = document.getElementById("popup-date"),
     closePopup = document.querySelector(".close");
+    // saveInbody = document.querySelector(".save-inbody");
 
 let date = new Date(),
     currYear = date.getFullYear(),
@@ -48,7 +49,10 @@ const renderCalendar = () => {
                 popupDate.innerText = ` ${months[currMonth]} ${selectedDate.getDate()}일`;
                 popup.classList.add('show');
                 fetchDataForDate(selectedDate);
-                renderCalendar();
+                // renderCalendar(); // 달력을 다시 렌더링하지 않음
+                // 선택된 날짜의 스타일을 다시 적용
+                document.querySelectorAll('.days li').forEach(d => d.classList.remove('selected'));
+                target.classList.add('selected');
             }
         });
     });
@@ -69,6 +73,7 @@ const fetchDataForDate = (date) => {
             updatePopupContent(data, 'exercises'); //운동 데이터 업데이트
         })
         .catch(error => console.error('Error fetching exercises:', error));
+
 }
 
 const updatePopupContent = (data, type) => {
@@ -283,3 +288,65 @@ function uploadImage(event, boxId) {
         });
     }
 }
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const saveButton = document.querySelector('.save-inbody');
+    const dateInput = document.querySelector('.input-date');
+    const userIdInput = document.querySelector('.input-user-id');
+
+    // 달력에서 선택된 날짜를 업데이트하는 함수
+    function updateSelectedDate(date) {
+        dateInput.value = date;
+    }    
+ 
+    
+    // 인바디 데이터 저장
+if (saveButton) {
+    saveButton.addEventListener('click', () => {
+        const height = document.querySelector('.input-height').value;
+        const weight = document.querySelector('.input-weight').value;
+        const muscleMass = document.querySelector('.input-muscle-mass').value;
+        const fat = document.querySelector('.input-fat').value;
+        const bmi = document.querySelector('.input-bmi').value;
+        const fatPercentage = document.querySelector('.input-fat-percentage').value;
+
+        if (!height || !weight || !muscleMass || !fat || !bmi || !fatPercentage) {
+            alert('모든 항목을 입력해주세요.');
+            return;
+        }
+
+        const inbodyData = {
+            date: `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`, // 선택된 날짜 포함
+            height: parseFloat(height),
+            weight: parseFloat(weight),
+            skeletalMuscleMass: parseFloat(muscleMass), // 필드 이름 수정
+            bodyFatMass: parseFloat(fat), // 필드 이름 수정
+            bmi: parseFloat(bmi),
+            bodyFatPercentage: parseFloat(fatPercentage) // 필드 이름 수정
+        };
+
+        fetch('/save-inbody', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(inbodyData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Inbody data saved successfully:', data);
+            alert('인바디 데이터가 저장되었습니다.');
+        })
+        .catch(error => {
+            console.error('Error saving inbody data:', error);
+            alert('인바디 데이터를 저장하는 동안 오류가 발생했습니다.');
+        });
+    });
+}
+});

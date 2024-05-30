@@ -82,8 +82,12 @@ router.post("/join", async function (req, res) {
     name_join,
     birth_join,
     telnumber_join,
-    "join-gender": join_gender,
+    height_join,
+    weight_join,
+    goal_weight_join,
+    d_day_join,
   } = req.body;
+
   const hashedPassword = await bcrypt.hash(pw_join, 12);
 
   try {
@@ -93,9 +97,12 @@ router.post("/join", async function (req, res) {
       name_join,
       birth_join,
       telnumber_join,
-      join_gender,
-    });
-    res.redirect("complete-join");
+      height_join,
+      weight_join,
+      goal_weight_join,
+      d_day_join,
+    })
+    res.redirect("login");
   } catch (error) {
     console.error("Error inserting user:", error);
     res.status(500).send("Internal Server Error");

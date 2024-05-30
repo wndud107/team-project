@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('includes/head')%>
+    <link rel="stylesheet" href="styles/my-board.css">
+</head>
+<body>
+    <%- include('includes/header')%>
+    <h1>내가 쓴 글</h1>
+
+    <div class="board-list">
+        <% if (posts.length > 0) { %>
+            <% posts.forEach(post => { %>
+                <div class="board">
+                    <h3><a href="/<%= posts.board %>-content/<%= posts._id %>"><%= posts.title %></a></h3>
+                    <div class="low-element">
+                        <p>댓글 수: <%= posts.comments ? posts.comments.length : 0 %></p>
+                        <span>|</span>
+                        <p>작성일: <%= new Date(post.date).toLocaleDateString("ko-KR") %></p>
+                    </div>
+                </div>
+                <hr>
+            <% }) %>
+        <% } else { %>
+            <p>작성한 글이 없습니다.</p>
+        <% } %>
+    </div>
+</body>
+</html>

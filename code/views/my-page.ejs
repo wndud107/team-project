@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <%-include('includes/head')%>
+    <%- include('includes/head') %>
     <link rel="stylesheet" href="styles/my-page.css"/>
   </head>
   <body>
-    <%-include('includes/header')%>
-
+    <%- include('includes/header') %>
     <main>
         <div class="container1">
             <h2 class="h2">My Page</h2>
@@ -24,32 +23,18 @@
                         </button>
                     </div>
                     <div class="nickname-box">
-                            <h3>NickName</h3>
-                            <a href="change-nickname">닉네임 변경</a>
+                        <h3><%= user.nickname_join %></h3>
+                        <a href="change-nickname">닉네임 변경</a>
                     </div>
                 </div>
 
                 <div class="D-DAY">
-                    <h3>목표 몸무게 50kg</h3>
-                    <h2>D-DAY</h2>
+                    <h3>목표 몸무게 <br><%= user.goal_weight_join %> Kg</h3>
+                    <h2>D-<%= dDay %></h2>
                     <a href="#">D-DAY 설정</a>
                 </div>
             </div>
         </div>
-        <script>
-            document.getElementById("fileInput").addEventListener("change", function (event) {
-                const file = event.target.files[0];
-                const reader = new FileReader();
-
-                reader.onload = function (e) {
-                    document.getElementById("photo-placeholder").style.backgroundImage = `url(${e.target.result})`;
-                };
-
-                if (file) {
-                    reader.readAsDataURL(file);
-                }
-            });
-        </script>
 
         <div class="User_info">
             <h2>회원 정보</h2>
@@ -62,7 +47,7 @@
                 <div class="info-row">
                     <label>비밀번호</label>
                     <span>********</span>
-                    <button class="btn">비밀번호 변경</button>
+                    <button action="go_to_change_pw" class="btn">비밀번호 변경</button>
                 </div>
                 <div class="info-row">
                     <label>이름(실명)</label>
@@ -96,6 +81,35 @@
                 </div>
             </div>
         </div>
+
+        <div class="User_info">
+            <h2>게시판 이용 내역</h2>
+            <div class="my-board">
+                <div class="board-use-record">
+                    <div class="my-board record-list">
+                        <a href="/my-board">내가 쓴 글</a>
+                    </div>
+                    <div class="my-comment record-list">
+                        <a href="">내가 쓴 댓글</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById("fileInput").addEventListener("change", function (event) {
+                const file = event.target.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    document.getElementById("photo-placeholder").style.backgroundImage = `url(${e.target.result})`;
+                };
+
+                if (file) {
+                    reader.readAsDataURL(file);
+                }
+            });
+        </script>
     </main>
   </body>
 </html>

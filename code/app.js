@@ -3,6 +3,7 @@ const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const userRoutes = require('./routes/user');
+const mypageRoutes = require('./routes/my-page');
 const db = require('./data/database');
 
 const app = express();
@@ -30,6 +31,8 @@ app.use((req, res, next) => {
 
 // Routes
 app.use(userRoutes);
+app.use(mypageRoutes);
+
 
 app.use(function (error, req, res, next) {
   console.error(error);

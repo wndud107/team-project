@@ -61,11 +61,11 @@ router.get("/my-page", async function (req, res) {
       .toArray();
 
     const userPosts = [
-      ...freeBoardPosts.map((post) => ({ ...post, board: "자유게시판" })),
-      ...endBoardPosts.map((post) => ({ ...post, board: "오운완게시판" })),
-      ...infoBoardPosts.map((post) => ({ ...post, board: "정보게시판" })),
-      ...ghwmBoardPosts.map((post) => ({ ...post, board: "헬린이게시판" })),
-      ...childBoardPosts.map((post) => ({ ...post, board: "G.H.W.M 게시판" })),
+      ...freeBoardPosts.map((post) => ({ ...post, board: "free" })),
+      ...endBoardPosts.map((post) => ({ ...post, board: "end" })),
+      ...infoBoardPosts.map((post) => ({ ...post, board: "info" })),
+      ...ghwmBoardPosts.map((post) => ({ ...post, board: "child" })),
+      ...childBoardPosts.map((post) => ({ ...post, board: "ghwm" })),
     ];
 
     if (userData) {
@@ -142,5 +142,57 @@ router.post("/my-page", async function (req, res) {
     res.status(500).send("Internal Server Error");
   }
 });
+
+router.get("/my-board", async function (req, res) {
+  const user = req.session.user;
+
+  if (!user) {
+    return res.send(
+      '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
+    );
+  }
+
+  try {
+    const freeBoardPosts = await db
+      .getDb()
+      .collection("free_board")
+      .find({ author: user.id })
+      .toArray();
+    const endBoardPosts = await db
+      .getDb()
+      .collection("end_board")
+      .find({ author: user.id })
+      .toArray();
+    const ghwmBoardPosts = await db
+      .getDb()
+      .collection("ghwm_board")
+      .find({ author: user.id })
+      .toArray();
+    const infoBoardPosts = await db
+      .getDb()
+      .collection("info_board")
+      .find({ author: user.id })
+      .toArray();
+    const childBoardPosts = await db
+      .getDb()
+      .collection("child_board")
+      .find({ author: user.id })
+      .toArray();
+
+    const userPosts = [
+      ...freeBoardPosts.map((post) => ({ ...post, board: "free" , board_name: "자유게시판"})),
+      ...endBoardPosts.map((post) => ({ ...post, board: "end", board_name:"오운완게시판" })),
+      ...infoBoardPosts.map((post) => ({ ...post, board: "info", board_name: "정보게시판" })),
+      ...ghwmBoardPosts.map((post) => ({ ...post, board: "ghwm", board_name: "G.H.W.M 게시판" })),
+      ...childBoardPosts.map((post) => ({ ...post, board: "child", board_name:"헬린이게시판" })),
+    ];
+
+    res.render("my-board", { posts: userPosts });
+  } catch (error) {
+    console.error("Error fetching user posts:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 
 module.exports = router;

@@ -7,13 +7,15 @@ h1 {
     margin: auto;
     width: 1000px;
     border: 1px solid rgb(11, 154, 167);
+    border-bottom: none;
 }
 
 .board {
     display: flex;
     flex-direction: column;
     align-items:flex-start;
-    margin-left: 25px;
+    padding-left: 25px;
+    border-bottom: 1px solid rgb(11, 154, 167);
 }
 
 .board h3 a {

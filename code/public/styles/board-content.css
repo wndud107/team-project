@@ -137,6 +137,11 @@ tbody tr:nth-child(even) td {
     color: rgba(0,53,89,0.5);
 }
 
+.upper-views {
+    color: rgba(0,53,89,0.5);
+    margin-top: 5px;
+}
+
 .title {
     color: rgb(0,53,89);
     font-size: 40px;
@@ -215,3 +220,4 @@ tbody tr:nth-child(even) td {
     background-color: rgb(55, 196, 170);
     border: 1px solid rgb(55, 196, 170);
 }
+

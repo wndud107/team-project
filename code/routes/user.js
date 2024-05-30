@@ -251,37 +251,23 @@ router.get("/meals", async (req, res) => {
 
 router.get("/main-board", async (req, res) => {
   try {
-    const freeBoardPosts = await db.getDb().collection("free_board")
-      .find()
-      .sort({ date: -1 }) // 날짜 기준 내림차순 정렬
-      .limit(4) // 최신 게시글 4개로 제한
-      .toArray();
+    const boards = ["free_board", "end_board", "info_board", "child_board", "ghwm_board"];
+    const popularPostsPromises = boards.map(board =>
+      db.getDb().collection(board).find().sort({ view: -1 }).limit(4).toArray()
+    );
+    const popularPostsData = await Promise.all(popularPostsPromises);
+    const popularPosts = popularPostsData.flat().map(post => ({
+      ...post,
+      board: post.board // board 필드 포함
+    })).sort((a, b) => b.view - a.view).slice(0, 4);
 
-    const endBoardPosts = await db.getDb().collection("end_board")
-      .find()
-      .sort({ date: -1 }) // 날짜 기준 내림차순 정렬
-      .limit(4) // 최신 게시글 4개로 제한
-      .toArray();
-    
-    const infoBoardPosts = await db.getDb().collection("info_board")
-      .find()
-      .sort({ date: -1 }) // 날짜 기준 내림차순 정렬
-      .limit(4) // 최신 게시글 4개로 제한
-      .toArray();
+    const freeBoardPosts = await db.getDb().collection("free_board").find().sort({ date: -1 }).limit(4).toArray();
+    const endBoardPosts = await db.getDb().collection("end_board").find().sort({ date: -1 }).limit(4).toArray();
+    const infoBoardPosts = await db.getDb().collection("info_board").find().sort({ date: -1 }).limit(4).toArray();
+    const childBoardPosts = await db.getDb().collection("child_board").find().sort({ date: -1 }).limit(4).toArray();
+    const ghwmBoardPosts = await db.getDb().collection("ghwm_board").find().sort({ date: -1 }).limit(4).toArray();
 
-    const childBoardPosts = await db.getDb().collection("child_board")
-      .find()
-      .sort({ date: -1 }) // 날짜 기준 내림차순 정렬
-      .limit(4) // 최신 게시글 4개로 제한
-      .toArray();
-
-    const ghwmBoardPosts = await db.getDb().collection("ghwm_board")
-      .find()
-      .sort({ date: -1 }) // 날짜 기준 내림차순 정렬
-      .limit(4) // 최신 게시글 4개로 제한
-      .toArray();
-
-    res.render("main-board", { freeBoardPosts, endBoardPosts, infoBoardPosts, childBoardPosts, ghwmBoardPosts });
+    res.render("main-board", { freeBoardPosts, endBoardPosts, infoBoardPosts, childBoardPosts, ghwmBoardPosts, popularPosts });
   } catch (error) {
     console.error("Error fetching board posts:", error);
     res.status(500).send("Internal Server Error");
@@ -415,35 +401,23 @@ router.post("/my-page", async function (req, res) {
 });
 
 router.post("/save-free-board", async function (req, res) {
-  let imagepath = ''; // 요청 시작 부분에서 imagepath를 초기화합니다.
-
   const user = req.session.user;
-
   if (!user) {
-    return res.send(
-      '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
-    );
+    return res.send('<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>');
   }
-
   const currentDate = new Date();
-
   try {
-    // 이미지 경로가 세션에 저장된 경우 가져옴
-    if (req.session.imagepath) {
-      imagepath = req.session.imagepath;
-    }
-
-    await db.getDb().collection("free_board").insertOne({
+    const result = await db.getDb().collection("free_board").insertOne({
       title: req.body.title,
       content: req.body.content,
       author: user.id,
       date: currentDate,
-      path: imagepath
+      path: req.session.imagepath || '',
+      view: 0, // 조회수 초기화
+      board: 'free' // 게시판 이름 추가
     });
-
-    // 게시물이 저장된 후 이미지 경로 초기화
+    console.log("Post inserted:", result.insertedId);
     req.session.imagepath = null;
-
     res.redirect("/free-board");
   } catch (error) {
     console.error("Error inserting data into MongoDB:", error);
@@ -452,35 +426,23 @@ router.post("/save-free-board", async function (req, res) {
 });
 
 router.post("/save-info-board", async function (req, res) {
-  let imagepath = ''; // 요청 시작 부분에서 imagepath를 초기화합니다.
-
   const user = req.session.user;
-
   if (!user) {
-    return res.send(
-      '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
-    );
+    return res.send('<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>');
   }
-
   const currentDate = new Date();
-
   try {
-    // 이미지 경로가 세션에 저장된 경우 가져옴
-    if (req.session.imagepath) {
-      imagepath = req.session.imagepath;
-    }
-
-    await db.getDb().collection("info_board").insertOne({
+    const result = await db.getDb().collection("info_board").insertOne({
       title: req.body.title,
       content: req.body.content,
       author: user.id,
       date: currentDate,
-      path: imagepath
+      path: req.session.imagepath || '',
+      view: 0, // 조회수 초기화
+      board: 'free' // 게시판 이름 추가
     });
-
-    // 게시물이 저장된 후 이미지 경로 초기화
+    console.log("Post inserted:", result.insertedId);
     req.session.imagepath = null;
-
     res.redirect("/info-board");
   } catch (error) {
     console.error("Error inserting data into MongoDB:", error);
@@ -489,35 +451,23 @@ router.post("/save-info-board", async function (req, res) {
 });
 
 router.post("/save-end-board", async function (req, res) {
-  let imagepath = ''; // 요청 시작 부분에서 imagepath를 초기화합니다.
-
   const user = req.session.user;
-
   if (!user) {
-    return res.send(
-      '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
-    );
+    return res.send('<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>');
   }
-
   const currentDate = new Date();
-
   try {
-    // 이미지 경로가 세션에 저장된 경우 가져옴
-    if (req.session.imagepath) {
-      imagepath = req.session.imagepath;
-    }
-
-    await db.getDb().collection("end_board").insertOne({
+    const result = await db.getDb().collection("end_board").insertOne({
       title: req.body.title,
       content: req.body.content,
       author: user.id,
       date: currentDate,
-      path: imagepath
+      path: req.session.imagepath || '',
+      view: 0, // 조회수 초기화
+      board: 'free' // 게시판 이름 추가
     });
-
-    // 게시물이 저장된 후 이미지 경로 초기화
+    console.log("Post inserted:", result.insertedId);
     req.session.imagepath = null;
-
     res.redirect("/end-board");
   } catch (error) {
     console.error("Error inserting data into MongoDB:", error);
@@ -526,35 +476,23 @@ router.post("/save-end-board", async function (req, res) {
 });
 
 router.post("/save-child-board", async function (req, res) {
-  let imagepath = ''; // 요청 시작 부분에서 imagepath를 초기화합니다.
-
   const user = req.session.user;
-
   if (!user) {
-    return res.send(
-      '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
-    );
+    return res.send('<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>');
   }
-
   const currentDate = new Date();
-
   try {
-    // 이미지 경로가 세션에 저장된 경우 가져옴
-    if (req.session.imagepath) {
-      imagepath = req.session.imagepath;
-    }
-
-    await db.getDb().collection("child_board").insertOne({
+    const result = await db.getDb().collection("child_board").insertOne({
       title: req.body.title,
       content: req.body.content,
       author: user.id,
       date: currentDate,
-      path: imagepath
+      path: req.session.imagepath || '',
+      view: 0, // 조회수 초기화
+      board: 'free' // 게시판 이름 추가
     });
-
-    // 게시물이 저장된 후 이미지 경로 초기화
+    console.log("Post inserted:", result.insertedId);
     req.session.imagepath = null;
-
     res.redirect("/child-board");
   } catch (error) {
     console.error("Error inserting data into MongoDB:", error);
@@ -563,35 +501,23 @@ router.post("/save-child-board", async function (req, res) {
 });
 
 router.post("/save-ghwm-board", async function (req, res) {
-  let imagepath = ''; // 요청 시작 부분에서 imagepath를 초기화합니다.
-
   const user = req.session.user;
-
   if (!user) {
-    return res.send(
-      '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
-    );
+    return res.send('<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>');
   }
-
   const currentDate = new Date();
-
   try {
-    // 이미지 경로가 세션에 저장된 경우 가져옴
-    if (req.session.imagepath) {
-      imagepath = req.session.imagepath;
-    }
-
-    await db.getDb().collection("ghwm_board").insertOne({
+    const result = await db.getDb().collection("ghwm_board").insertOne({
       title: req.body.title,
       content: req.body.content,
       author: user.id,
       date: currentDate,
-      path: imagepath
+      path: req.session.imagepath || '',
+      view: 0, // 조회수 초기화
+      board: 'free' // 게시판 이름 추가
     });
-
-    // 게시물이 저장된 후 이미지 경로 초기화
+    console.log("Post inserted:", result.insertedId);
     req.session.imagepath = null;
-
     res.redirect("/ghwm-board");
   } catch (error) {
     console.error("Error inserting data into MongoDB:", error);
@@ -722,18 +648,25 @@ router.get("/ghwm-board", async (req, res) => {
 // 자유게시판
 router.get("/free-content/:id", async function (req, res) {
   const id = req.params.id;
-  
+
   // Check if the id is a valid ObjectId
   if (!ObjectId.isValid(id)) {
     return res.status(400).send("Invalid ID format");
   }
 
   try {
+    // Find the post by ID
     const post = await db.getDb().collection("free_board").findOne({ _id: new ObjectId(id) });
 
     if (post) {
+      // Increment view count
+      await db.getDb().collection("free_board").updateOne(
+        { _id: new ObjectId(id) },
+        { $inc: { view: 1 } }
+      );
       res.render("free-content", { data: post, user: req.session.user });
     } else {
+      console.log("No post found with id:", id);
       res.status(404).send("게시물을 찾을 수 없습니다.");
     }
   } catch (error) {
@@ -741,6 +674,7 @@ router.get("/free-content/:id", async function (req, res) {
     res.status(500).send("Internal Server Error");
   }
 });
+
 
 router.delete("/delete-free-post/:id", async function (req, res) {
   const id = req.params.id;
@@ -847,14 +781,18 @@ router.get("/end-content/:id", async function (req, res) {
   }
 
   try {
-    const post = await db
-      .getDb()
-      .collection("end_board")
-      .findOne({ _id: new ObjectId(id) });
+    // Find the post by ID
+    const post = await db.getDb().collection("end_board").findOne({ _id: new ObjectId(id) });
 
     if (post) {
-      res.render("end-content", { data: post });
+      // Increment view count
+      await db.getDb().collection("end_board").updateOne(
+        { _id: new ObjectId(id) },
+        { $inc: { view: 1 } }
+      );
+      res.render("end-content", { data: post, user: req.session.user });
     } else {
+      console.log("No post found with id:", id);
       res.status(404).send("게시물을 찾을 수 없습니다.");
     }
   } catch (error) {
@@ -968,14 +906,18 @@ router.get("/child-content/:id", async function (req, res) {
   }
 
   try {
-    const post = await db
-      .getDb()
-      .collection("child_board")
-      .findOne({ _id: new ObjectId(id) });
+    // Find the post by ID
+    const post = await db.getDb().collection("child_board").findOne({ _id: new ObjectId(id) });
 
     if (post) {
-      res.render("child-content", { data: post });
+      // Increment view count
+      await db.getDb().collection("child_board").updateOne(
+        { _id: new ObjectId(id) },
+        { $inc: { view: 1 } }
+      );
+      res.render("child-content", { data: post, user: req.session.user });
     } else {
+      console.log("No post found with id:", id);
       res.status(404).send("게시물을 찾을 수 없습니다.");
     }
   } catch (error) {
@@ -1089,14 +1031,18 @@ router.get("/info-content/:id", async function (req, res) {
   }
 
   try {
-    const post = await db
-      .getDb()
-      .collection("info_board")
-      .findOne({ _id: new ObjectId(id) });
+    // Find the post by ID
+    const post = await db.getDb().collection("info_board").findOne({ _id: new ObjectId(id) });
 
     if (post) {
-      res.render("info-content", { data: post });
+      // Increment view count
+      await db.getDb().collection("info_board").updateOne(
+        { _id: new ObjectId(id) },
+        { $inc: { view: 1 } }
+      );
+      res.render("info-content", { data: post, user: req.session.user });
     } else {
+      console.log("No post found with id:", id);
       res.status(404).send("게시물을 찾을 수 없습니다.");
     }
   } catch (error) {
@@ -1210,14 +1156,18 @@ router.get("/ghwm-content/:id", async function (req, res) {
   }
 
   try {
-    const post = await db
-      .getDb()
-      .collection("ghwm_board")
-      .findOne({ _id: new ObjectId(id) });
+    // Find the post by ID
+    const post = await db.getDb().collection("ghwm_board").findOne({ _id: new ObjectId(id) });
 
     if (post) {
-      res.render("ghwm-content", { data: post });
+      // Increment view count
+      await db.getDb().collection("ghwm_board").updateOne(
+        { _id: new ObjectId(id) },
+        { $inc: { view: 1 } }
+      );
+      res.render("ghwm-content", { data: post, user: req.session.user });
     } else {
+      console.log("No post found with id:", id);
       res.status(404).send("게시물을 찾을 수 없습니다.");
     }
   } catch (error) {
@@ -1362,6 +1312,5 @@ router.post('/photo', upload.single('picture'), function(req, res) {
     res.status(400).send('No file uploaded');
   }
 });
-
 
 module.exports = router;

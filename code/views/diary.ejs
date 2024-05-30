@@ -1,525 +1,882 @@
 <!DOCTYPE html>
 <html lang="ko">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <%- include('includes/head') %>
-        <link rel="stylesheet" href="/styles/shared.css" />
-        <link rel="stylesheet" href="/styles/diary.css">
-        <script src="/scripts/diary.js" defer></script>
+    <link rel="stylesheet" href="/styles/shared.css" />
+    <link rel="stylesheet" href="/styles/diary.css" />
+    <script src="/scripts/diary.js" defer></script>
+  </head>
 
-</head>
-
-<body>
+  <body>
     <%- include('includes/header') %>
 
-        <div class="container">
-            <!-- 캘린더 -->
-            <div class="calendar">
-                <!-- 달력 상단 부분 -->
-                <div class="year-month">
-                    <div class="current-date">
-                        <span class="current-year"></span>
-                        <span class="current-month"></span>
-                    </div>
-                    <input type="month" id="monthPicker" />
-                    <!-- 달력 넘기기 버튼 -->
-                    <div class="icons">
-                        <span id="prev" class="btn-month btn-left">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
-                                class="bi bi-caret-left" viewBox="0 0 16 16">
-                                <path
-                                    d="M10 12.796V3.204L4.519 8zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753" />
-                            </svg>
-                        </span>
-                        <span id="next" class="btn-month btn-right">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
-                                class="bi bi-caret-right" viewBox="0 0 16 16">
-                                <path
-                                    d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753" />
-                            </svg>
-                        </span>
-                    </div>
-
-                </div>
-                <!-- 달력 부분 -->
-                <div class="weeks-days">
-                    <ul class="weeks">
-                        <li>일</li>
-                        <li>월</li>
-                        <li>화</li>
-                        <li>수</li>
-                        <li>목</li>
-                        <li>금</li>
-                        <li>토</li>
-                    </ul>
-                    <hr class="hr-calendar" />
-                    <ul class="days">
-                    </ul>
-                </div>
-
-            </div>
-
-            <!-- 우측 내용 -->
-            <div class="calendar-right">
-                <div class="D-day">
-                    <p>D-day</p>
-                    <p></p>
-                    <p></p>
-                </div>
-                <div class="graph">
-                    <p>graph</p>
-                </div>
-                <!-- 팝업 창 -->
-                <div id="popup" class="popup">
-                    <div class="popup-content-1">
-                        <span class="close">&times;</span>
-                        <p class="p-popup-exercise">오늘의 운동</p>
-                        <p id="popup-date"></p>
-                        <div class="popup-exercise">
-                            <ul id="exercise-list"></ul>
-                            <div id="btn-add-exercise" class="btn-add-exercise">
-                                <span class="btn-add">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                        class="bi bi-plus-circle" viewBox="0 0 16 16">
-                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                        <path
-                                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
-                                    </svg>
-                                    <p class="p-add-exercise">운동 추가하기</p>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="popup-choice-exercise" class="popup-choice-exercise">
-                        <span>
-                            <svg class="close2" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
-                                <path
-                                    d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z" />
-                            </svg>
-                        </span>
-                        <form action="">
-                            <div class="choice-exercise">
-                                <p class="p-choice-exercise">운동 선택</p>
-                                <select name="" id="exercise-select" class="select-exercise">
-                                    <optgroup label="하체"
-                                        style="font-size: larger; font-weight: 600; color: rgb(55, 196, 170);">
-                                        <option value="컨벤셔널 데드리프트">컨벤셔널 데드리프트</option>
-                                        <option value="바벨 백스쿼트">바벨 백스쿼트</option>
-                                        <option value="스미스머신 스플릿 스쿼트">스미스머신 스플릿 스쿼트</option>
-                                        <option value="스미스머신 데드리프트">스미스머신 데드리프트</option>
-                                        <option value="스미스머신 스쿼트">스미스머신 스쿼트</option>
-                                        <option value="덤벨 런지">덤벨 런지</option>
-                                        <option value="덤벨 고블릿 스쿼트">덤벨 고블릿 스쿼트</option>
-                                        <option value="덤벨 스티프 레그 데드리프트">덤벨 스티프 레그 데드리프트</option>
-                                        <option value="프론트 스쿼트">프론트 스쿼트</option>
-                                        <option value="저처 스쿼트">저처 스쿼트</option>
-                                        <option value="바벨 불가리안 스플릿 스쿼트">바벨 불가리안 스플릿 스쿼트</option>
-                                        <option value="덤벨 불가리안 스플릿 스쿼트">덤벨 불가리안 스플릿 스쿼트</option>
-                                        <option value="덤벨 스플릿 스쿼트">덤벨 스플릿 스쿼트</option>
-                                        <option value="맨몸 스플릿 스쿼트">맨몸 스플릿 스쿼트</option>
-                                        <option value="에어 스쿼트">에어 스쿼트</option>
-                                        <option value="점프 스쿼트">점프 스쿼트</option>
-                                        <option value="케틀벨 고블릿 스쿼트">케틀벨 고블릿 스쿼트</option>
-                                        <option value="루마니안 데드리프트">루마니안 데드리프트</option>
-                                        <option value="스모 데드리프트">스모 데드리프트</option>
-                                        <option value="레그 프레스">레그 프레스</option>
-                                        <option value="레그 컬">레그 컬</option>
-                                        <option value="레그 익스텐션">레그 익스텐션</option>
-                                        <option value="스탠딩 카프 레이즈">스탠딩 카프 레이즈</option>
-                                        <option value="이너 싸이 머신">이너 싸이 머신</option>
-                                        <option value="런지">런지</option>
-                                        <option value="스텝업">스텝업</option>
-                                        <option value="중량 스텝업">중량 스텝업</option>
-                                        <option value="힙 쓰러스트">힙 쓰러스트</option>
-                                        <option value="바벨 힙 쓰러스트">바벨 힙 쓰러스트</option>
-                                        <option value="브이 스쿼트">브이 스쿼트</option>
-                                        <option value="리버스 브이 스쿼트">리버스 브이 스쿼트</option>
-                                        <option value="글루트 킥백 머신">글루트 킥백 머신</option>
-                                        <option value="힙 어브덕션 머신">힙 어브덕션 머신</option>
-                                        <option value="시티드 카프 레이즈">시티드 카프 레이즈</option>
-                                        <option value="정지 백 스쿼트">정지 백 스쿼트</option>
-                                        <option value="트랩바 데드리프트">트랩바 데드리프트</option>
-                                        <option value="케이블 힙 어브덕션">케이블 힙 어브덕션</option>
-                                        <option value="핵 스쿼트 머신">핵 스쿼트 머신</option>
-                                        <option value="정지 데드리프트">정지 데드리프트</option>
-                                        <option value="정지 스모 데드리프트">정지 스모 데드리프트</option>
-                                        <option value="바벨 박스 스쿼트">바벨 박스 스쿼트</option>
-                                        <option value="바벨 프론트 랙 런지">바벨 프론트 랙 런지</option>
-                                        <option value="바벨 점프 스쿼트">바벨 점프 스쿼트</option>
-                                        <option value="바벨 런지">바벨 런지</option>
-                                        <option value="바벨 레터럴 런지">바벨 레터럴 런지</option>
-                                        <option value="바벨 스플릿 스쿼트">바벨 스플릿 스쿼트</option>
-                                        <option value="바벨 스탠딩 카프 레이즈">바벨 스탠딩 카프 레이즈</option>
-                                        <option value="스티프 레그 데드리프트">스티프 레그 데드리프트</option>
-                                        <option value="맨몸 오버헤드 스쿼트">맨몸 오버헤드 스쿼트</option>
-                                        <option value="덤벨 스모 스쿼트">덤벨 스모 스쿼트</option>
-                                        <option value="덤벨 레그 컬">덤벨 레그 컬</option>
-                                        <option value="덤벨 스쿼트">덤벨 스쿼트</option>
-                                        <option value="바벨 핵 스쿼트">바벨 핵 스쿼트</option>
-                                        <option value="시티드 레그 컬">시티드 레그 컬</option>
-                                        <option value="힙 쓰러스트 머신">힙 쓰러스트 머신</option>
-                                        <option value="맨몸 카프레이즈">맨몸 카프레이즈</option>
-                                        <option value="글루트 브릿지">글루트 브릿지</option>
-                                        <option value="덤벨 루마니안 데드리프트">덤벨 루마니안 데드리프트</option>
-                                        <option value="라잉 힙 어브덕션">라잉 힙 어브덕션</option>
-                                        <option value="싱글 레그 글루트 브릿지">싱글 레그 글루트 브릿지</option>
-                                        <option value="피스툴 박스 스쿼트">피스툴 박스 스쿼트</option>
-                                        <option value="사이드 라잉 클램">사이드 라잉 클램</option>
-                                        <option value="맨몸 원레그 데드리프트">맨몸 원레그 데드리프트</option>
-                                        <option value="바벨 원레그 데드리프트">바벨 원레그 데드리프트</option>
-                                        <option value="덤벨 원레그 데드리프트">덤벨 원레그 데드리프트</option>
-                                        <option value="케틀벨 데드리프트">케틀벨 데드리프트</option>
-                                        <option value="케틀벨 스모 데드리프트">케틀벨 스모 데드리프트</option>
-                                        <option value="덤벨 스모 데드리프트">덤벨 스모 데드리프트</option>
-                                        <option value="덤벨 레터럴 런지">덤벨 레터럴 런지</option>
-                                        <option value="케틀벨 레터럴 런지">케틀벨 레터럴 런지</option>
-                                        <option value="맨몸 레터럴 런지">맨몸 레터럴 런지</option>
-                                        <option value="원레그 익스텐션">원레그 익스텐션</option>
-                                        <option value="원레그 컬">원레그 컬</option>
-                                        <option value="원레그 프레스">원레그 프레스</option>
-                                        <option value="수평 레그 프레스">수평 레그 프레스</option>
-                                        <option value="수평 원레그 프레스">수평 원레그 프레스</option>
-                                        <option value="시티드 원레그 컬">시티드 원레그 컬</option>
-                                        <option value="노르딕 햄스트링 컬">노르딕 햄스트링 컬</option>
-                                        <option value="바벨 스모 스쿼트">바벨 스모 스쿼트</option>
-                                        <option value="커틀벨 스모 스쿼트">커틀벨 스모 스쿼트</option>
-                                        <option value="스모 에어 스쿼트">스모 에어 스쿼트</option>
-                                        <option value="피스톨 스쿼트">피스톨 스쿼트</option>
-                                        <option value="덩키 킥">덩키 킥</option>
-                                        <option value="케이블 덩키 킥">케이블 덩키 킥</option>
-                                        <option value="데피핏 데드리프트">데피핏 데드리프트</option>
-                                        <option value="런지 트위스트">런지 트위스트</option>
-                                        <option value="케틀벨 런지 트위스트">케틀벨 런지 트위스트</option>
-                                        <option value="케이블 풀 스루">케이블 풀 스루</option>
-                                        <option value="몬스터 글루트 머신">몬스터 글루트 머신</option>
-                                    </optgroup>
-                                    <optgroup label="가슴"
-                                        style="font-size: larger; font-weight: 600; color: rgb(55, 196, 170);">
-                                        <option value="벤치프레스">벤치프레스</option>
-                                        <option value="스미스머신 벤치프레스">스미스머신 벤치프레스</option>
-                                        <option value="스미스머신 인클라인 벤치프레스">스미스머신 인클라인 벤치프레스</option>
-                                        <option value="덤벨 벤치프레스">덤벨 벤치프레스</option>
-                                        <option value="인클라인 덤벨 벤치프레스">인클라인 덤벨 벤치프레스</option>
-                                        <option value="덤벨 플라이">덤벨 플라이</option>
-                                        <option value="스탠딩 케이블 플라이">스탠딩 케이블 플라이</option>
-                                        <option value="인클라인 벤치프레스">인클라인 벤치프레스</option>
-                                        <option value="딥스">딥스</option>
-                                        <option value="중량 딥스">중량 딥스</option>
-                                        <option value="인클라인 덤벨 플라이">인클라인 덤벨 플라이</option>
-                                        <option value="푸시업">푸시업</option>
-                                        <option value="중량 푸시업">중량 푸시업</option>
-                                        <option value="힌두 푸시업">힌두 푸시업</option>
-                                        <option value="아처 푸시업">아처 푸시업</option>
-                                        <option value="클로즈그립 푸시업">클로즈그립 푸시업</option>
-                                        <option value="체스트 프레스 머신">체스트 프레스 머신</option>
-                                        <option value="펙덱 플라이 머신">펙덱 플라이 머신</option>
-                                        <option value="인클라인 벤치프레스 머신">인클라인 벤치프레스 머신</option>
-                                        <option value="덤벨 풀오버">덤벨 풀오버</option>
-                                        <option value="시티드 딥스 머신">시티드 딥스 머신</option>
-                                        <option value="로우 풀리 케이블 플라이">로우 풀리 케이블 플라이</option>
-                                        <option value="해머 벤치프레스">해머 벤치프레스</option>
-                                        <option value="스포토 벤치프레스">스포토 벤치프레스</option>
-                                        <option value="어시스트 딥스 머신">어시스트 딥스 머신</option>
-                                        <option value="디클라인 벤치프레스">디클라인 벤치프레스</option>
-                                        <option value="바벨 플로어 프레스">바벨 플로어 프레스</option>
-                                        <option value="클랩 푸시업">클랩 푸시업</option>
-                                        <option value="디클라인 덤벨 플라이">디클라인 덤벨 플라이</option>
-                                        <option value="인클라인 덤벨 트위스트 프레스">인클라인 덤벨 트위스트 프레스</option>
-                                        <option value="인클라인 케이블 플라이">인클라인 케이블 플라이</option>
-                                    </optgroup>
-                                    <optgroup label="어깨"
-                                        style="font-size: larger; font-weight: 600; color: rgb(55, 196, 170);">
-                                        <option value="오버헤드 프레스">오버헤드 프레스</option>
-                                        <option value="스미스머신 오버헤드 프레스">스미스머신 오버헤드 프레스</option>
-                                        <option value="스미스머신 슈러그">스미스머신 슈러그</option>
-                                        <option value="덤벨 숄더 프레스">덤벨 숄더 프레스</option>
-                                        <option value="덤벨 레터럴 레이즈">덤벨 레터럴 레이즈</option>
-                                        <option value="벤트오버 덤벨 레터럴 레이즈">벤트오버 덤벨 레터럴 레이즈</option>
-                                        <option value="아놀드 덤벨 프레스">아놀드 덤벨 프레스</option>
-                                        <option value="숄더 프레스 머신">숄더 프레스 머신</option>
-                                        <option value="비하인드 넥 프레스">비하인드 넥 프레스</option>
-                                        <option value="덤벨 프론트 레이즈">덤벨 프론트 레이즈</option>
-                                        <option value="덤벨 슈러그">덤벨 슈러그</option>
-                                        <option value="바벨 슈러그">바벨 슈러그</option>
-                                        <option value="페이스 풀">페이스 풀</option>
-                                        <option value="핸드스탠드">핸드스탠드</option>
-                                        <option value="핸드스탠드 푸시업">핸드스탠드 푸시업</option>
-                                        <option value="바벨 업라이트 로우">바벨 업라이트 로우</option>
-                                        <option value="덤벨 업라이트 로우">덤벨 업라이트 로우</option>
-                                        <option value="이지바 업라이트 로우">이지바 업라이트 로우</option>
-                                        <option value="푸시 프레스">푸시 프레스</option>
-                                        <option value="리어 델토이드 플라이머신">리어 델토이드 플라이머신</option>
-                                        <option value="레터럴 레이즈 머신">레터럴 레이즈 머신</option>
-                                        <option value="케이블 레터럴 레이즈">케이블 레터럴 레이즈</option>
-                                        <option value="케이블 프론트 레이즈">케이블 프론트 레이즈</option>
-                                        <option value="바벨 프론트 레이즈">바벨 프론트 레이즈</option>
-                                        <option value="이지바 프론트 레이즈">이지바 프론트 레이즈</option>
-                                        <option value="시티드 덤벨 리어 레터럴 레이즈">시티드 덤벨 리어 레터럴 레이즈</option>
-                                        <option value="숄더 탭">숄더 탭</option>
-                                        <option value="시티드 바벨 숄더 프레스">시티드 바벨 숄더 프레스</option>
-                                        <option value="시티드 덤벨 숄더 프레스">시티드 덤벨 숄더 프레스</option>
-                                        <option value="플레이트 숄더 프레스">플레이트 숄더 프레스</option>
-                                        <option value="Y 레이즈">Y 레이즈</option>
-                                        <option value="덤벨 Y 레이즈">덤벨 Y 레이즈</option>
-                                        <option value="슈러그 머신">슈러그 머신</option>
-                                        <option value="케이블 슈러그">케이블 슈러그</option>
-                                        <option value="케이블 인터널 로테이션">케이블 인터널 로테이션</option>
-                                        <option value="케이블 익스터널 로테이션">케이블 익스터널 로테이션</option>
-                                        <option value="원암 케이블 레터럴 레이즈">원암 케이블 레터럴 레이즈</option>
-                                        <option value="랜드마인 프레스">랜드마인 프레스</option>
-                                        <option value="원암 랜드마인 프레스">원암 랜드마인 프레스</option>
-                                    </optgroup>
-                                    <optgroup label="복근"
-                                        style="font-size: larger; font-weight: 600; color: rgb(55, 196, 170);">
-                                        <option value="싯업">싯업</option>
-                                        <option value="크런치">크런치</option>
-                                        <option value="힐터치">힐터치</option>
-                                        <option value="레그 레이즈">레그 레이즈</option>
-                                        <option value="행잉 레그 레이즈">행잉 레그 레이즈</option>
-                                        <option value="할로우 포지션">할로우 포지션</option>
-                                        <option value="플랭크">플랭크</option>
-                                        <option value="덤벨 사이드 밴드">덤벨 사이드 밴드</option>
-                                        <option value="복근롤아웃">복근롤아웃</option>
-                                        <option value="복근 에어 바이크">복근 에어 바이크</option>
-                                        <option value="행 클린">행 클린</option>
-                                        <option value="행 스내치">행 스내치</option>
-                                        <option value="필라테스 잭나이프">필라테스 잭나이프</option>
-                                        <option value="리버스 크런치">리버스 크런치</option>
-                                        <option value="사이드 플랭크">사이드 플랭크</option>
-                                        <option value="45도 사이드 밴드">45도 사이드 밴드</option>
-                                        <option value="RKC 플랭크">RKC 플랭크</option>
-                                        <option value="케이블 사이드 밴드">케이블 사이드 밴드</option>
-                                        <option value="중량 디클라인 크런치">중량 디클라인 크런치</option>
-                                        <option value="디클라인 싯업">디클라인 싯업</option>
-                                        <option value="중량 디클라인 싯업">중량 디클라인 싯업</option>
-                                        <option value="사이드 크런치">사이드 크런치</option>
-                                        <option value="케이블 트위스트">케이블 트위스트</option>
-                                    </optgroup>
-                                    <optgroup label="등"
-                                        style="font-size: larger; font-weight: 600; color: rgb(55, 196, 170);">
-                                        <option value="덤벨 로우">덤벨 로우</option>
-                                        <option value="원암 덤벨 로우">원암 덤벨 로우</option>
-                                        <option value="케이블 암 풀다운">케이블 암 풀다운</option>
-                                        <option value="시티드 케이블 로우">시티드 케이블 로우</option>
-                                        <option value="굿모닝 엑서사이즈">굿모닝 엑서사이즈</option>
-                                        <option value="풀업">풀업</option>
-                                        <option value="중량 풀업">중량 풀업</option>
-                                        <option value="친업">친업</option>
-                                        <option value="중량 친업">중량 친업</option>
-                                        <option value="인클라인 바벨 로우">인클라인 바벨 로우</option>
-                                        <option value="인클라인 덤벨 로우">인클라인 덤벨 로우</option>
-                                        <option value="인버티드 로우">인버티드 로우</option>
-                                        <option value="바벨 풀오버">바벨 풀오버</option>
-                                        <option value="시티드 로우 머신">시티드 로우 머신</option>
-                                        <option value="랫풀다운">랫풀다운</option>
-                                        <option value="중량 하이퍼 익스텐션">중량 하이퍼 익스텐션</option>
-                                        <option value="백 익스텐션">백 익스텐션</option>
-                                        <option value="티바 로우 머신">티바 로우 머신</option>
-                                        <option value="맥그립 랫풀다운">맥그립 랫풀다운</option>
-                                        <option value="패러럴그립 랫풀다운">패러럴그립 랫풀다운</option>
-                                        <option value="정지 바벨 로우">정지 바벨 로우</option>
-                                        <option value="어시스트 풀업 머신">어시스트 풀업 머신</option>
-                                        <option value="플로어 시티드 케이블 로우">플로어 시티드 케이블 로우</option>
-                                        <option value="언더그립 바벨 로우">언더그립 바벨 로우</option>
-                                        <option value="라잉 바벨 로우">라잉 바벨 로우</option>
-                                        <option value="비하인드 넥 풀다운">비하인드 넥 풀다운</option>
-                                        <option value="원암 케이블 풀다운">원암 케이블 풀다운</option>
-                                        <option value="원암 레터럴 와이드 풀다운">원암 레터럴 와이드 풀다운</option>
-                                        <option value="로우 로우 머신">로우 로우 머신</option>
-                                        <option value="원암 로우 로우 머신">원암 로우 로우 머신</option>
-                                        <option value="하이 로우 머신">하이 로우 머신</option>
-                                        <option value="언더그립 하이 로우 머신">언더그립 하이 로우 머신</option>
-                                        <option value="원암 하이 로우 머신">원암 하이 로우 머신</option>
-                                        <option value="원암 시티드 케이블 로우">원암 시티드 케이블 로우</option>
-                                    </optgroup>
-                                    <optgroup label="팔"
-                                        style="font-size: larger; font-weight: 600; color: rgb(55, 196, 170);">
-                                        <option value="덤벨 트라이셉 익스텐션">덤벨 트라이셉 익스텐션</option>
-                                        <option value="덤벨 킥백">덤벨 킥백</option>
-                                        <option value="케이블 푸시 다운">케이블 푸시 다운</option>
-                                        <option value="바벨 컬">바벨 컬</option>
-                                        <option value="이지바 컬">이지바 컬</option>
-                                        <option value="덤벨 해머 컬">덤벨 해머 컬</option>
-                                        <option value="클로즈 그립 벤치프레스">클로즈 그립 벤치프레스</option>
-                                        <option value="시티드 덤벨 트라이셉 익스텐션">시티드 덤벨 트라이셉 익스텐션</option>
-                                        <option value="바벨 리스트 컬">바벨 리스트 컬</option>
-                                        <option value="이지바 리스트 컬">이지바 리스트 컬</option>
-                                        <option value="덤벨 리스트 컬">덤벨 리스트 컬</option>
-                                        <option value="스컬 크러셔">스컬 크러셔</option>
-                                        <option value="바벨 라잉 트라이셉 익스텐션">바벨 라잉 트라이셉 익스텐션</option>
-                                        <option value="덤벨 프리쳐 컬">덤벨 프리쳐 컬</option>
-                                        <option value="바벨 프리쳐 컬">바벨 프리쳐 컬</option>
-                                        <option value="이지바 프리쳐 컬">이지바 프리쳐 컬</option>
-                                        <option value="프리쳐 컬 머신">프리쳐 컬 머신</option>
-                                        <option value="암 컬 머신">암 컬 머신</option>
-                                        <option value="케이블 해머컬">케이블 해머컬</option>
-                                        <option value="케이블 오버헤드 트라이셉 익스텐션">케이블 오버헤드 트라이셉 익스텐션</option>
-                                        <option value="케이블 라잉 트라이셉 익스텐션">케이블 라잉 트라이셉 익스텐션</option>
-                                        <option value="리버스 바벨 리스트 컬">리버스 바벨 리스트 컬</option>
-                                        <option value="리버스 덤벨 리스트 컬">리버스 덤벨 리스트 컬</option>
-                                        <option value="인클라인 덤벨 컬">인클라인 덤벨 컬</option>
-                                        <option value="벤치 딥스">벤치 딥스</option>
-                                        <option value="리스트 롤러">리스트 롤러</option>
-                                        <option value="리버스 바벨 컬">리버스 바벨 컬</option>
-                                        <option value="트라이셉 익스텐션 머신">트라이셉 익스텐션 머신</option>
-                                    </optgroup>
-                                    <optgroup label="유산소"
-                                        style="font-size: larger; font-weight: 600; color: rgb(55, 196, 170);">
-                                        <option value="트레드밀">트레드밀</option>
-                                        <option value="싸이클">싸이클</option>
-                                        <option value="로잉머신">로잉머신</option>
-                                        <option value="계단 오르기">계단 오르기</option>
-                                        <option value="줄넘기">줄넘기</option>
-                                        <option value="이단 뛰기">이단 뛰기</option>
-                                        <option value="하이니 스킵">하이니 스킵</option>
-                                        <option value="어썰트 바이크">어썰트 바이크</option>
-                                        <option value="스텝밀">스텝밀</option>
-                                        <option value="걷기">걷기</option>
-                                        <option value="달리기">달리기</option>
-                                    </optgroup>
-                                    <optgroup label="역도"
-                                        style="font-size: larger; font-weight: 600; color: rgb(55, 196, 170);">
-                                        <option value="클린">클린</option>
-                                        <option value="클린&저크">클린&저크</option>
-                                        <option value="저크">저크</option>
-                                        <option value="스내치">스내치</option>
-                                        <option value="바벨 오버헤드 스쿼트">바벨 오버헤드 스쿼트</option>
-                                        <option value="덤벨 스내치">덤벨 스내치</option>
-                                        <option value="케틀벨 스내치">케틀벨 스내치</option>
-                                        <option value="스내치 밸런스">스내치 밸런스</option>
-                                        <option value="중량 행잉 니 레이즈">중량 행잉 니 레이즈</option>
-                                        <option value="클린 하이풀">클린 하이풀</option>
-                                        <option value="스내치 하이풀">스내치 하이풀</option>
-                                    </optgroup>
-                                    <optgroup label="기타"
-                                        style="font-size: larger; font-weight: 600; color: rgb(55, 196, 170);">
-                                        <option value="쓰러스터">쓰러스터</option>
-                                        <option value="버피">버피</option>
-                                        <option value="케틀벨 스윙">케틀벨 스윙</option>
-                                        <option value="파머스 워크">파머스 워크</option>
-                                        <option value="월볼 샷">월볼 샷</option>
-                                        <option value="마운틴 클라이머">마운틴 클라이머</option>
-                                        <option value="박스 점프">박스 점프</option>
-                                        <option value="점핑 잭">점핑 잭</option>
-                                        <option value="바 머슬업">바 머슬업</option>
-                                        <option value="링 머슬업">링 머슬업</option>
-                                        <option value="덤벨 버피">덤벨 버피</option>
-                                        <option value="덤벨 쓰러스터">덤벨 쓰러스터</option>
-                                        <option value="인치웜">인치웜</option>
-                                        <option value="스모 데드리프트 하이풀">스모 데드리프트 하이풀</option>
-                                        <option value="케틀벨 스모 하이풀">케틀벨 스모 하이풀</option>
-                                    </optgroup>
-                                </select>
-                            </div>
-                            <div class="count-exercise">
-                                <input type="number" id="reps" class="input-count-exercise"
-                                    onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');" min="1" max="3000">
-                                <p>회 x </p>
-                                <input type="number" id="sets" class="input-count-exercise"
-                                    onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');" min="1" max="3000">
-                                <p>세트</p>
-                            </div>
-
-                            <button id="add-exercise-button">추가</button>
-                        </form>
-
-                    </div>
-                    <div class="popup-content-2">
-                        <div class="popup-diet">
-                            <p class="p-popup-diet">오늘의 식단</p>
-                            <div class="image-upload-container">
-                                <form action="/upload" method="post">
-                                    <div class="image-upload-box"
-                                        onclick="document.getElementById('uploadInput1').click()">
-                                        <input type="file" id="uploadInput1" accept="image/*"
-                                            onchange="previewImage(event, 'uploadBox1')" />
-                                        <div id="uploadBox1" class="placeholder">
-                                            <p>+</p>
-                                            <p>아침 식단</p>
-                                        </div>
-                                    </div>
-                                    <div class="image-upload-box"
-                                        onclick="document.getElementById('uploadInput2').click()">
-                                        <input type="file" id="uploadInput2" accept="image/*"
-                                            onchange="previewImage(event, 'uploadBox2')" />
-                                        <div id="uploadBox2" class="placeholder">
-                                            <p>+</p>
-                                            <p>점심 식단</p>
-                                        </div>
-                                    </div>
-                                    <div class="image-upload-box"
-                                        onclick="document.getElementById('uploadInput2').click()">
-                                        <input type="file" id="uploadInput2" accept="image/*"
-                                            onchange="previewImage(event, 'uploadBox2')" />
-                                        <div id="uploadBox2" class="placeholder">
-                                            <p>+</p>
-                                            <p>저녁 식단</p>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="popup-inbody">
-                            <p class="p-popup-inbody">오늘의 인바디</p>
-                            <div class="popup-inbody-input">
-                                <form action="/User_inbody" method="post">
-                                    <span class="save-inbody">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                            fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
-                                            <path
-                                                d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z" />
-                                        </svg>
-                                    </span>
-                                    <div class="popup-input popup-height">
-                                        <label for="height">키</label> <!--마이페이지에서 한 번 설정하면 자동으로 반영되게끔-->
-                                        
-                                        <input type="text" id="height" name="height" class="inbody-input input-height"
-                                            onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');" />
-                                        <p>cm</p>
-                                    </div>
-                                    <div class="popup-input popup-weight">
-                                        <p>체중</p>
-                                        <input type="text" id="weight" name="weight" class="inbody-input input-weight"
-                                            onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');" />
-                                        <p>kg</p>
-                                    </div>
-                                    <div class="popup-input popup-muscle-mass">
-                                        <p>골격근량</p>
-                                        <input type="text" id="muscle_mass" name="muscle_mass" class="inbody-input input-muscle-mass"
-                                            onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');" />
-                                        <p>kg</p>
-                                    </div>
-                                    <div class="popup-input popup-fat">
-                                        <p>체지방량</p>
-                                        <input type="text" id="fat" name="fat" class="inbody-input input-fat"
-                                            onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');" />
-                                        <p>kg</p>
-                                    </div>
-                                    <div class="popup-input popup-bmi">
-                                        <p>BMI</p>
-                                        <input type="text" id="bmi" name="bmi" class="inbody-input input-bmi"
-                                            onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');" />
-                                        <p>kg/m<sup>2</sup></p>
-                                    </div>
-                                    <div class="popup-input popup-fat-percentage">
-                                        <p>체지방률</p>
-                                        <input type="text" id="fat_percentage" name="fat_percentage" class="inbody-input input-fat-percentage"
-                                            onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');" />
-                                        <p>%</p>
-                                    </div>
-                                    <button>저장</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="container">
+      <!-- 캘린더 -->
+      <div class="calendar">
+        <!-- 달력 상단 부분 -->
+        <div class="year-month">
+          <div class="current-date">
+            <span class="current-year"></span>
+            <span class="current-month"></span>
+          </div>
+          <input type="month" id="monthPicker" />
+          <!-- 달력 넘기기 버튼 -->
+          <div class="icons">
+            <span id="prev" class="btn-month btn-left">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="25"
+                height="25"
+                fill="currentColor"
+                class="bi bi-caret-left"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M10 12.796V3.204L4.519 8zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753"
+                />
+              </svg>
+            </span>
+            <span id="next" class="btn-month btn-right">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="25"
+                height="25"
+                fill="currentColor"
+                class="bi bi-caret-right"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753"
+                />
+              </svg>
+            </span>
+          </div>
         </div>
+        <!-- 달력 부분 -->
+        <div class="weeks-days">
+          <ul class="weeks">
+            <li>일</li>
+            <li>월</li>
+            <li>화</li>
+            <li>수</li>
+            <li>목</li>
+            <li>금</li>
+            <li>토</li>
+          </ul>
+          <hr class="hr-calendar" />
+          <ul class="days"></ul>
+        </div>
+      </div>
 
-</body>
+      <!-- 우측 내용 -->
+      <div class="calendar-right">
+        <div class="D-day">
+          <p>D-day</p>
+          <p></p>
+          <p></p>
+        </div>
+        <div class="graph">
+          <p>graph</p>
+        </div>
+        <!-- 팝업 창 -->
+        <div id="popup" class="popup">
+          <div class="popup-content-1">
+            <span class="close">&times;</span>
+            <p class="p-popup-exercise">오늘의 운동</p>
+            <p id="popup-date"></p>
+            <div class="popup-exercise">
+              <ul id="exercise-list"></ul>
+              <div id="btn-add-exercise" class="btn-add-exercise">
+                <span class="btn-add">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-plus-circle"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
+                    />
+                    <path
+                      d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"
+                    />
+                  </svg>
+                  <p class="p-add-exercise">운동 추가하기</p>
+                </span>
+              </div>
+            </div>
+          </div>
 
+          <div id="popup-choice-exercise" class="popup-choice-exercise">
+            <span>
+              <svg
+                class="close2"
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-check-lg"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"
+                />
+              </svg>
+            </span>
+            <form action="">
+              <div class="choice-exercise">
+                <p class="p-choice-exercise">운동 선택</p>
+                <select name="" id="exercise-select" class="select-exercise">
+                  <optgroup
+                    label="하체"
+                    style="
+                      font-size: larger;
+                      font-weight: 600;
+                      color: rgb(55, 196, 170);
+                    "
+                  >
+                    <option value="컨벤셔널 데드리프트">
+                      컨벤셔널 데드리프트
+                    </option>
+                    <option value="바벨 백스쿼트">바벨 백스쿼트</option>
+                    <option value="스미스머신 스플릿 스쿼트">
+                      스미스머신 스플릿 스쿼트
+                    </option>
+                    <option value="스미스머신 데드리프트">
+                      스미스머신 데드리프트
+                    </option>
+                    <option value="스미스머신 스쿼트">스미스머신 스쿼트</option>
+                    <option value="덤벨 런지">덤벨 런지</option>
+                    <option value="덤벨 고블릿 스쿼트">
+                      덤벨 고블릿 스쿼트
+                    </option>
+                    <option value="덤벨 스티프 레그 데드리프트">
+                      덤벨 스티프 레그 데드리프트
+                    </option>
+                    <option value="프론트 스쿼트">프론트 스쿼트</option>
+                    <option value="저처 스쿼트">저처 스쿼트</option>
+                    <option value="바벨 불가리안 스플릿 스쿼트">
+                      바벨 불가리안 스플릿 스쿼트
+                    </option>
+                    <option value="덤벨 불가리안 스플릿 스쿼트">
+                      덤벨 불가리안 스플릿 스쿼트
+                    </option>
+                    <option value="덤벨 스플릿 스쿼트">
+                      덤벨 스플릿 스쿼트
+                    </option>
+                    <option value="맨몸 스플릿 스쿼트">
+                      맨몸 스플릿 스쿼트
+                    </option>
+                    <option value="에어 스쿼트">에어 스쿼트</option>
+                    <option value="점프 스쿼트">점프 스쿼트</option>
+                    <option value="케틀벨 고블릿 스쿼트">
+                      케틀벨 고블릿 스쿼트
+                    </option>
+                    <option value="루마니안 데드리프트">
+                      루마니안 데드리프트
+                    </option>
+                    <option value="스모 데드리프트">스모 데드리프트</option>
+                    <option value="레그 프레스">레그 프레스</option>
+                    <option value="레그 컬">레그 컬</option>
+                    <option value="레그 익스텐션">레그 익스텐션</option>
+                    <option value="스탠딩 카프 레이즈">
+                      스탠딩 카프 레이즈
+                    </option>
+                    <option value="이너 싸이 머신">이너 싸이 머신</option>
+                    <option value="런지">런지</option>
+                    <option value="스텝업">스텝업</option>
+                    <option value="중량 스텝업">중량 스텝업</option>
+                    <option value="힙 쓰러스트">힙 쓰러스트</option>
+                    <option value="바벨 힙 쓰러스트">바벨 힙 쓰러스트</option>
+                    <option value="브이 스쿼트">브이 스쿼트</option>
+                    <option value="리버스 브이 스쿼트">
+                      리버스 브이 스쿼트
+                    </option>
+                    <option value="글루트 킥백 머신">글루트 킥백 머신</option>
+                    <option value="힙 어브덕션 머신">힙 어브덕션 머신</option>
+                    <option value="시티드 카프 레이즈">
+                      시티드 카프 레이즈
+                    </option>
+                    <option value="정지 백 스쿼트">정지 백 스쿼트</option>
+                    <option value="트랩바 데드리프트">트랩바 데드리프트</option>
+                    <option value="케이블 힙 어브덕션">
+                      케이블 힙 어브덕션
+                    </option>
+                    <option value="핵 스쿼트 머신">핵 스쿼트 머신</option>
+                    <option value="정지 데드리프트">정지 데드리프트</option>
+                    <option value="정지 스모 데드리프트">
+                      정지 스모 데드리프트
+                    </option>
+                    <option value="바벨 박스 스쿼트">바벨 박스 스쿼트</option>
+                    <option value="바벨 프론트 랙 런지">
+                      바벨 프론트 랙 런지
+                    </option>
+                    <option value="바벨 점프 스쿼트">바벨 점프 스쿼트</option>
+                    <option value="바벨 런지">바벨 런지</option>
+                    <option value="바벨 레터럴 런지">바벨 레터럴 런지</option>
+                    <option value="바벨 스플릿 스쿼트">
+                      바벨 스플릿 스쿼트
+                    </option>
+                    <option value="바벨 스탠딩 카프 레이즈">
+                      바벨 스탠딩 카프 레이즈
+                    </option>
+                    <option value="스티프 레그 데드리프트">
+                      스티프 레그 데드리프트
+                    </option>
+                    <option value="맨몸 오버헤드 스쿼트">
+                      맨몸 오버헤드 스쿼트
+                    </option>
+                    <option value="덤벨 스모 스쿼트">덤벨 스모 스쿼트</option>
+                    <option value="덤벨 레그 컬">덤벨 레그 컬</option>
+                    <option value="덤벨 스쿼트">덤벨 스쿼트</option>
+                    <option value="바벨 핵 스쿼트">바벨 핵 스쿼트</option>
+                    <option value="시티드 레그 컬">시티드 레그 컬</option>
+                    <option value="힙 쓰러스트 머신">힙 쓰러스트 머신</option>
+                    <option value="맨몸 카프레이즈">맨몸 카프레이즈</option>
+                    <option value="글루트 브릿지">글루트 브릿지</option>
+                    <option value="덤벨 루마니안 데드리프트">
+                      덤벨 루마니안 데드리프트
+                    </option>
+                    <option value="라잉 힙 어브덕션">라잉 힙 어브덕션</option>
+                    <option value="싱글 레그 글루트 브릿지">
+                      싱글 레그 글루트 브릿지
+                    </option>
+                    <option value="피스툴 박스 스쿼트">
+                      피스툴 박스 스쿼트
+                    </option>
+                    <option value="사이드 라잉 클램">사이드 라잉 클램</option>
+                    <option value="맨몸 원레그 데드리프트">
+                      맨몸 원레그 데드리프트
+                    </option>
+                    <option value="바벨 원레그 데드리프트">
+                      바벨 원레그 데드리프트
+                    </option>
+                    <option value="덤벨 원레그 데드리프트">
+                      덤벨 원레그 데드리프트
+                    </option>
+                    <option value="케틀벨 데드리프트">케틀벨 데드리프트</option>
+                    <option value="케틀벨 스모 데드리프트">
+                      케틀벨 스모 데드리프트
+                    </option>
+                    <option value="덤벨 스모 데드리프트">
+                      덤벨 스모 데드리프트
+                    </option>
+                    <option value="덤벨 레터럴 런지">덤벨 레터럴 런지</option>
+                    <option value="케틀벨 레터럴 런지">
+                      케틀벨 레터럴 런지
+                    </option>
+                    <option value="맨몸 레터럴 런지">맨몸 레터럴 런지</option>
+                    <option value="원레그 익스텐션">원레그 익스텐션</option>
+                    <option value="원레그 컬">원레그 컬</option>
+                    <option value="원레그 프레스">원레그 프레스</option>
+                    <option value="수평 레그 프레스">수평 레그 프레스</option>
+                    <option value="수평 원레그 프레스">
+                      수평 원레그 프레스
+                    </option>
+                    <option value="시티드 원레그 컬">시티드 원레그 컬</option>
+                    <option value="노르딕 햄스트링 컬">
+                      노르딕 햄스트링 컬
+                    </option>
+                    <option value="바벨 스모 스쿼트">바벨 스모 스쿼트</option>
+                    <option value="커틀벨 스모 스쿼트">
+                      커틀벨 스모 스쿼트
+                    </option>
+                    <option value="스모 에어 스쿼트">스모 에어 스쿼트</option>
+                    <option value="피스톨 스쿼트">피스톨 스쿼트</option>
+                    <option value="덩키 킥">덩키 킥</option>
+                    <option value="케이블 덩키 킥">케이블 덩키 킥</option>
+                    <option value="데피핏 데드리프트">데피핏 데드리프트</option>
+                    <option value="런지 트위스트">런지 트위스트</option>
+                    <option value="케틀벨 런지 트위스트">
+                      케틀벨 런지 트위스트
+                    </option>
+                    <option value="케이블 풀 스루">케이블 풀 스루</option>
+                    <option value="몬스터 글루트 머신">
+                      몬스터 글루트 머신
+                    </option>
+                  </optgroup>
+                  <optgroup
+                    label="가슴"
+                    style="
+                      font-size: larger;
+                      font-weight: 600;
+                      color: rgb(55, 196, 170);
+                    "
+                  >
+                    <option value="벤치프레스">벤치프레스</option>
+                    <option value="스미스머신 벤치프레스">
+                      스미스머신 벤치프레스
+                    </option>
+                    <option value="스미스머신 인클라인 벤치프레스">
+                      스미스머신 인클라인 벤치프레스
+                    </option>
+                    <option value="덤벨 벤치프레스">덤벨 벤치프레스</option>
+                    <option value="인클라인 덤벨 벤치프레스">
+                      인클라인 덤벨 벤치프레스
+                    </option>
+                    <option value="덤벨 플라이">덤벨 플라이</option>
+                    <option value="스탠딩 케이블 플라이">
+                      스탠딩 케이블 플라이
+                    </option>
+                    <option value="인클라인 벤치프레스">
+                      인클라인 벤치프레스
+                    </option>
+                    <option value="딥스">딥스</option>
+                    <option value="중량 딥스">중량 딥스</option>
+                    <option value="인클라인 덤벨 플라이">
+                      인클라인 덤벨 플라이
+                    </option>
+                    <option value="푸시업">푸시업</option>
+                    <option value="중량 푸시업">중량 푸시업</option>
+                    <option value="힌두 푸시업">힌두 푸시업</option>
+                    <option value="아처 푸시업">아처 푸시업</option>
+                    <option value="클로즈그립 푸시업">클로즈그립 푸시업</option>
+                    <option value="체스트 프레스 머신">
+                      체스트 프레스 머신
+                    </option>
+                    <option value="펙덱 플라이 머신">펙덱 플라이 머신</option>
+                    <option value="인클라인 벤치프레스 머신">
+                      인클라인 벤치프레스 머신
+                    </option>
+                    <option value="덤벨 풀오버">덤벨 풀오버</option>
+                    <option value="시티드 딥스 머신">시티드 딥스 머신</option>
+                    <option value="로우 풀리 케이블 플라이">
+                      로우 풀리 케이블 플라이
+                    </option>
+                    <option value="해머 벤치프레스">해머 벤치프레스</option>
+                    <option value="스포토 벤치프레스">스포토 벤치프레스</option>
+                    <option value="어시스트 딥스 머신">
+                      어시스트 딥스 머신
+                    </option>
+                    <option value="디클라인 벤치프레스">
+                      디클라인 벤치프레스
+                    </option>
+                    <option value="바벨 플로어 프레스">
+                      바벨 플로어 프레스
+                    </option>
+                    <option value="클랩 푸시업">클랩 푸시업</option>
+                    <option value="디클라인 덤벨 플라이">
+                      디클라인 덤벨 플라이
+                    </option>
+                    <option value="인클라인 덤벨 트위스트 프레스">
+                      인클라인 덤벨 트위스트 프레스
+                    </option>
+                    <option value="인클라인 케이블 플라이">
+                      인클라인 케이블 플라이
+                    </option>
+                  </optgroup>
+                  <optgroup
+                    label="어깨"
+                    style="
+                      font-size: larger;
+                      font-weight: 600;
+                      color: rgb(55, 196, 170);
+                    "
+                  >
+                    <option value="오버헤드 프레스">오버헤드 프레스</option>
+                    <option value="스미스머신 오버헤드 프레스">
+                      스미스머신 오버헤드 프레스
+                    </option>
+                    <option value="스미스머신 슈러그">스미스머신 슈러그</option>
+                    <option value="덤벨 숄더 프레스">덤벨 숄더 프레스</option>
+                    <option value="덤벨 레터럴 레이즈">
+                      덤벨 레터럴 레이즈
+                    </option>
+                    <option value="벤트오버 덤벨 레터럴 레이즈">
+                      벤트오버 덤벨 레터럴 레이즈
+                    </option>
+                    <option value="아놀드 덤벨 프레스">
+                      아놀드 덤벨 프레스
+                    </option>
+                    <option value="숄더 프레스 머신">숄더 프레스 머신</option>
+                    <option value="비하인드 넥 프레스">
+                      비하인드 넥 프레스
+                    </option>
+                    <option value="덤벨 프론트 레이즈">
+                      덤벨 프론트 레이즈
+                    </option>
+                    <option value="덤벨 슈러그">덤벨 슈러그</option>
+                    <option value="바벨 슈러그">바벨 슈러그</option>
+                    <option value="페이스 풀">페이스 풀</option>
+                    <option value="핸드스탠드">핸드스탠드</option>
+                    <option value="핸드스탠드 푸시업">핸드스탠드 푸시업</option>
+                    <option value="바벨 업라이트 로우">
+                      바벨 업라이트 로우
+                    </option>
+                    <option value="덤벨 업라이트 로우">
+                      덤벨 업라이트 로우
+                    </option>
+                    <option value="이지바 업라이트 로우">
+                      이지바 업라이트 로우
+                    </option>
+                    <option value="푸시 프레스">푸시 프레스</option>
+                    <option value="리어 델토이드 플라이머신">
+                      리어 델토이드 플라이머신
+                    </option>
+                    <option value="레터럴 레이즈 머신">
+                      레터럴 레이즈 머신
+                    </option>
+                    <option value="케이블 레터럴 레이즈">
+                      케이블 레터럴 레이즈
+                    </option>
+                    <option value="케이블 프론트 레이즈">
+                      케이블 프론트 레이즈
+                    </option>
+                    <option value="바벨 프론트 레이즈">
+                      바벨 프론트 레이즈
+                    </option>
+                    <option value="이지바 프론트 레이즈">
+                      이지바 프론트 레이즈
+                    </option>
+                    <option value="시티드 덤벨 리어 레터럴 레이즈">
+                      시티드 덤벨 리어 레터럴 레이즈
+                    </option>
+                    <option value="숄더 탭">숄더 탭</option>
+                    <option value="시티드 바벨 숄더 프레스">
+                      시티드 바벨 숄더 프레스
+                    </option>
+                    <option value="시티드 덤벨 숄더 프레스">
+                      시티드 덤벨 숄더 프레스
+                    </option>
+                    <option value="플레이트 숄더 프레스">
+                      플레이트 숄더 프레스
+                    </option>
+                    <option value="Y 레이즈">Y 레이즈</option>
+                    <option value="덤벨 Y 레이즈">덤벨 Y 레이즈</option>
+                    <option value="슈러그 머신">슈러그 머신</option>
+                    <option value="케이블 슈러그">케이블 슈러그</option>
+                    <option value="케이블 인터널 로테이션">
+                      케이블 인터널 로테이션
+                    </option>
+                    <option value="케이블 익스터널 로테이션">
+                      케이블 익스터널 로테이션
+                    </option>
+                    <option value="원암 케이블 레터럴 레이즈">
+                      원암 케이블 레터럴 레이즈
+                    </option>
+                    <option value="랜드마인 프레스">랜드마인 프레스</option>
+                    <option value="원암 랜드마인 프레스">
+                      원암 랜드마인 프레스
+                    </option>
+                  </optgroup>
+                  <optgroup
+                    label="복근"
+                    style="
+                      font-size: larger;
+                      font-weight: 600;
+                      color: rgb(55, 196, 170);
+                    "
+                  >
+                    <option value="싯업">싯업</option>
+                    <option value="크런치">크런치</option>
+                    <option value="힐터치">힐터치</option>
+                    <option value="레그 레이즈">레그 레이즈</option>
+                    <option value="행잉 레그 레이즈">행잉 레그 레이즈</option>
+                    <option value="할로우 포지션">할로우 포지션</option>
+                    <option value="플랭크">플랭크</option>
+                    <option value="덤벨 사이드 밴드">덤벨 사이드 밴드</option>
+                    <option value="복근롤아웃">복근롤아웃</option>
+                    <option value="복근 에어 바이크">복근 에어 바이크</option>
+                    <option value="행 클린">행 클린</option>
+                    <option value="행 스내치">행 스내치</option>
+                    <option value="필라테스 잭나이프">필라테스 잭나이프</option>
+                    <option value="리버스 크런치">리버스 크런치</option>
+                    <option value="사이드 플랭크">사이드 플랭크</option>
+                    <option value="45도 사이드 밴드">45도 사이드 밴드</option>
+                    <option value="RKC 플랭크">RKC 플랭크</option>
+                    <option value="케이블 사이드 밴드">
+                      케이블 사이드 밴드
+                    </option>
+                    <option value="중량 디클라인 크런치">
+                      중량 디클라인 크런치
+                    </option>
+                    <option value="디클라인 싯업">디클라인 싯업</option>
+                    <option value="중량 디클라인 싯업">
+                      중량 디클라인 싯업
+                    </option>
+                    <option value="사이드 크런치">사이드 크런치</option>
+                    <option value="케이블 트위스트">케이블 트위스트</option>
+                  </optgroup>
+                  <optgroup
+                    label="등"
+                    style="
+                      font-size: larger;
+                      font-weight: 600;
+                      color: rgb(55, 196, 170);
+                    "
+                  >
+                    <option value="덤벨 로우">덤벨 로우</option>
+                    <option value="원암 덤벨 로우">원암 덤벨 로우</option>
+                    <option value="케이블 암 풀다운">케이블 암 풀다운</option>
+                    <option value="시티드 케이블 로우">
+                      시티드 케이블 로우
+                    </option>
+                    <option value="굿모닝 엑서사이즈">굿모닝 엑서사이즈</option>
+                    <option value="풀업">풀업</option>
+                    <option value="중량 풀업">중량 풀업</option>
+                    <option value="친업">친업</option>
+                    <option value="중량 친업">중량 친업</option>
+                    <option value="인클라인 바벨 로우">
+                      인클라인 바벨 로우
+                    </option>
+                    <option value="인클라인 덤벨 로우">
+                      인클라인 덤벨 로우
+                    </option>
+                    <option value="인버티드 로우">인버티드 로우</option>
+                    <option value="바벨 풀오버">바벨 풀오버</option>
+                    <option value="시티드 로우 머신">시티드 로우 머신</option>
+                    <option value="랫풀다운">랫풀다운</option>
+                    <option value="중량 하이퍼 익스텐션">
+                      중량 하이퍼 익스텐션
+                    </option>
+                    <option value="백 익스텐션">백 익스텐션</option>
+                    <option value="티바 로우 머신">티바 로우 머신</option>
+                    <option value="맥그립 랫풀다운">맥그립 랫풀다운</option>
+                    <option value="패러럴그립 랫풀다운">
+                      패러럴그립 랫풀다운
+                    </option>
+                    <option value="정지 바벨 로우">정지 바벨 로우</option>
+                    <option value="어시스트 풀업 머신">
+                      어시스트 풀업 머신
+                    </option>
+                    <option value="플로어 시티드 케이블 로우">
+                      플로어 시티드 케이블 로우
+                    </option>
+                    <option value="언더그립 바벨 로우">
+                      언더그립 바벨 로우
+                    </option>
+                    <option value="라잉 바벨 로우">라잉 바벨 로우</option>
+                    <option value="비하인드 넥 풀다운">
+                      비하인드 넥 풀다운
+                    </option>
+                    <option value="원암 케이블 풀다운">
+                      원암 케이블 풀다운
+                    </option>
+                    <option value="원암 레터럴 와이드 풀다운">
+                      원암 레터럴 와이드 풀다운
+                    </option>
+                    <option value="로우 로우 머신">로우 로우 머신</option>
+                    <option value="원암 로우 로우 머신">
+                      원암 로우 로우 머신
+                    </option>
+                    <option value="하이 로우 머신">하이 로우 머신</option>
+                    <option value="언더그립 하이 로우 머신">
+                      언더그립 하이 로우 머신
+                    </option>
+                    <option value="원암 하이 로우 머신">
+                      원암 하이 로우 머신
+                    </option>
+                    <option value="원암 시티드 케이블 로우">
+                      원암 시티드 케이블 로우
+                    </option>
+                  </optgroup>
+                  <optgroup
+                    label="팔"
+                    style="
+                      font-size: larger;
+                      font-weight: 600;
+                      color: rgb(55, 196, 170);
+                    "
+                  >
+                    <option value="덤벨 트라이셉 익스텐션">
+                      덤벨 트라이셉 익스텐션
+                    </option>
+                    <option value="덤벨 킥백">덤벨 킥백</option>
+                    <option value="케이블 푸시 다운">케이블 푸시 다운</option>
+                    <option value="바벨 컬">바벨 컬</option>
+                    <option value="이지바 컬">이지바 컬</option>
+                    <option value="덤벨 해머 컬">덤벨 해머 컬</option>
+                    <option value="클로즈 그립 벤치프레스">
+                      클로즈 그립 벤치프레스
+                    </option>
+                    <option value="시티드 덤벨 트라이셉 익스텐션">
+                      시티드 덤벨 트라이셉 익스텐션
+                    </option>
+                    <option value="바벨 리스트 컬">바벨 리스트 컬</option>
+                    <option value="이지바 리스트 컬">이지바 리스트 컬</option>
+                    <option value="덤벨 리스트 컬">덤벨 리스트 컬</option>
+                    <option value="스컬 크러셔">스컬 크러셔</option>
+                    <option value="바벨 라잉 트라이셉 익스텐션">
+                      바벨 라잉 트라이셉 익스텐션
+                    </option>
+                    <option value="덤벨 프리쳐 컬">덤벨 프리쳐 컬</option>
+                    <option value="바벨 프리쳐 컬">바벨 프리쳐 컬</option>
+                    <option value="이지바 프리쳐 컬">이지바 프리쳐 컬</option>
+                    <option value="프리쳐 컬 머신">프리쳐 컬 머신</option>
+                    <option value="암 컬 머신">암 컬 머신</option>
+                    <option value="케이블 해머컬">케이블 해머컬</option>
+                    <option value="케이블 오버헤드 트라이셉 익스텐션">
+                      케이블 오버헤드 트라이셉 익스텐션
+                    </option>
+                    <option value="케이블 라잉 트라이셉 익스텐션">
+                      케이블 라잉 트라이셉 익스텐션
+                    </option>
+                    <option value="리버스 바벨 리스트 컬">
+                      리버스 바벨 리스트 컬
+                    </option>
+                    <option value="리버스 덤벨 리스트 컬">
+                      리버스 덤벨 리스트 컬
+                    </option>
+                    <option value="인클라인 덤벨 컬">인클라인 덤벨 컬</option>
+                    <option value="벤치 딥스">벤치 딥스</option>
+                    <option value="리스트 롤러">리스트 롤러</option>
+                    <option value="리버스 바벨 컬">리버스 바벨 컬</option>
+                    <option value="트라이셉 익스텐션 머신">
+                      트라이셉 익스텐션 머신
+                    </option>
+                  </optgroup>
+                  <optgroup
+                    label="유산소"
+                    style="
+                      font-size: larger;
+                      font-weight: 600;
+                      color: rgb(55, 196, 170);
+                    "
+                  >
+                    <option value="트레드밀">트레드밀</option>
+                    <option value="싸이클">싸이클</option>
+                    <option value="로잉머신">로잉머신</option>
+                    <option value="계단 오르기">계단 오르기</option>
+                    <option value="줄넘기">줄넘기</option>
+                    <option value="이단 뛰기">이단 뛰기</option>
+                    <option value="하이니 스킵">하이니 스킵</option>
+                    <option value="어썰트 바이크">어썰트 바이크</option>
+                    <option value="스텝밀">스텝밀</option>
+                    <option value="걷기">걷기</option>
+                    <option value="달리기">달리기</option>
+                  </optgroup>
+                  <optgroup
+                    label="역도"
+                    style="
+                      font-size: larger;
+                      font-weight: 600;
+                      color: rgb(55, 196, 170);
+                    "
+                  >
+                    <option value="클린">클린</option>
+                    <option value="클린&저크">클린&저크</option>
+                    <option value="저크">저크</option>
+                    <option value="스내치">스내치</option>
+                    <option value="바벨 오버헤드 스쿼트">
+                      바벨 오버헤드 스쿼트
+                    </option>
+                    <option value="덤벨 스내치">덤벨 스내치</option>
+                    <option value="케틀벨 스내치">케틀벨 스내치</option>
+                    <option value="스내치 밸런스">스내치 밸런스</option>
+                    <option value="중량 행잉 니 레이즈">
+                      중량 행잉 니 레이즈
+                    </option>
+                    <option value="클린 하이풀">클린 하이풀</option>
+                    <option value="스내치 하이풀">스내치 하이풀</option>
+                  </optgroup>
+                  <optgroup
+                    label="기타"
+                    style="
+                      font-size: larger;
+                      font-weight: 600;
+                      color: rgb(55, 196, 170);
+                    "
+                  >
+                    <option value="쓰러스터">쓰러스터</option>
+                    <option value="버피">버피</option>
+                    <option value="케틀벨 스윙">케틀벨 스윙</option>
+                    <option value="파머스 워크">파머스 워크</option>
+                    <option value="월볼 샷">월볼 샷</option>
+                    <option value="마운틴 클라이머">마운틴 클라이머</option>
+                    <option value="박스 점프">박스 점프</option>
+                    <option value="점핑 잭">점핑 잭</option>
+                    <option value="바 머슬업">바 머슬업</option>
+                    <option value="링 머슬업">링 머슬업</option>
+                    <option value="덤벨 버피">덤벨 버피</option>
+                    <option value="덤벨 쓰러스터">덤벨 쓰러스터</option>
+                    <option value="인치웜">인치웜</option>
+                    <option value="스모 데드리프트 하이풀">
+                      스모 데드리프트 하이풀
+                    </option>
+                    <option value="케틀벨 스모 하이풀">
+                      케틀벨 스모 하이풀
+                    </option>
+                  </optgroup>
+                </select>
+              </div>
+              <div class="count-exercise">
+                <input
+                  type="number"
+                  id="reps"
+                  class="input-count-exercise"
+                  onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"
+                  min="1"
+                  max="3000"
+                />
+                <p>회 x</p>
+                <input
+                  type="number"
+                  id="sets"
+                  class="input-count-exercise"
+                  onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"
+                  min="1"
+                  max="3000"
+                />
+                <p>세트</p>
+              </div>
+
+              <button id="add-exercise-button">추가</button>
+            </form>
+          </div>
+          <div class="popup-content-2">
+            <div class="popup-diet">
+              <p class="p-popup-diet">오늘의 식단</p>
+              <div class="image-upload-container">
+                <form action="/upload" method="post">
+                  <div
+                    class="image-upload-box"
+                    onclick="document.getElementById('uploadInput1').click()"
+                  >
+                    <input
+                      type="file"
+                      id="uploadInput1"
+                      accept="image/*"
+                      onchange="previewImage(event, 'uploadBox1')"
+                    />
+                    <div id="uploadBox1" class="placeholder">
+                      <p>+</p>
+                      <p>아침 식단</p>
+                    </div>
+                  </div>
+                  <div
+                    class="image-upload-box"
+                    onclick="document.getElementById('uploadInput2').click()"
+                  >
+                    <input
+                      type="file"
+                      id="uploadInput2"
+                      accept="image/*"
+                      onchange="previewImage(event, 'uploadBox2')"
+                    />
+                    <div id="uploadBox2" class="placeholder">
+                      <p>+</p>
+                      <p>점심 식단</p>
+                    </div>
+                  </div>
+                  <div
+                    class="image-upload-box"
+                    onclick="document.getElementById('uploadInput2').click()"
+                  >
+                    <input
+                      type="file"
+                      id="uploadInput2"
+                      accept="image/*"
+                      onchange="previewImage(event, 'uploadBox2')"
+                    />
+                    <div id="uploadBox2" class="placeholder">
+                      <p>+</p>
+                      <p>저녁 식단</p>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+
+
+            <!--인바디-->            <!--인바디-->
+            <div class="popup-inbody">
+              <p class="p-popup-inbody">오늘의 인바디</p>
+              <div class="popup-inbody-input">
+                <form action="/save-inbody" method="post">
+                  <span class="save-inbody">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-check-lg"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"
+                      />
+                    </svg>
+                  </span>
+                  <div class="popup-input popup-height">
+                    <label for="height">키</label>
+                    <!--마이페이지에서 한 번 설정하면 자동으로 반영되게끔-->
+
+                    <input
+                      type="text"
+                      id="height"
+                      name="height"
+                      class="inbody-input input-height"
+                      onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"
+                    />
+                    <p>cm</p>
+                  </div>
+                  <div class="popup-input popup-weight">
+                    <p>체중</p>
+                    <input
+                      type="text"
+                      id="weight"
+                      name="weight"
+                      class="inbody-input input-weight"
+                      onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"
+                    />
+                    <p>kg</p>
+                  </div>
+                  <div class="popup-input popup-muscle-mass">
+                    <p>골격근량</p>
+                    <input
+                      type="text"
+                      id="muscle_mass"
+                      name="muscle_mass"
+                      class="inbody-input input-muscle-mass"
+                      onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"
+                    />
+                    <p>kg</p>
+                  </div>
+                  <div class="popup-input popup-fat">
+                    <p>체지방량</p>
+                    <input
+                      type="text"
+                      id="fat"
+                      name="fat"
+                      class="inbody-input input-fat"
+                      onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"
+                    />
+                    <p>kg</p>
+                  </div>
+                  <div class="popup-input popup-bmi">
+                    <p>BMI</p>
+                    <input
+                      type="text"
+                      id="bmi"
+                      name="bmi"
+                      class="inbody-input input-bmi"
+                      onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"
+                    />
+                    <p>kg/m<sup>2</sup></p>
+                  </div>
+                  <div class="popup-input popup-fat-percentage">
+                    <p>체지방률</p>
+                    <input
+                      type="text"
+                      id="fat_percentage"
+                      name="fat_percentage"
+                      class="inbody-input input-fat-percentage"
+                      onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"
+                    />
+                    <p>%</p>
+                  </div>
+                  <button>저장</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>

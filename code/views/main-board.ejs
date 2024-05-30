@@ -94,10 +94,13 @@
                 <div class="board">
                     <h2>오늘의 인기글</h2>
                     <ul>
-                        <li><a href="#">...</a></li>
-                        <li><a href="#">...</a></li>
-                        <li><a href="#">...</a></li>
-                        <li><a href="#">...</a></li>
+                        <% if (popularPosts && popularPosts.length > 0) { %>
+                            <% popularPosts.forEach(function(post) { %>
+                                <li><a href="/<%= post.board %>-content/<%= post._id %>"><%= post.title %></a></li>
+                            <% }) %>
+                        <% } else { %>
+                            <li>인기 게시물이 없습니다.</li>
+                        <% } %>
                     </ul>
                 </div>
             </div>

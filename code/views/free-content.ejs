@@ -50,10 +50,17 @@
         <% } %>
       </div>
 
+      <h2 class="comments">댓글</h2>
+
+      <div id="comments-section">
+        <!-- 댓글이 여기에 출력됩니다 -->
+      </div>
+
       <!--comment-->
       <div class="comment-part">
-        <form action="get-comment">
-          <input class="comment" type="text" placeholder="댓글을 입력하세요">
+        <form id="comment-form">
+          <input class="comment" name="comment" type="text" placeholder="댓글을 입력하세요">
+          <button type="submit" class="comment-submit-btn">등록</button>
         </form>
       </div>
 
@@ -104,6 +111,65 @@
     $('#edit-text').on('click', function() {
       const postId = $(this).data('id');
       window.location.href = '/edit-free-board/' + postId;
+    });
+
+    // Comment form submission
+    $('#comment-form').on('submit', function(e) {
+      e.preventDefault();
+      const comment = $('input[name="comment"]').val();
+      const postId = "<%= data._id %>";
+      if (comment.trim() === "") {
+        alert("댓글을 입력하세요.");
+        return;
+      }
+      $.ajax({
+        url: '/post-comment',
+        type: 'POST',
+        data: { comment, postId },
+        success: function(result) {
+          // 댓글 등록 성공 시 처리
+          loadComments(); // 댓글을 다시 불러와서 새 댓글이 아래에 표시되도록 함
+          $('input[name="comment"]').val('');
+        },
+        error: function(err) {
+          if (err.status === 401) {
+            alert('로그인이 필요합니다.');
+            window.location.href = '/login';
+          } else {
+            alert('댓글 등록 중 오류가 발생했습니다.');
+          }
+        }
+      });
+    });
+
+    // Load comments
+    function loadComments() {
+      const postId = "<%= data._id %>";
+      $.ajax({
+        url: '/get-comments',
+        type: 'GET',
+        data: { postId },
+        success: function(comments) {
+          const commentsSection = $('#comments-section');
+          commentsSection.empty();
+          comments.forEach(comment => {
+            const commentElement = $('<div>').addClass('comment-item');
+            const commentAuthor = $('<p>').addClass('comment-author').text(comment.author);
+            const commentContent = $('<p>').addClass('comment-content').text(comment.content);
+            const commentDate = $('<p>').addClass('comment-date').text(new Date(comment.date).toLocaleString('ko-KR'));
+            commentElement.append(commentAuthor, commentContent, commentDate);
+            commentsSection.append(commentElement);
+          });
+        },
+        error: function(err) {
+          console.error('Error loading comments:', err);
+        }
+      });
+    }
+
+    // Load comments on page load
+    $(document).ready(function() {
+      loadComments();
     });
   </script>
 </body>

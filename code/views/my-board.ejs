@@ -12,7 +12,7 @@
         <% if (posts.length > 0) { %>
             <% posts.forEach(post => { %>
                 <div class="board">
-                    <h3><%= post.board_name%></h3>
+                    <h4><%= post.board_name%></h3>
                     <h3><a href="/<%= post.board %>-content/:<%= post._id %>"><%= post.title %></a></h3>
                     <div class="low-element">
                         <p>댓글 수: <%= post.comments ? post.comments.length : 0 %></p>
@@ -22,6 +22,7 @@
                 </div>
             <% }) %>
         <% } else { %>
+            <style>.board-list {border-bottom:  1px solid rgb(11, 154, 167);};</style>
             <p>작성한 글이 없습니다.</p>
         <% } %>
     </div>

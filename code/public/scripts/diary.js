@@ -8,7 +8,6 @@ const daysTag = document.querySelector(".days"),
     popup = document.getElementById("popup"),
     popupDate = document.getElementById("popup-date"),
     closePopup = document.querySelector(".close");
-    // saveInbody = document.querySelector(".save-inbody");
 
 let date = new Date(),
     currYear = date.getFullYear(),
@@ -49,10 +48,9 @@ const renderCalendar = () => {
                 popupDate.innerText = ` ${months[currMonth]} ${selectedDate.getDate()}일`;
                 popup.classList.add('show');
                 fetchDataForDate(selectedDate);
-                // renderCalendar(); // 달력을 다시 렌더링하지 않음
-                // 선택된 날짜의 스타일을 다시 적용
                 document.querySelectorAll('.days li').forEach(d => d.classList.remove('selected'));
                 target.classList.add('selected');
+
             }
         });
     });
@@ -73,7 +71,6 @@ const fetchDataForDate = (date) => {
             updatePopupContent(data, 'exercises'); //운동 데이터 업데이트
         })
         .catch(error => console.error('Error fetching exercises:', error));
-
 }
 
 const updatePopupContent = (data, type) => {
@@ -135,7 +132,6 @@ const updatePopupContent = (data, type) => {
     }
 }
 
-
 renderCalendar();
 
 prevNextIcon.forEach(icon => {
@@ -178,6 +174,7 @@ closePopup.addEventListener('click', () => {
 
 monthPicker.value = `${currYear}-${String(currMonth + 1).padStart(2, '0')}`;
 
+//이미지 미리보기
 function previewImage(event, boxId) {
     const input = event.target;
     const reader = new FileReader();
@@ -303,10 +300,10 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
+    document.getElementById('uploadInput1').addEventListener('change', (event) => uploadImage(event, 'uploadBox1'));
+    document.getElementById('uploadInput2').addEventListener('change', (event) => uploadImage(event, 'uploadBox2'));
+    document.getElementById('uploadInput3').addEventListener('change', (event) => uploadImage(event, 'uploadBox3'));
 });
-    // document.getElementById('uploadInput1').addEventListener('change', (event) => uploadImage(event, 'uploadBox1'));
-    // document.getElementById('uploadInput2').addEventListener('change', (event) => uploadImage(event, 'uploadBox2'));
-    // document.getElementById('uploadInput3').addEventListener('change', (event) => uploadImage(event, 'uploadBox3'));
 
 
 function uploadImage(event, boxId) {
@@ -340,11 +337,5 @@ function uploadImage(event, boxId) {
         .catch(error => {
             console.error('Error uploading image:', error);
         });
-        
     }
 }
-
-
-
-    
-

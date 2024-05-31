@@ -275,6 +275,33 @@ router.get("/meals", async (req, res) => {
   }
 });
 
+// 인바디 데이터 저장 엔드포인트
+router.post("/save-inbody", async function (req, res) {
+  // const {  height, weight, muscle_mass,  fat, bmi, fat_percentage} = req.body;
+  if (!req.session.user) {
+    return res.status(401).send("로그인이 필요합니다.");
+  }
+  
+  const user = req.session.user;
+  // const selectedDate = new date.getDate();
+  try {
+    await db.getDb().collection("User_inbody").insertOne({
+      author : user.id,  
+      // date : selectedDate,
+      height : req.body.height,
+      weight: req.body.weight,
+      skeletalMuscleMass: req.body.muscle_mass,
+      bodyFatMass: req.body.fat,
+      bmi: req.body.bmi,
+      bodyFatPercentage: req.body.fat_percentage
+    });
+    res.redirect("/diary");
+  } catch (error) {
+    console.error("인바디 데이터 저장 오류:", error);
+    res.status(500).send("인바디 데이터 저장 중 오류가 발생했습니다.");
+  }
+});
+
 router.get("/main-board", async (req, res) => {
   try {
     const boards = ["free_board", "end_board", "info_board", "child_board", "ghwm_board"];

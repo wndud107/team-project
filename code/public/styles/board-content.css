@@ -183,14 +183,26 @@ tbody tr:nth-child(even) td {
     color: #c0392b;
 }
 
+.comments {
+    text-align: left;
+}
+
 .comment-part {
     margin-top: 8px;
     padding:0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.comment-part form {
+    display: flex;
+    align-items: center;
+    width: 100%;
 }
 
 .comment {
     border: 0.3px solid rgb(0,53,89);
-    width: 100%;
+    flex: 1;
     padding: 15px 30px; 
     border-top: none;
     font-size: 14px;
@@ -200,6 +212,24 @@ tbody tr:nth-child(even) td {
 .comment::placeholder {
     color: rgb(55, 196, 170);
 }
+
+.comment-submit-btn {
+    padding: 10px 20px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-left: 10px;
+    box-sizing: border-box;
+    background-color: rgb(11, 154, 167);
+    border: 1px solid rgb(11, 154, 167);
+    border-radius: 4px;
+    color: white; 
+}
+
+.comment-submit-btn:hover {
+    background-color: rgb(55, 196, 170);
+    border: 1px solid rgb(55, 196, 170);
+}
+
 
 .go-to-board {
     float: left;
@@ -221,3 +251,30 @@ tbody tr:nth-child(even) td {
     border: 1px solid rgb(55, 196, 170);
 }
 
+/* 댓글 목록 */
+.comment-item {
+    border: 0.3px solid rgb(0,53,89);
+    margin-top: 8px;
+    padding: 15px 30px; 
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.comment-author {
+    text-align: left;
+    font-size: 14px;
+    margin: 0;
+}
+
+.comment-content {
+    text-align: left;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.comment-date {
+    text-align: left;
+    color: rgba(0,53,89,0.5);
+    font-size: 12px;
+    margin: 0;
+}

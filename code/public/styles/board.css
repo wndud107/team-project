@@ -133,3 +133,9 @@ tbody tr:nth-child(even) td {
 .btn {
     margin-top: 20px;
 }
+
+@media (max-width:738px){
+    .sidebar {
+        width:30%
+    }
+}

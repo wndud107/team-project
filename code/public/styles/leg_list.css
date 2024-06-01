@@ -161,3 +161,82 @@
     margin-bottom: 5px; /* 이미지와 텍스트 사이의 간격 */
     font-size: 14px; /* 텍스트 크기 설정 */
 }
+
+@media (max-width: 738px) {
+    .title {
+        font-size: 27px; 
+        top: 90px; 
+        left: calc(78% - 200px/2 - 100px); 
+    }
+
+    .search-container {
+        width: 220px;
+        height: 35px;
+        right: calc(40% - 200px/2 - 100px); 
+        top: 91px; 
+    }
+
+    .search-box {
+        width: 250px; 
+    }
+
+    .search-button {
+        width: 60px;
+    }
+
+    .exercises-container {
+        max-width:390px; 
+        top: 140px;
+        left: 27%;
+        width: 100%;
+        padding: 0 20px; 
+    }
+
+    .exercise {
+        margin: 5px 5px; 
+        width: 30%;
+    }
+
+    .exercise img {
+        width: 80%; 
+        height: auto; 
+    }
+
+    .exercise .text {
+        font-size: 14px; 
+    }
+
+    .sidebar {
+        width: 30%;
+        padding: 10px; 
+        border-right: none; 
+        border-bottom: 1px solid #e0e0e0; 
+    }
+
+    .profile {
+        margin-bottom: 10px;
+    }
+
+    .profile-image {
+        width: 80px; 
+        height: 80px; 
+    }
+
+    .profile-name {
+        font-size: 16px; 
+    }
+
+    .profile-button {
+        padding: 8px; 
+        font-size: 12px; 
+    }
+
+    .menu ul li {
+        margin-bottom: 8px; 
+    }
+
+    .menu ul li a {
+        font-size: 14px; 
+    }
+}
+

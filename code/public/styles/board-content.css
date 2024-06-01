@@ -278,3 +278,10 @@ tbody tr:nth-child(even) td {
     font-size: 12px;
     margin: 0;
 }
+
+@media (max-width:738px){
+    .sidebar{
+        width:30%;
+    }
+}
+

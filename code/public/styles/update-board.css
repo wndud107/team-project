@@ -142,3 +142,41 @@ textarea {
     background-color: rgb(55, 196, 170);
     border-color: rgb(55, 196, 170);
 }
+
+@media (max-width: 738px) {
+   
+    .container {
+        height: auto; 
+    }
+
+    .main-content {
+        padding: 20px; 
+    }
+
+    .profile-image {
+        width: 80px; 
+        height: 80px; 
+    }
+
+    .profile-name {
+        font-size: 16px; 
+    }
+
+    .menu ul li a {
+        font-size: 14px; 
+    }
+
+    .main-content h1 {
+        font-size: 24px;
+    }
+
+    .title-input, .file-input, .textarea {
+        font-size: 14px; 
+        padding: 8px;
+    }
+
+    .attach-button, .button {
+        font-size: 14px; 
+        padding: 8px 16px; 
+    }
+}

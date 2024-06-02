@@ -3,6 +3,7 @@ h2 {  /* 로그인 박스 안 로고 */
     text-align: center;
     font-size: 35px;
     position: relative;
+    margin-bottom: 20px;
 }
 
 form {    /* 로그인 박스 전체 */
@@ -24,7 +25,7 @@ form img {
     width: 80%; 
     margin: auto;
     right: 52px;
-    bottom: 0.5px;
+    bottom: 15px;
     pointer-events: none;
 }
 
@@ -68,7 +69,6 @@ form input[text] {
     height: 40px;
     /* display: block; */
     margin: auto;
-    margin-top: 5px;
     /* padding: 16px 80px; */
     position: relative;  /* 구조상 부모요소(pw입력박스) 기준으로 position 값 지정 */
     top: 8px;
@@ -107,10 +107,10 @@ form input[text] {
 }
 
 
-/* svg {
-    position: absolute;
-    left: 35px;
-    top: 3px;
-    z-index: 1;
-    color: rgb(78, 77, 77);
-} */
+.error-message {
+    color: red;
+    text-align: center;
+    font-size:10px;
+    margin:0;
+    padding:0;
+}

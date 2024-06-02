@@ -5,34 +5,30 @@ h2 {  /* 로그인 박스 안 로고 */
     font-family : 'Oleo Script Swash Caps';
     text-align: center;
     font-size: 35px;
+    margin-bottom: 20px;
     position: relative;
 }
 
 form {    /* 로그인 박스 전체 */
     position: relative;
     margin: 0 auto;
-    /* margin-top: 200px; */
     width: 500px;
-    height: 280px;
     padding: 10px;
-    /* border: 1px solid rgb(0, 53, 89); */
     border-radius: 12px;
     text-align: center;
-    position: relative;
     top: 120px;
 }
 
 form img {
     position: absolute;
     width: 80%; 
-    margin:auto;
+    margin: auto;
     right: 52px;
-    top: 10px;
     pointer-events: none;
+    bottom: -4px;
 }
 
 form input {   /* 아이디, 비밀번호 입력 박스 */
-    /* display: block; */
     width: 300px;
     height: 35px;
     padding: 20px;

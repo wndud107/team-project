@@ -3,6 +3,7 @@ h2 {  /* 로그인 박스 안 로고 */
     text-align: center;
     font-size: 35px;
     position: relative;
+    margin-bottom: 20px;
 }
 
 form {    /* 로그인 박스 전체 */
@@ -20,9 +21,10 @@ form img {
     width: 80%; 
     margin: auto;
     right: 52px;
-    top: 7px;
     pointer-events: none;
+    bottom: -39px;
 }
+
 
 form input {   /* 아이디, 비밀번호 입력 박스 */
     width: 300px;
@@ -37,7 +39,7 @@ form input {   /* 아이디, 비밀번호 입력 박스 */
 }
 
 form input:focus {      
-    border: 2px solid rgb(0, 53, 89);
+    border: 2px solid rgb(11, 154, 167);
 }
 
 form input[text] {

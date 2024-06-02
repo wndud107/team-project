@@ -13,7 +13,7 @@
             <% posts.forEach(post => { %>
                 <div class="board">
                     <h4><%= post.board_name%></h3>
-                    <h3><a href="/<%= post.board %>-content/:<%= post._id %>"><%= post.title %></a></h3>
+                    <h3><a href="/<%= post.board %>-content/<%= post._id %>" action="/<%= post.board %>-content/:<%= post._id %>"><%= post.title %></a></h3>
                     <div class="low-element">
                         <p>댓글 수: <%= post.comments ? post.comments.length : 0 %></p>
                         <span>|</span>

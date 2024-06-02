@@ -19,9 +19,17 @@ h1 {
 }
 
 .board h4 {
+    margin-top: 8px;
+}
+
+.board h4 a{
     margin:0;
-    margin-top: 10px;
     color:rgb(11, 154, 167);
+    text-decoration: none;
+}
+
+.board h4 a:hover {
+    color: rgb(0,53,89);
 }
 
 .board h3 {

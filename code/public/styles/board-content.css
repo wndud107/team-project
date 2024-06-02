@@ -113,6 +113,7 @@ tbody tr:nth-child(even) td {
 
 .main-board {
     border: 0.3px solid rgb(0,53,89);
+    margin-bottom: 6px;
 }
 
 .upper-part {
@@ -165,48 +166,52 @@ tbody tr:nth-child(even) td {
 }
 
 #edit-text {
-    color: #4e4e4e;
+    color: rgb(0,53,89);
     cursor: pointer;
     margin-right: 10px;
+    padding: 4px 8px;
+    margin-bottom: 4px;
+    border-radius: 6px;
 }
 
 #edit-text:hover {
-    color: #414141;
+    color: rgb(55, 196, 170);
+    background-color: rgb(247,247,247);
 }
 
 #delete-text {
     color: #e74c3c;
     cursor: pointer;
+    padding: 4px 8px;
+    margin-bottom: 4px;
+    border-radius: 6px;
 }
 
 #delete-text:hover {
-    color: #c0392b;
-}
-
-.comments {
-    text-align: left;
+    background-color: rgb(247,247,247);
 }
 
 .comment-part {
-    margin-top: 8px;
     padding:0;
     width: 100%;
     box-sizing: border-box;
+    border-top: 0.3px solid rgb(0,53,89);
 }
 
 .comment-part form {
     display: flex;
     align-items: center;
     width: 100%;
+    background-color: #f2f2f2;
 }
 
 .comment {
-    border: 0.3px solid rgb(0,53,89);
     flex: 1;
     padding: 15px 30px; 
-    border-top: none;
-    font-size: 14px;
+    border: none;
+    font-size: 16px;
     box-sizing: border-box; 
+    background-color: #f2f2f2;
 }
 
 .comment::placeholder {
@@ -214,14 +219,13 @@ tbody tr:nth-child(even) td {
 }
 
 .comment-submit-btn {
-    padding: 10px 20px;
-    font-size: 15px;
+    padding: 15px 30px;
+    font-size: 16px;
     cursor: pointer;
     margin-left: 10px;
-    box-sizing: border-box;
+    box-sizing:border-box;
     background-color: rgb(11, 154, 167);
     border: 1px solid rgb(11, 154, 167);
-    border-radius: 4px;
     color: white; 
 }
 
@@ -230,34 +234,35 @@ tbody tr:nth-child(even) td {
     border: 1px solid rgb(55, 196, 170);
 }
 
-
 .go-to-board {
-    float: left;
+    margin-top: 20px;
+    text-align: left;
 }
 
-.go-to-board button {
-    margin-top: 8px;
-    padding: 8px 20px;
-    margin-left: 15px;
+.go-to-board a {
+    text-decoration: none;
+    color: white;
     background-color: rgb(11, 154, 167);
     border: 1px solid rgb(11, 154, 167);
-    border-radius: 4px;
-    color: white; 
-    font-size: 15px;
+    padding: 6px 12px;
+    border-radius: 6px;
 }
 
-.go-to-board button:hover {
+.go-to-board a:hover {
     background-color: rgb(55, 196, 170);
-    border: 1px solid rgb(55, 196, 170);
 }
 
 /* 댓글 목록 */
-.comment-item {
+#comments-section {
     border: 0.3px solid rgb(0,53,89);
-    margin-top: 8px;
+    border-bottom: none;
+}
+
+.comment-item {
     padding: 15px 30px; 
     width: 100%;
     box-sizing: border-box;
+    border-bottom: 0.3px solid rgb(0,53,89);
 }
 
 .comment-author {

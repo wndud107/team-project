@@ -18,7 +18,7 @@
                             회원님의 게시물이나 댓글들에 사용됩니다.
                         </p>
                         <input type="file" id="fileInput" style="display: none"/>
-                        <button onclick="document.getElementById('fileInput').click();">
+                        <button onclick="document.getElementById('fileInput').click();" class="profile-photo-btn">
                            사진 변경
                         </button>
                     </div>
@@ -42,42 +42,43 @@
                 <div class="info-row">
                     <label>아이디</label>
                     <span><%= user.id_join %></span>
-                    <button class="btn">아이디 변경</button>
+                    <a class="btn" href="#">아이디 변경</a>
                 </div>
                 <div class="info-row">
                     <label>비밀번호</label>
                     <span>********</span>
-                    <button action="go_to_change_pw" class="btn">비밀번호 변경</button>
+                    <a action="go_to_change_pw" class="btn" href="change-pw">비밀번호 변경</a>
+                    
                 </div>
                 <div class="info-row">
-                    <label>이름(실명)</label>
+                    <label>이름</label>
                     <span><%= user.name_join %></span>
-                    <button class="btn">이름 수정</button>
+                    <a class="btn" href="#">이름 수정</a>
                 </div>
                 <div class="info-row">
                     <label>닉네임</label>
                     <span><%= user.nickname_join %></span>
-                    <button class="btn">닉네임 변경</button>
+                    <a class="btn" href="#">닉네임 변경</a>
                 </div>
                 <div class="info-row">
                     <label>생년월일</label>
                     <span><%= user.birth_join %></span>
-                    <button class="btn">생년월일 변경</button>
+                    <a class="btn" href="#">생년월일 변경</a>
                 </div>
                 <div class="info-row">
                     <label>휴대전화</label>
                     <span><%= user.telnumber_join %></span>
-                    <button class="btn">휴대전화 변경</button>
+                    <a class="btn" href="#">휴대전화 변경</a>
                 </div>
                 <div class="info-row">
                     <label>키</label>
                     <span><%= user.height_join %></span>
-                    <button class="btn">키 변경</button>
+                    <a class="btn" href="#">키 변경</a>
                 </div>
                 <div class="info-row">
                     <label>몸무게</label>
                     <span><%= user.weight_join %></span>
-                    <button class="btn">몸무게 변경</button>
+                    <a class="btn" href="#">몸무게 변경</a>
                 </div>
             </div>
         </div>
@@ -90,7 +91,7 @@
                         <a href="/my-board">내가 쓴 글</a>
                     </div>
                     <div class="my-comment record-list">
-                        <a href="">내가 쓴 댓글</a>
+                        <a href="/my-comment">내가 쓴 댓글</a>
                     </div>
                 </div>
             </div>

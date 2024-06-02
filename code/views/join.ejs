@@ -13,7 +13,7 @@
           id="form1"
           onsubmit="event.preventDefault(); goToPage2();"
         >
-          <img src="/회원가입달력.png" alt="" />
+          <div><img src="/회원가입달력.png" alt="" /></div>
           <section>
             <h2>Healancaler</h2>
             <div>
@@ -68,7 +68,7 @@
             </div>
           </section>
           <section>
-            <button class="btn-login" type="submit">다음</button>
+            <button id="btn-login" type="submit">다음</button>
           </section>
         </form>
       </div>
@@ -138,8 +138,6 @@
             <button class="btn-login" type="submit">회원가입</button>
           </section>
         </form>
-      </div>
-
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
       <script>
         function goToPage2() {
@@ -162,7 +160,7 @@
             weight_join: $("#weight").val(),
             goal_weight_join: $("#goal_weight").val(),
             goal_date_join: $("#goal_date").val(),
-            nickname_join: $("#nickname").val()
+            nickname_join: $("#nickname").val(),
           };
 
           const formData = Object.assign(

@@ -10,15 +10,19 @@
     <main>
         <form action="/login" class="input-group" method="post">
             <img src="어두운달력.png" alt="">
-            <section >
+            <section>
                 <h2>Healancaler</h2>
                 <div>
-                        <input type="text" name="userid" class="input-field" placeholder="아이디" id="id" required>
+                    <input type="text" name="userid" class="input-field" placeholder="아이디" id="id" required>
                 </div>
-                <div> 
+                <div>
                     <input type="password" name="userpw" class="input-field" placeholder="비밀번호" id="pw" required>
                 </div>
             </section>
+
+            <% if (typeof error !== 'undefined' && error) { %>
+                <p class="error-message"><%= message %></p>
+            <% } %>
 
             <section>
                 <button id="btn-login" type="submit">로그인</button>
@@ -26,19 +30,12 @@
         </form>
 
         <div id="a-find-total">
-            <a href="looking-for-pw" class="a-find">비밀번호 찾기</a>
+            <a href="change-pw" class="a-find">비밀번호 찾기</a>
             <span> | </span>
             <a href="looking-for-id" class="a-find">아이디 찾기</a>
             <span> | </span>
-            <a id="a-join" href="/join" class="a-find">회원가입</a>      
+            <a id="a-join" href="/join" class="a-find">회원가입</a>
         </div>
-
-        <% if (message) { %>
-            <div style="text-align: center; margin-top: -22.3px;">
-                <p style="color: red; font-size: 9px;"><%= message %></p>
-            </div>
-        <% } %>
-        
     </main>
   </body>
 </html>

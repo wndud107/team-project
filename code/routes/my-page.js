@@ -18,6 +18,8 @@ let storage = multer.diskStorage({
     done(null, file.originalname);
   },
 });
+
+
 router.get("/my-page", async function (req, res) {
   const user = req.session.user;
 
@@ -50,7 +52,6 @@ router.get("/my-page", async function (req, res) {
     res.status(500).send("Internal Server Error");
   }
 });
-
 
 router.post("/my-page", async function (req, res) {
   const user = req.session.user;
@@ -114,8 +115,6 @@ router.post("/my-page", async function (req, res) {
   }
 });
 
-
-
 // my-board// my-board// my-board// my-board// my-board// my-board// my-board// my-board// my-board// my-board// my-board// my-board// my-board// my-board// my-board// my-board// my-board
 
 
@@ -175,7 +174,5 @@ router.get("/my-board", async function (req, res) {
     res.status(500).send("Internal Server Error");
   }
 });
-
-
 
 module.exports = router;

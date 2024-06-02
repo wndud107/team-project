@@ -48,28 +48,27 @@
             <p id="delete-text" data-id="<%= data._id %>">삭제</p>
           </div>
         <% } %>
+
+        <div class="comment-part">
+          <form id="comment-form">
+            <input class="comment" name="comment" type="text" placeholder="댓글을 입력하세요">
+            <button type="submit" class="comment-submit-btn">등록</button>
+          </form>
+        </div>
       </div>
 
-      <h2 class="comments">댓글</h2>
+      <!--comment-->
 
       <div id="comments-section">
         <!-- 댓글이 여기에 출력됩니다 -->
       </div>
-
-      <!--comment-->
-      <div class="comment-part">
-        <form id="comment-form">
-          <input class="comment" name="comment" type="text" placeholder="댓글을 입력하세요">
-          <button type="submit" class="comment-submit-btn">등록</button>
-        </form>
-      </div>
+      
 
       <div class="go-to-board">
-        <form action="go-to-board">
-          <button>글 목록</button>
-        </form>
+        <a href="/free-board">글목록</a>
       </div>
     </main>
+    
   </div>
 
   <script>

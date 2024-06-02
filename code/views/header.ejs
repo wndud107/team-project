@@ -1,0 +1,43 @@
+<header>
+    <div>
+        <a href="/index" class="logo-text"><img src="/logo_icon.png" alt="" id="logo-img">Healancaler</a>
+    </div>
+    <div>
+        <div class="line" id="line">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </div>
+        <nav id="nav">
+            <ul>
+                <li><a href="/diary" class="nav">다이어리</a></li>
+                <li><a href="/main-board" class="nav">커뮤니티</a></li>
+                <li><a href="/list_leg" class="nav" >운동법</a></li>
+                <% if (user) { %>
+                    <li><a href="/my-page" class="nav">마이페이지</a></li>
+                    <li><a href="/logout" class="nav" id="Login-to-Logout" action="logout">로그아웃</a></li>
+                <% } else { %>
+                    <li><a href="/login" class="nav" id="Login-to-Logout">로그인</a></li>
+                <% } %>
+            </ul>
+        </nav>
+</header>
+<script>
+    document.getElementById('line').addEventListener('click', function(event) {
+    var navMenu = document.querySelector('nav ul');
+    if (navMenu.classList.contains('show')) {
+        navMenu.classList.remove('show');
+    } else {
+        navMenu.classList.add('show');
+    }
+    event.stopPropagation(); // Prevent event from propagating to parent elements
+});
+
+document.addEventListener('click', function(event) {
+    var navMenu = document.querySelector('nav ul');
+    if (navMenu.classList.contains('show') && !event.target.closest('nav ul')) {
+        navMenu.classList.remove('show');
+    }
+});
+</script>

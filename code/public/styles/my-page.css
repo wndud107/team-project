@@ -78,6 +78,7 @@ header li {
 .container1 {
     background-color: rgb(11, 154, 167);
     border-top: 1px solid rgb(0, 53, 89);
+    border-radius: 6px;
 }
 
 .h2 {

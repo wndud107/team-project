@@ -105,12 +105,13 @@ router.get("/diary", async function (req, res) {
     }
   });
   
-  
+  //운동 목록 삭제 
   router.post("/delete-exercise", async function (req, res) {
     const { date, exercise, reps, sets, checked } = req.body;
+    const user = req.session.user;
     try {
       await db.getDb().collection("User_diary").deleteOne({
-        author,
+        author: user.id,
         date,
         exercise,
         reps,

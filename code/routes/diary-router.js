@@ -77,11 +77,12 @@ router.get("/diary", async function (req, res) {
   // 운동 목록 가져오기 라우트
   router.get("/exercises", async (req, res) => {
     const { date } = req.query;
+    const user = req.session.user;
     try {
       const exercises = await db
         .getDb()
         .collection("User_diary")
-        .find({ date })
+        .find({ date, author: user.id })
         .toArray();
       res.json(exercises);
     } catch (error) {

@@ -1,5 +1,16 @@
 body{
   font-family: 'Noto Sans Kr';
+  
+}
+
+.container {
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-start;
+  background-color: #ffffff;
+  align-items: center;
+  height: calc(100vh-55px);  /* 전체화면 - 헤더 영역 크기 */
+  margin-top: 5vh;
 }
 
 
@@ -38,22 +49,6 @@ body{
   color: #07656f;
 }
 
-/* 운동 추가하기 버튼 */
-.bi-plus-circle{
-  position: relative;
-  top: 2px;
-  width: 25px;
-  height: 25px;
-  /* color: #7d7d7d; */
-  color: #0b99a9;
-}
-.bi-plus-circle:hover{
-  /* color: #0b99a9; */
-}
-
-.p-add-exercise:hover{
-  text-shadow: #0b99a9;
-}
 
 .bi-caret-left {
   position: relative;
@@ -218,25 +213,14 @@ input[type="month"]:focus {
 }
 
 
-.container {
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
-  background-color: #ffffff;
-  align-items: center;
-  height: calc(100vh-55px);  /* 전체화면 - 헤더 영역 크기 */
-  margin-top: 5vh;
-}
-
-
 .calendar {
     display: inline;
     /* width: 100%; */
     width: 480px;
     background: #fff;
-    padding: 25px;
+    padding: 35px;
     border-color: #0b99a9;
-    margin-left: 15px;
+    margin-left: 20px;
 }
 
 
@@ -274,35 +258,13 @@ input[type="month"]:focus {
 }
 
 
-.D-day {
-  position: absolute;
-  top: 0;
-  width: 510px;
-  height: 220px;
-  background-color: rgb(255, 255, 255);  
-  border-radius: 5px;
-  outline: auto;
-  outline-color: #e1e1e1;
-}
-
-.graph {
-  position: absolute;
-  top: 240px;
-  width: 510px;
-  height: 365px;
-  background-color: rgb(255, 255, 255);  
-  border-radius: 5px;
-  outline: auto;
-  outline-color: #e1e1e1;
-}
-
 
 /* 전체 팝업창  */
 .popup {
-  display: none;
+  /* display: none; */
   position: absolute;
   top: -40px;
-  left: -5px;
+  left: -23px;
   border: 3px;
   background-color: rgb(190, 223, 228);
   border-radius: 5px;
@@ -316,27 +278,12 @@ input[type="month"]:focus {
   display: block;
 }
 
-/* 닫기 버튼 */
-.close {
-  position: absolute;
-  right: 10px;
-  color: #838383;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
 #popup-date{
   position: absolute;
-  right: 20px;
-  top: 12px;
+  /* right: 20px; */
+  /* top: 12px; */
+  left: 420px;
+  top: -15px;
   font-size: 23px;
   font-weight: 700;
   /* color: hsl(0, 0%, 100%); */
@@ -351,7 +298,9 @@ input[type="month"]:focus {
 .popup-diet {
   position: absolute;
   left: 20px;
-  top: -40px;
+  /* top: -40px; */
+  margin-top: 10px;
+  top: -85px;
 }
 
 .diet-image input[type="file"] {
@@ -375,7 +324,7 @@ input[type="month"]:focus {
 
 .image-upload-box {
   width: 220px;
-  height: 122px; 
+  height: 135px;
   border: 2px #ffffff;
   display: flex;
   align-items: center;
@@ -384,6 +333,7 @@ input[type="month"]:focus {
   position: relative;
   border-radius: 5px;
   background-color: #ffffff;
+  margin-top: 10px;
 }
 
 /* 스크롤바 생성 시 */
@@ -395,11 +345,10 @@ input[type="month"]:focus {
   /* width: 100%;
   height: 100%; */
   width: 220px;
-  /* height: 150px; 스크롤바 생성시 */
-  height: 123px;
+  height: 135px;
   object-fit: cover;
   border-radius: 5px;
- margin-top: 5px;
+  /* margin-top: 5px; */
 }
 
 .image-upload-box input[type="file"] {
@@ -423,7 +372,7 @@ input[type="month"]:focus {
 
 .diet-image{
   width: 200px;
-  height: 90px;
+  height: 75px;
   background-color: #ffffff;
   gap: 10px;
 }
@@ -432,15 +381,12 @@ input[type="month"]:focus {
 /* 인바디 파트 전체 */
 .popup-inbody {
   position: absolute;
-  left: 270px;
-  top: -68px;
-  /* background-color: #0b99a9; */
-  width: 230px;
-  height: 410px;
+  left: 250px;
+  top: -103px;
+  width: 250px;
+  height: 430px;
   text-align: left;
 }
-
-
 /* 오늘의 인바디 */
 .p-popup-inbody{
   position: absolute;
@@ -462,8 +408,8 @@ input[type="month"]:focus {
   position: absolute;
   top: 30px; 
   background-color: hwb(0 100% 0%);
-  width: 230px;
-  height: 388px;
+  width: 250px;
+  height: 425px;
   border-radius: 5px;
 }
 .inbody-input::placeholder { color: #aaaaaa; }
@@ -473,7 +419,7 @@ input[type="month"]:focus {
 .popup-input {
   display: flex;
   gap: 10px;
-  margin-top: 30px;
+  margin-top: 10px;
   margin-left: 20px;
 }
 .popup-input:first-child{
@@ -481,25 +427,19 @@ input[type="month"]:focus {
 }
 
 /* 인바디 개별 input요소 p태그 */
-.popup-inbody-input p{
-  font-size: 13px;
+.popup-weight p{
+  font-size: 15px;
   font-weight: 500;
   margin: 6px 2px;
 }
-/* 4글자 너비 기준 (47.84) input요소 마진 설정해서 줄 맞추기 */
-.input-height{
-  margin-left: 35.88px;
-}
+
 .input-weight{
-  margin-left: 23.92px;
-}
-.input-bmi{
-  margin-left: 24.36px;
+  margin-left: 0px;
 }
 
 /* 인바디 input창 */
 .popup-inbody-input input {
-  width: 80px;
+  width: 120px;
   height: 30px;
   font-size: 15px;
   border: 0;
@@ -507,18 +447,16 @@ input[type="month"]:focus {
   outline: none;
   padding-left: 10px;
   background-color: rgb(190, 223, 228);
- 
 }
-
-
 
 /* 오늘의 운동 */
 .p-popup-exercise{
-  position: absolute;
-  left: 25px;
-  top: 25px;
+  position: absolute; 
+  left: 23px;
+  top: -2px; 
   font-weight: 600;
   font-size: 18px;
+  color: black;
 }
 
 .popup-content-1{
@@ -530,10 +468,25 @@ input[type="month"]:focus {
   top: 280px;
 }
 
+/* 운동 추가하기 버튼 */
+.bi-plus-circle{
+  position: relative;
+  top: 2px;
+  width: 25px;
+  height: 25px;
+  /* color: #7d7d7d; */
+}
+
+.btn-add:hover{
+  color: #0b99a9;
+}
+
+
 /* 팝업창 운동 섹션 */
 .popup-exercise {
   position: absolute;
-  top: 72px;
+  /* top: 72px; */
+  top: 45px;
   left: 20px;
   width: 480px;
   height: 130px;
@@ -555,6 +508,11 @@ input[type="month"]:focus {
   margin: -1px 5px ;
   position: relative;
 }
+
+.p-add-exercise:hover{
+  color: #0b99a9;
+}
+
 
 .btn-add {
   display: flex;
@@ -628,7 +586,7 @@ input[type="month"]:focus {
   border: 1px solid #0b99a9;
 }
 
-/* 회 세트 토탈 */
+/* 회x세트 토탈 */
 .count-exercise{
   display: flex;
   position: absolute;
@@ -693,25 +651,155 @@ select optgroup{
   font-weight: 600;
 }
 
+/* 운동 삭제 버튼 */
+.delete-exercise{
+  background-color: transparent;
+  border:none;
+  width :16px;
+  height :16px;
+}
+.bi-x-square:hover{
+  /* background-color: rgba(55, 196, 170, 0.296); */
+  /* color: rgb(255, 76, 76); */
+  background-color: rgba(255, 87, 87, 0.441);
+}
 
+.btn-save-inbody:hover{
+  /* background-color: #0b99a939; */
+  background-color:rgba(190, 223, 228, 0.5) ;
+
+}
+
+.check-exercise{
+ width: 20px;
+ height: 20px;
+}
 
 /* 인바디 저장 버튼 */
-.save-inbody {
-  width: 25px;
-  height: 25px;
+.btn-save-inbody {
+  color: #585858;
+  background-color: #fff;
+  border-radius: 5px;
+  border: #9a9a9a 1.5px solid;
+  width: 220px;
+  height: 40px;
   position: absolute;
-  right: 10px;
+  top: 370px;
+  left: 15px;
   float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-.bi-check-lg{
-  width: 25px;
-  height: 25px;
-  color: #aaaaaa;
-}
-.bi-check-lg:hover{
-  color: #0b99a9;
-
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0 auto;
 }
 
+
+/* 팝업창 없는 버전 최우측 */
+.D-day {
+  position: absolute;
+  top: 0;
+  left: 550px;
+  width: 430px;
+  height: 150px;
+  background-color: rgb(255, 255, 255);  
+  border-radius: 5px;
+  outline: auto;
+  outline-color: #e1e1e1;
+}
+
+.graph {
+  position: absolute;
+  left: 550px;
+  top: 240px;
+  width: 430px;
+  height: 365px;
+  background-color: rgb(255, 255, 255);  
+  border-radius: 5px;
+  outline: auto;
+  outline-color: #e1e1e1;
+}
+
+
+.nunbody-image-box{
+  background-color: rgba(190, 223, 228, 0.5);
+  width: 220px;
+  height: 290px;
+  margin: 15px auto;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* 기존 파일선택 버튼폼 없에기 */
+.image-nunbody input[type="file"] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+}
+
+.bi-person-bounding-box {
+  width: 40px;
+  height: 40px;
+  color: #a6a6a6;
+  margin-top: 95px;
+  margin-bottom: 10px;
+} 
+.nunbody-image-box img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.nunbody-image-box p{
+  font-size: 13px;
+  color: #a6a6a6;
+}
+
+
+
+/* 운동 체크박스 */
+.exercise-checkbox {
+  display: none;
+}
+
+.exercise-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  padding-left: 30px;
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+.exercise-label::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #0b99a9;
+  border-radius: 50%;
+  background-color: #fff;
+  position: absolute;
+  left: 0;
+  top: 4px;
+}
+
+.exercise-checkbox:checked + .exercise-label::before {
+  background-color: #0b99a9;
+  border-color: #0b99a9;
+}
+
+.exercise-checkbox:checked + .exercise-label::after {
+  content: '';
+  display: block;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+  position: absolute;
+  left: 7px;
+  top: 7px;
+}

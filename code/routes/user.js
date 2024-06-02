@@ -60,7 +60,6 @@ router.post("/login", async function (req, res) {
   }
 });
 
-
 router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
@@ -210,14 +209,14 @@ router.get("/diary", async function (req, res) {
   }
 });
 
-
+// 운동 저장하기 라우트 
 router.post("/save-exercise", async (req, res) => {
   const { date, exercise, reps, sets } = req.body;
   try {
     await db
       .getDb()
       .collection("User_diary")
-      .insertOne({ date, exercise, reps, sets });
+      .insertOne({ date, exercise, reps, sets, checked: false });
     res.send("Exercise saved successfully");
   } catch (error) {
     console.error("Error saving exercise:", error);
@@ -225,6 +224,7 @@ router.post("/save-exercise", async (req, res) => {
   }
 });
 
+// 운동 목록 가져오기 라우트
 router.get("/exercises", async (req, res) => {
   const { date } = req.query;
   try {
@@ -240,8 +240,24 @@ router.get("/exercises", async (req, res) => {
   }
 });
 
+// 운동 상태 업데이트 라우트
+router.post('/update-exercise', async (req, res) => {
+  const { id, checked } = req.body;
+  try {
+    const result = await db.getDb().collection('User_diary').updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { checked: checked } }
+    );
+    res.json({ message: 'Exercise updated successfully', result });
+  } catch (error) {
+    console.error('Error updating exercise status:', error);
+    res.status(500).send('Error updating exercise status');
+  }
+});
+
+
 router.post("/delete-exercise", async function (req, res) {
-  const { date, exercise, reps, sets } = req.body;
+  const { date, exercise, reps, sets, checked } = req.body;
   try {
     await db.getDb().collection("User_diary").deleteOne({
       date,
@@ -305,6 +321,7 @@ router.get("/meals", async (req, res) => {
 // 인바디 데이터 저장 엔드포인트
 router.post("/save-inbody", async function (req, res) {
   // const {  height, weight, muscle_mass,  fat, bmi, fat_percentage} = req.body;
+  const { weight }= req.body;
   if (!req.session.user) {
     return res.status(401).send("로그인이 필요합니다.");
   }
@@ -315,12 +332,12 @@ router.post("/save-inbody", async function (req, res) {
     await db.getDb().collection("User_inbody").insertOne({
       author : user.id,  
       // date : selectedDate,
-      height : req.body.height,
-      weight: req.body.weight,
-      skeletalMuscleMass: req.body.muscle_mass,
-      bodyFatMass: req.body.fat,
-      bmi: req.body.bmi,
-      bodyFatPercentage: req.body.fat_percentage
+      // height : req.body.height,
+      weight: req.body.weight
+      // skeletalMuscleMass: req.body.muscle_mass,
+      // bodyFatMass: req.body.fat,
+      // bmi: req.body.bmi,
+      // bodyFatPercentage: req.body.fat_percentage
     });
     res.redirect("/diary");
   } catch (error) {
@@ -1325,42 +1342,6 @@ router.post('/photo', upload.single('picture'), function(req, res) {
     res.status(200).send('File uploaded');
   } else {
     res.status(400).send('No file uploaded');
-  }
-});
-
-// 댓글 저장 라우트 수정
-router.post('/post-comment', async (req, res) => {
-  const { comment, postId } = req.body;
-  const user = req.session.user;
-
-  if (!user) {
-    return res.status(401).send('로그인이 필요합니다.');
-  }
-
-  try {
-    await db.getDb().collection('free_comment').insertOne({
-      author: user.id,
-      content: comment,
-      date: new Date(),
-      postId: new ObjectId(postId)
-    });
-    res.status(201).send('댓글이 등록되었습니다.');
-  } catch (error) {
-    console.error('Error posting comment:', error);
-    res.status(500).send('댓글 등록 중 오류가 발생했습니다.');
-  }
-});
-
-// 댓글 불러오기 라우트 추가
-router.get('/get-comments', async (req, res) => {
-  const { postId } = req.query;
-
-  try {
-    const comments = await db.getDb().collection('free_comment').find({ postId: new ObjectId(postId) }).sort({ date: 1 }).toArray();
-    res.status(200).json(comments);
-  } catch (error) {
-    console.error('Error fetching comments:', error);
-    res.status(500).send('댓글 불러오기 중 오류가 발생했습니다.');
   }
 });
 

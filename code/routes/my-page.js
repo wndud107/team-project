@@ -114,6 +114,11 @@ router.post("/my-page", async function (req, res) {
   }
 });
 
+
+
+// my-board// my-board// my-board// my-board// my-board// my-board// my-board// my-board// my-board// my-board// my-board// my-board// my-board// my-board// my-board// my-board// my-board
+
+
 router.get("/my-board", async function (req, res) {
   const user = req.session.user;
 
@@ -158,12 +163,19 @@ router.get("/my-board", async function (req, res) {
       ...childBoardPosts.map((post) => ({ ...post, board: "child", board_name: "헬린이게시판" })),
     ];
 
-    res.render("my-board", { posts: userPosts });
+    // 각 게시물의 댓글 수를 가져오는 부분 추가
+    const userPostsWithComments = await Promise.all(userPosts.map(async (post) => {
+      const commentCount = await db.getDb().collection('free_comment').countDocuments({ postId: new ObjectId(post._id) });
+      return { ...post, commentCount };
+    }));
+
+    res.render("my-board", { posts: userPostsWithComments });
   } catch (error) {
     console.error("Error fetching user posts:", error);
     res.status(500).send("Internal Server Error");
   }
 });
+
 
 
 module.exports = router;

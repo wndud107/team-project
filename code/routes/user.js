@@ -47,6 +47,7 @@ router.post("/login", async function (req, res) {
 
     if (!user || !(await bcrypt.compare(userpw, user.pw_join))) {
       return res.render("login", {
+        error: true,
         message: "아이디 또는 비밀번호를 잘못 입력했습니다.",
       });
     }
@@ -58,6 +59,7 @@ router.post("/login", async function (req, res) {
     res.status(500).send("Internal Server Error");
   }
 });
+
 
 router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
@@ -174,15 +176,40 @@ router.get("/complete-LP", function (req, res) {
   res.render("complete-LP");
 });
 
-router.get("/diary", function (req, res) {
-  if (!req.session.user) {
+router.get("/diary", async function (req, res) {
+  const user = req.session.user;
+
+  if (!user) {
     res.send(
       '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
     );
-  } else {
-    res.render("diary");
+    return; // return을 추가하여 이후 코드가 실행되지 않도록 합니다.
+  }
+
+  try {
+    const userData = await db
+      .getDb()
+      .collection("User_info")
+      .findOne({ id_join: user.id });
+
+    if (userData) {
+      // 목표 날짜와 현재 날짜의 차이를 계산하여 D-Day 구하기
+      const currentDate = new Date();
+      const goalDate = new Date(userData.goal_date_join);
+      const dDay = Math.ceil((goalDate - currentDate) / (1000 * 60 * 60 * 24));
+
+      res.render("diary", { user: userData, dDay: dDay });
+    } else {
+      res.send(
+        '<script>alert("사용자 정보를 불러오는 데 실패했습니다."); window.location.href = "/";</script>'
+      );
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    res.status(500).send("Internal Server Error");
   }
 });
+
 
 router.post("/save-exercise", async (req, res) => {
   const { date, exercise, reps, sets } = req.body;

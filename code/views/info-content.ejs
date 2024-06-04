@@ -26,7 +26,7 @@
           </div>
           <p class="upper-date">작성일 : <span id="formatted-date"></span></p>
         </div>
-
+        
         <!-- 조회수 -->
         <div class="upper-part">
           <p class="upper-views">조회수 : <%= data.view %></p>
@@ -48,20 +48,39 @@
             <p id="delete-text" data-id="<%= data._id %>">삭제</p>
           </div>
         <% } %>
+
+        <div class="comment-part">
+          <form id="comment-form">
+            <input class="comment" name="comment" type="text" placeholder="댓글을 입력하세요">
+            <button type="submit" class="comment-submit-btn">등록</button>
+          </form>
+        </div>
       </div>
 
-      <!--comment-->
-      <div class="comment-part">
-        <form action="get-comment">
-          <input class="comment" type="text" placeholder="댓글을 입력하세요">
-        </form>
+      <!-- 댓글 목록 -->
+      <div id="comments-section">
+        <% comments.forEach(comment => { %>
+          <div class="comment-item">
+            <div class="comment-details">
+              <p class="comment-author"><%= comment.author %></p>
+              <p class="comment-content"><%= comment.content %></p>
+              <p class="comment-date"><%= new Date(comment.date).toLocaleString('ko-KR') %></p>
+            </div>
+            <% if (user && user.id === comment.author) { %>
+              <div class="delete-container">
+                <p id="delete-comment-text" data-id="<%= comment._id %>">삭제</p>
+              </div>
+            <% } %>
+          </div>
+        <% }) %>
       </div>
 
-
+    
       <div class="go-to-board">
-        <a href="/free-board">글목록</a>
+        <a href="/info-board">글목록</a>
       </div>
     </main>
+    
   </div>
 
   <script>
@@ -70,20 +89,20 @@
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
       return new Date(date).toLocaleDateString('ko-KR', options);
     }
-
+  
     // Get the raw date from server-rendered content
     const rawDate = "<%= data.date %>";
     
     // Format the date
     const formattedDate = formatDate(rawDate);
-
+  
     // Insert the formatted date into the document
     document.getElementById('formatted-date').textContent = formattedDate;
-
-    // Delete text click event
+  
+    // Delete post click event
     $('#delete-text').on('click', function() {
       const postId = $(this).data('id');
-
+  
       if (confirm('정말로 삭제하시겠습니까?')) {
         $.ajax({
           url: '/delete-info-post/' + postId,
@@ -98,12 +117,59 @@
         });
       }
     });
-
-    // Edit text click event
+  
+    // Edit post click event
     $('#edit-text').on('click', function() {
       const postId = $(this).data('id');
       window.location.href = '/edit-info-board/' + postId;
     });
-  </script>
+  
+    // Use event delegation for deleting comments
+    $('#comments-section').on('click', '#delete-comment-text', function() {
+      const commentId = $(this).data('id');
+  
+      if (confirm('정말로 삭제하시겠습니까?')) {
+        $.ajax({
+          url: '/delete-info-comment/' + commentId,
+          type: 'DELETE',
+          success: function(result) {
+            alert('댓글이 삭제되었습니다.');
+            window.location.reload();
+          },
+          error: function(err) {
+            alert('댓글 삭제 중 오류가 발생했습니다.');
+          }
+        });
+      }
+    });
+  
+    // Comment form submission
+    $('#comment-form').on('submit', function(e) {
+      e.preventDefault();
+      const comment = $('input[name="comment"]').val();
+      const postId = "<%= data._id %>";
+      if (comment.trim() === "") {
+        alert("댓글을 입력하세요.");
+        return;
+      }
+      $.ajax({
+        url: '/post-info-comment',
+        type: 'POST',
+        data: { comment, postId },
+        success: function(result) {
+          // 댓글 등록 성공 시 처리
+          window.location.reload(); // 페이지를 새로고침하여 댓글을 표시
+        },
+        error: function(err) {
+          if (err.status === 401) {
+            alert('로그인이 필요합니다.');
+            window.location.href = '/login';
+          } else {
+            alert('댓글 등록 중 오류가 발생했습니다.');
+          }
+        }
+      });
+    });
+  </script>  
 </body>
 </html>

@@ -52,7 +52,7 @@ const renderCalendar = () => {
                 popupDate.innerText = ` ${months[currMonth]} ${selectedDate.getDate()}일`;
                 popup.classList.add('show'); // 팝업 기능
                 fetchDataForDate(selectedDate);
-                fetchWeight();
+                fetchWeight(); // 체중 데이터를 불러와서 todayWeight 요소에 표시
                 document.querySelectorAll('.days li').forEach(d => d.classList.remove('selected'));
                 target.classList.add('selected');
             }
@@ -172,8 +172,8 @@ const fetchWeight = async () => {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        if (data.success && data.weight) {
-            todayWeight.innerText = data.weight;
+        if (data.length > 0) {
+            todayWeight.innerText = data[0].weight;
         } else {
             todayWeight.innerText = '';
         }
@@ -199,7 +199,6 @@ prevNextIcon.forEach(icon => {
         }
         monthPicker.value = `${currYear}-${String(currMonth + 1).padStart(2, '0')}`;
         renderCalendar();
-        fetchWeight(); // 새롭게 달력을 렌더링할 때 체중 데이터도 가져오기
     });
 });
 
@@ -212,7 +211,6 @@ if (datePicker) {
         selectedDate = parseInt(day);
         date = new Date(currYear, currMonth, selectedDate);
         renderCalendar();
-        fetchWeight(); // 날짜 선택 시 체중 데이터도 가져오기
     });
 }
 
@@ -222,7 +220,6 @@ monthPicker.addEventListener('change', (event) => {
     currYear = parseInt(year);
     currMonth = parseInt(month) - 1;
     renderCalendar();
-    fetchWeight(); // 월 선택 시 체중 데이터도 가져오기
 });
 
 monthPicker.value = `${currYear}-${String(currMonth + 1).padStart(2, '0')}`;
@@ -453,6 +450,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.log('Sending weight data:', weightData);
 
                 try {
+
                     const response = await fetch('/save-weight', {
                         method: 'POST',
                         headers: {
@@ -468,13 +466,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     const data = await response.json();
                     console.log('Weight saved successfully:', data);
 
-                    // 저장 후 입력 필드에 체중 데이터 표시
-                    weightInput.value = "";
-
-                    const pItem = document.createElement("p");
-                    pItem.innerHTML = `<p class="p-weight" >${weight}</p>`;
-                    todayWeight.innerHTML = "";
-                    todayWeight.appendChild(pItem);
+                    // 저장 후 todayWeight 요소에 체중 데이터 표시
+                    todayWeight.innerHTML = `<p class="p-weight">${weight}</p>`;
+                    weightInput.value = ""; // 입력 필드 초기화
 
                 } catch (error) {
                     console.error('Error saving weight:', error);

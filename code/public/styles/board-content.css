@@ -258,35 +258,56 @@ tbody tr:nth-child(even) td {
     border-bottom: none;
 }
 
-.comment-item {
-    padding: 15px 30px; 
-    width: 100%;
-    box-sizing: border-box;
-    border-bottom: 0.3px solid rgb(0,53,89);
-}
-
-.comment-author {
-    text-align: left;
-    font-size: 14px;
-    margin: 0;
-}
-
-.comment-content {
-    text-align: left;
-    margin-top: 5px;
-    font-size: 14px;
-}
-
-.comment-date {
-    text-align: left;
-    color: rgba(0,53,89,0.5);
-    font-size: 12px;
-    margin: 0;
-}
-
 @media (max-width:738px){
     .sidebar{
         width:30%;
     }
 }
+
+.comment-item {
+    padding: 15px 30px; 
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: 0.3px solid rgb(0,53,89);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comment-details {
+    flex-grow: 1;
+}
+
+.comment-author,
+.comment-content,
+.comment-date {
+    text-align: left;
+    margin: 0;
+    font-size: 14px;
+}
+
+.comment-date {
+    color: rgba(0,53,89,0.5);
+    font-size: 12px;
+}
+
+.delete-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0;
+}
+
+#delete-comment-text {
+    font-size: 14px;
+    color: #e74c3c;
+    cursor: pointer;
+    padding: 4px 8px;
+    margin-bottom: 4px;
+    border-radius: 6px;
+}
+
+#delete-comment-text:hover {
+    background-color: rgb(247,247,247);
+}
+
 

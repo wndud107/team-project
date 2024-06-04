@@ -60,14 +60,14 @@ router.get("/diary", async function (req, res) {
     const { date, exercise, reps, sets } = req.body;
     const user = req.session.user;
     try {
-      await db.getDb().collection("User_diary").insertOne({ 
+      const result = await db.getDb().collection("User_diary").insertOne({ 
         author : user.id, 
         date, 
         exercise, 
         reps, 
         sets, 
         checked: false });
-      res.send("Exercise saved successfully");
+      res.json({ message: "Exercise saved successfully", _id: result.insertedId }); // _id 반환
     } catch (error) {
       console.error("Error saving exercise:", error);
       res.status(500).send("Error saving exercise");
@@ -125,6 +125,7 @@ router.get("/diary", async function (req, res) {
     }
   });
   
+  // 사진 업로드 라우트
   router.post("/upload", (req, res) => {
     const form = new formidable.IncomingForm();
     form.uploadDir = path.join(__dirname, "..", "public", "uploads");
@@ -160,6 +161,7 @@ router.get("/diary", async function (req, res) {
     });
   });
   
+  // 식단 가져오기 라우트
   router.get("/meals", async (req, res) => {
     const { date } = req.query;
     try {
@@ -171,27 +173,63 @@ router.get("/diary", async function (req, res) {
     }
   });
   
-  // 인바디 데이터 저장 엔드포인트
-  router.post("/save-inbody", async function (req, res) {
-    const { weight }= req.body;
-    if (!req.session.user) {
-      return res.status(401).send("로그인이 필요합니다.");
-    }
-    
+// 체중 저장하기 라우트 
+router.post("/save-weight", async (req, res) => {
+    const { weight, date } = req.body;
     const user = req.session.user;
-    // const selectedDate = new date.getDate();
-    try {
-      await db.getDb().collection("User_inbody").insertOne({
-        author : user.id,  
-        date : selectedDate,
-        weight: req.body.weight
-      });
-      res.redirect("/diary");
-    } catch (error) {
-      console.error("인바디 데이터 저장 오류:", error);
-      res.status(500).send("인바디 데이터 저장 중 오류가 발생했습니다.");
+
+    if (!weight ) {
+        return res.status(400).json({ message: "체중을 입력해주세요." });
     }
+
+    try {
+      const result = await db.getDb().collection("User_inbody").insertOne({ 
+        author : user.id, 
+        date : date, 
+        weight : weight });
+
+      res.json({ message: "Weight saved successfully", _id: result.insertedId }); // _id 반환
+    } catch (error) {
+      console.error("Error saving weight:", error);
+      res.status(500).send("Error saving weight");
+    }
+    console.log(`Date: ${date}, Weight: ${weight}`);
   });
 
+    // 체중 목록 가져오기 라우트
+    router.get("/weight", async (req, res) => {
+        const { date } = req.query;
+        const user = req.session.user;
+        try {
+        const weight = await db
+            .getDb()
+            .collection("User_inbody")
+            .find({ date, author: user.id })
+            .toArray();
+        res.json(weight);
+        } catch (error) {
+        console.error("Error fetching weight:", error);
+        res.status(500).send("Error fetching weight");
+        }
+    });
 
-  module.exports = router;
+    //체중 목록 삭제 
+    router.post("/delete-weight", async function (req, res) {
+        const {  weight } = req.body;
+        const user = req.session.user;
+        const { date } = req.query;
+
+        try {
+        await db.getDb().collection("User_inbody").deleteOne({
+            author: user.id,
+            date, 
+            weight
+        });
+        res.send("Weight deleted successfully");
+        } catch (error) {
+        console.error("Error deleting weight:", error);
+        res.status(500).send("Error deleting weight");
+        }
+    });
+
+module.exports = router;

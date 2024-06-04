@@ -1175,4 +1175,40 @@ router.post('/photo', upload.single('picture'), function(req, res) {
   }
 });
 
+// 댓글 저장 라우트 수정
+router.post('/post-comment', async (req, res) => {
+  const { comment, postId } = req.body;
+  const user = req.session.user;
+
+  if (!user) {
+    return res.status(401).send('로그인이 필요합니다.');
+  }
+
+  try {
+    await db.getDb().collection('free_comment').insertOne({
+      author: user.id,
+      content: comment,
+      date: new Date(),
+      postId: new ObjectId(postId)
+    });
+    res.status(201).send('댓글이 등록되었습니다.');
+  } catch (error) {
+    console.error('Error posting comment:', error);
+    res.status(500).send('댓글 등록 중 오류가 발생했습니다.');
+  }
+});
+
+// 댓글 불러오기 라우트 추가
+router.get('/get-comments', async (req, res) => {
+  const { postId } = req.query;
+
+  try {
+    const comments = await db.getDb().collection('free_comment').find({ postId: new ObjectId(postId) }).sort({ date: 1 }).toArray();
+    res.status(200).json(comments);
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+    res.status(500).send('댓글 불러오기 중 오류가 발생했습니다.');
+  }
+});
+
 module.exports = router;

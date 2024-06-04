@@ -61,7 +61,7 @@ form input[text] {
     background-position: 10px center;
 }
 
-#btn-login {    /* 로그인 버튼 */
+.btn-login {    /* 로그인 버튼 */
     font-weight: bold;
     width: 300px;
     height: 40px;

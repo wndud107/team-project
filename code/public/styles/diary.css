@@ -282,7 +282,7 @@ input[type="month"]:focus {
   position: absolute;
   /* right: 20px; */
   /* top: 12px; */
-  left: 420px;
+  left: 410px;
   top: -15px;
   font-size: 23px;
   font-weight: 700;
@@ -348,7 +348,7 @@ input[type="month"]:focus {
   height: 135px;
   object-fit: cover;
   border-radius: 5px;
-  /* margin-top: 5px; */
+  margin-top: 5px;
 }
 
 .image-upload-box input[type="file"] {
@@ -412,6 +412,7 @@ input[type="month"]:focus {
   height: 425px;
   border-radius: 5px;
 }
+
 .inbody-input::placeholder { color: #aaaaaa; }
 .inbody-input:focus { outline: none; }
 
@@ -512,7 +513,6 @@ input[type="month"]:focus {
 .p-add-exercise:hover{
   color: #0b99a9;
 }
-
 
 .btn-add {
   display: flex;
@@ -658,6 +658,7 @@ select optgroup{
   width :16px;
   height :16px;
 }
+
 .bi-x-square:hover{
   /* background-color: rgba(55, 196, 170, 0.296); */
   /* color: rgb(255, 76, 76); */
@@ -691,7 +692,6 @@ select optgroup{
   font-weight: 400;
   margin: 0 auto;
 }
-
 
 /* 팝업창 없는 버전 최우측 */
 .D-day {
@@ -756,8 +756,6 @@ select optgroup{
   color: #a6a6a6;
 }
 
-
-
 /* 운동 체크박스 */
 .exercise-checkbox {
   display: none;
@@ -802,4 +800,12 @@ select optgroup{
   position: absolute;
   left: 7px;
   top: 7px;
+}
+
+#today-weight{
+  position: absolute;
+  left: 100px;
+  margin: auto;
+  font-size: 17px;
+  font-weight: 600;
 }

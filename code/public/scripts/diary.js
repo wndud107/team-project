@@ -14,8 +14,6 @@ const daysTag = document.querySelector(".days"),
     todayWeight = document.getElementById("today-weight"),
     addWeightButton = document.querySelector(".btn-save-inbody");
 
-// 달력 구현부
-
 let date = new Date(),
     currYear = date.getFullYear(),
     currMonth = date.getMonth(),
@@ -62,7 +60,6 @@ const renderCalendar = () => {
     });
 }
 
-// 식단 구현부
 const fetchDataForDate = (date) => {
     const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     fetch(`/meals?date=${formattedDate}`)
@@ -78,32 +75,26 @@ const fetchDataForDate = (date) => {
             updatePopupContent(data, 'exercises');
         })
         .catch(error => console.error('Error fetching exercises:', error));
-
-        if (type === 'meals') {
-            const mealContainers = {
-                아침: document.getElementById('uploadBox1'),
-                점심: document.getElementById('uploadBox2'),
-                저녁: document.getElementById('uploadBox3')
-            };
-    
-            for (let key in mealContainers) {
-                mealContainers[key].innerHTML = `<p>+</p><p>${key} 식단</p>`;
-            }
-    
-            data.forEach(meal => {
-                if (mealContainers[meal.mealType]) {
-                    mealContainers[meal.mealType].innerHTML = `<img src="/uploads/${meal.filename}" alt="${meal.mealType} 식단">`;
-                }
-            });
-        } 
-
 }
 
-// 운동 구현부 
-
 const updatePopupContent = (data, type) => {
+    if (type === 'meals') {
+        const mealContainers = {
+            아침: document.getElementById('uploadBox1'),
+            점심: document.getElementById('uploadBox2'),
+            저녁: document.getElementById('uploadBox3')
+        };
 
-    if (type === 'exercises') {
+        for (let key in mealContainers) {
+            mealContainers[key].innerHTML = `<p>+</p><p>${key} 식단</p>`;
+        }
+
+        data.forEach(meal => {
+            if (mealContainers[meal.mealType]) {
+                mealContainers[meal.mealType].innerHTML = `<img src="/uploads/${meal.filename}" alt="${meal.mealType} 식단">`;
+            }
+        });
+    } else if (type === 'exercises') {
         exerciseList.innerHTML = ''; // 초기화
 
         data.forEach((exercise) => {
@@ -172,8 +163,6 @@ const updatePopupContent = (data, type) => {
     }
 }
 
-
-// 체중 구현부
 const fetchWeight = async () => {
     const formattedDate = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
 
@@ -223,7 +212,7 @@ if (datePicker) {
         selectedDate = parseInt(day);
         date = new Date(currYear, currMonth, selectedDate);
         renderCalendar();
-        
+        fetchWeight(); // 날짜 선택 시 체중 데이터도 가져오기
     });
 }
 

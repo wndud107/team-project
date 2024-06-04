@@ -2,7 +2,7 @@ body {
     text-align: center;
     margin: 0;
     padding: 0;
-    background: linear-gradient(to bottom, #0b99a9, #ffffff);
+    background: linear-gradient(to bottom, #0b99a9dc, #ffffff);
 }
 
 header {
@@ -11,6 +11,7 @@ header {
 
 .main-1-text {
     color:white;
+    /* text-shadow: 0px 0px 3px  rgb(179, 179, 179) ; */
 }
 
 #main-1,
@@ -18,6 +19,7 @@ header {
 #main-3,
 #main-4 {
     height: 100vh;
+
 }
 
 #main-1 {
@@ -41,15 +43,49 @@ h1 {
 
 span {
     color: #00365A;
+
 }
 
-#화살표 {
-    padding-top: 250px;
+#arrow {
+    padding-top: 230px;
+    animation: before-bounce 0.5s infinite alternate; /* 애니메이션 적용 */
+
 }
+
+@keyframes before-bounce {
+  0% {
+      transform: translateY(0);
+  }
+  100% {
+      transform: translateY(-8px);
+  }
+}
+
+
 
 #사용법알아보기 {
     padding-bottom: 100px;
 }
+
+.slogan{
+    display: flex;
+    justify-content:center;
+    color:white;
+    font-size: 18px;
+    font-weight: 400;
+    animation: slogan;
+}
+/* 
+
+@keyframes slogan {
+  0%{
+    color: transparent;
+  }100%{
+    color: #ffffff;
+  }
+} */
+
+
 
 #main-2 {
     display: flex;
@@ -132,93 +168,216 @@ span {
     height: 600px;
 }
 
-@media (max-width: 738px) {
-    h1 {
-        font-size: 50px;
-        padding-top: 100px;
-    }
+.bundle-split-logo{
+    display: flex;
+    justify-content: center;
+    width: 500px;
+    position: relative;
+    margin: 0 auto;
 
-    #mean {
-        font-size: 18px;
-    }
-
-    #mean-kr {
-        margin-top:10px;
-        font-size: 15px;
-    }
-
-    #화살표 {
-        padding-top: 200px;
-    }
-
-    #사용법알아보기 {
-        padding-bottom: 50px;
-    }
-
-    #main-2 {
-        flex-direction: column;
-    }
-
-    #main-2-text {
-        text-align: center;
-        margin-left: 0;
-        margin-top: 20px;
-    }
-
-    .main-2-text {
-        font-size: 24px;
-    }
-
-    .main-2-text-small {
-        font-size: 14px;
-    }
-
-    #main-2-img {
-        width: 100%;
-        max-width: 300px;
-    }
-
-    #main-3 {
-        grid-template-columns: 1fr;
-        grid-row-gap: 20px;
-    }
-
-    .main-3-text {
-        text-align: center;
-        font-size: 24px;
-    }
-
-    .main-3-text-small {
-        font-size: 14px;
-    }
-
-    .main-3-img {
-        width: 100%;
-        max-width: 300px;
-    }
-
-    #main-4 {
-        flex-direction: column;
-    }
-
-    #main-4-first-text {
-        margin-top: 100px;
-    }
-
-    .main-4-text {
-        text-align: center;
-        font-size: 24px;
-    }
-
-    .main-4-text-small {
-        font-size: 14px;
-    }
-
-    #main-4-img {
-        margin-top: 50px;
-        width: 100%;
-        max-width: 300px;
-        height: auto;
-        margin-left:20%;
-    }
 }
+
+.split-logo ,.plus, .test{
+    color: #ffffff;
+    font-size: 30px;
+}
+
+.Heal{
+    position: relative;
+    left: -50px;
+    /* animation-name: slogan; */
+}
+
+.lan{
+    position: absolute;
+    left: 223px;
+}
+
+.Cal{
+    position: absolute;
+    left: 265px;
+}
+
+.er{
+    position: absolute;
+    left: 310px;
+}
+
+.bundle-split-logo {
+    display: flex;
+    justify-content: center;
+    width: 500px;
+    position: relative;
+    margin: 0 auto;
+  }
+  
+  .split-logo {
+    color: #ffffff;
+    font-size: 30px;
+  }
+  
+  
+  
+  .Heal {
+    position: relative;
+    left: -25px;
+    animation: moveHeal 3s ;
+    animation-fill-mode: forwards ;
+    animation-delay: 3s;
+  }
+    
+  @keyframes moveHeal {
+    0% {
+      left: -25px;
+    } 100% {
+      left: -195px;
+    }
+  }
+  
+  .plus{
+    position: relative;
+    color: transparent;
+  }
+
+  .plus1{
+    left: -60px;
+    animation: plus1 3s;
+    animation-delay: 3s;
+    animation-fill-mode: forwards ;
+  }
+
+  @keyframes plus1{
+    0%{
+      color: transparent;
+      left: -60px;
+    }
+    100%{
+      color: #ffffff;
+      left: -155px;
+    }
+  }
+
+  .plus2{
+    left: 0;
+    animation: plus2 3s;
+    animation-delay: 3s;
+    animation-fill-mode: forwards ;
+  }
+
+  @keyframes plus2{
+    0%{
+      color: transparent;
+      left: 0;
+    }
+    100%{
+      color: #ffffff;
+      left: -80px;
+    }
+  }
+
+  .plus3{
+    left: 20px;
+    animation: plus3 3s;
+    animation-delay: 3s;
+    animation-fill-mode: forwards ;
+  }
+
+  @keyframes plus3{
+    0%{
+      color: transparent;
+      left: 20px;
+    }
+    100%{
+      color: #ffffff;
+      left: 60px;
+    }
+  }
+
+  .lan {
+    position: absolute;
+    left: 223px;
+    animation: moveLan 3s ;
+    animation-fill-mode: forwards ;
+    animation-delay: 3s;
+
+  }
+
+  @keyframes moveLan {
+    0% {
+      left: 223px;
+    } 100% {
+      left: 145px;
+    }
+  }
+  
+  .Cal {
+    position: absolute;
+    left: 265px;
+    animation: moveCal 3s ;
+    animation-fill-mode: forwards ;
+    animation-delay: 3s;
+
+  }
+    
+  @keyframes moveCal {
+    0% {
+      left: 265px;
+    } 100% {
+      left: 215px;
+    }
+  }
+
+  .er {
+    position: absolute;
+    left: 310px;
+    animation: moveEr 3s ;
+    animation-fill-mode: forwards ;
+    animation-delay: 3s;
+
+  }    
+ 
+  @keyframes moveEr {
+    0% {
+      left: 310px;
+    } 100% {
+      left: 472px;
+    }
+  }
+
+ 
+  .th, .P, .endar, .Record{
+    font-size: 30px;
+    animation-delay: 7s;
+    animation: hidden 10s;
+  }
+  
+  @keyframes hidden{
+    0%{
+        color: transparent;
+    }50%{
+      color: transparent;
+    }
+    100%{
+        color: #00365A;
+    }
+  }
+
+
+  .th{
+    position: absolute;
+    left: 63px;
+  }
+  .P{
+    position: absolute;
+    left: 125px;
+  }
+  .endar{  
+    position: absolute;
+    left: 260px;
+  }
+  .Record{
+    position: absolute;
+    left: 375px;
+  }
+
+ 

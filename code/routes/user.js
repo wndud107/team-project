@@ -526,7 +526,11 @@ router.get("/free-content/:id", async function (req, res) {
         { _id: new ObjectId(id) },
         { $inc: { view: 1 } }
       );
-      res.render("free-content", { data: post, user: req.session.user });
+
+      // Fetch comments
+      const comments = await db.getDb().collection('free_comment').find({ postId: new ObjectId(id) }).sort({ date: 1 }).toArray();
+
+      res.render("free-content", { data: post, user: req.session.user, comments });
     } else {
       console.log("No post found with id:", id);
       res.status(404).send("게시물을 찾을 수 없습니다.");
@@ -536,7 +540,6 @@ router.get("/free-content/:id", async function (req, res) {
     res.status(500).send("Internal Server Error");
   }
 });
-
 
 router.delete("/delete-free-post/:id", async function (req, res) {
   const id = req.params.id;
@@ -652,7 +655,11 @@ router.get("/end-content/:id", async function (req, res) {
         { _id: new ObjectId(id) },
         { $inc: { view: 1 } }
       );
-      res.render("end-content", { data: post, user: req.session.user });
+
+      // Fetch comments
+      const comments = await db.getDb().collection('end_comment').find({ postId: new ObjectId(id) }).sort({ date: 1 }).toArray();
+
+      res.render("end-content", { data: post, user: req.session.user, comments });
     } else {
       console.log("No post found with id:", id);
       res.status(404).send("게시물을 찾을 수 없습니다.");
@@ -777,7 +784,11 @@ router.get("/child-content/:id", async function (req, res) {
         { _id: new ObjectId(id) },
         { $inc: { view: 1 } }
       );
-      res.render("child-content", { data: post, user: req.session.user });
+
+      // Fetch comments
+      const comments = await db.getDb().collection('child_comment').find({ postId: new ObjectId(id) }).sort({ date: 1 }).toArray();
+
+      res.render("child-content", { data: post, user: req.session.user, comments });
     } else {
       console.log("No post found with id:", id);
       res.status(404).send("게시물을 찾을 수 없습니다.");
@@ -902,7 +913,11 @@ router.get("/info-content/:id", async function (req, res) {
         { _id: new ObjectId(id) },
         { $inc: { view: 1 } }
       );
-      res.render("info-content", { data: post, user: req.session.user });
+
+      // Fetch comments
+      const comments = await db.getDb().collection('info_comment').find({ postId: new ObjectId(id) }).sort({ date: 1 }).toArray();
+
+      res.render("info-content", { data: post, user: req.session.user, comments });
     } else {
       console.log("No post found with id:", id);
       res.status(404).send("게시물을 찾을 수 없습니다.");
@@ -1027,7 +1042,11 @@ router.get("/ghwm-content/:id", async function (req, res) {
         { _id: new ObjectId(id) },
         { $inc: { view: 1 } }
       );
-      res.render("ghwm-content", { data: post, user: req.session.user });
+
+      // Fetch comments
+      const comments = await db.getDb().collection('ghwm_comment').find({ postId: new ObjectId(id) }).sort({ date: 1 }).toArray();
+
+      res.render("ghwm-content", { data: post, user: req.session.user, comments });
     } else {
       console.log("No post found with id:", id);
       res.status(404).send("게시물을 찾을 수 없습니다.");
@@ -1172,42 +1191,6 @@ router.post('/photo', upload.single('picture'), function(req, res) {
     res.status(200).send('File uploaded');
   } else {
     res.status(400).send('No file uploaded');
-  }
-});
-
-// 댓글 저장 라우트 수정
-router.post('/post-comment', async (req, res) => {
-  const { comment, postId } = req.body;
-  const user = req.session.user;
-
-  if (!user) {
-    return res.status(401).send('로그인이 필요합니다.');
-  }
-
-  try {
-    await db.getDb().collection('free_comment').insertOne({
-      author: user.id,
-      content: comment,
-      date: new Date(),
-      postId: new ObjectId(postId)
-    });
-    res.status(201).send('댓글이 등록되었습니다.');
-  } catch (error) {
-    console.error('Error posting comment:', error);
-    res.status(500).send('댓글 등록 중 오류가 발생했습니다.');
-  }
-});
-
-// 댓글 불러오기 라우트 추가
-router.get('/get-comments', async (req, res) => {
-  const { postId } = req.query;
-
-  try {
-    const comments = await db.getDb().collection('free_comment').find({ postId: new ObjectId(postId) }).sort({ date: 1 }).toArray();
-    res.status(200).json(comments);
-  } catch (error) {
-    console.error('Error fetching comments:', error);
-    res.status(500).send('댓글 불러오기 중 오류가 발생했습니다.');
   }
 });
 

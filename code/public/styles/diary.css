@@ -1,46 +1,49 @@
 body{
   font-family: 'Noto Sans Kr';
-  
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
 }
 
 .container {
   margin: 0 auto;
   display: flex;
-  justify-content: flex-start;
-  background-color: #ffffff;
+  justify-content: center;
   align-items: center;
   height: calc(100vh-55px);  /* 전체화면 - 헤더 영역 크기 */
-  margin-top: 5vh;
+  margin-top: 4vh;
+  background-color: #ffffff;
+  gap:10px;
 }
 
 
 .year-month{
   font-family: 'Noto Sans Kr';
 }
+
 .current-date {
   position: relative;
-  top: -10px;
+  top: -1vh;
 }
 
 /* 월 넘기기 버튼 < >  */
 .icons{
-  position: relative;
-  left: 310px;
-  top: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin-bottom : -4vh ;
+  margin-left: 10vw;
   color: #0b99a9;
+  position: absolute;
+  left: 18vw;
 }
 
 .btn-month {
-  width: 30px;
-  height: 30px;
+  width: 3vw;
+  height: 3vh;
   margin: 0 3px;
-  cursor: pointer;
+  cursor: pointer; 
   border-radius: 50%;
-  border-color: #0b99a9;
+  border-color: 1px #0b99a9;
   background-color: #ffffff;
+
 }
 
 .btn-month:hover{
@@ -51,11 +54,11 @@ body{
 
 
 .bi-caret-left {
-  position: relative;
+  /* position: relative; */
   right: 1px;
 }
 .bi-caret-right {
-  position: relative;
+  /* position: relative; */
   left: 1px;
 }
 
@@ -63,21 +66,22 @@ body{
 .calendar .year-month {
     display: flex;
     align-items: center;
-    /* justify-content: space-between; */
-    margin-bottom: 30px;
+    margin-bottom: 3vh;
+
   }
 
 .calendar .year-month .current-date {
-    font-size: 24px;
     font-weight: 600;
     text-align: left;
   }
+
+
 .weeks-days{
   outline: auto;
   outline-color: #0b99a9;
-  padding: 5px;
+  padding-top: 0.7vh;
   position: relative;
-  top: -30px;
+  top: -3vh;
 }
 
 
@@ -96,12 +100,14 @@ body{
     width: calc(100% / 7);
     position: relative;
   }
+  
 .weeks-days .days li {
     z-index: 1;
-    padding-top: 15px ;
-    padding-bottom: 15px;
-    margin-top: 30px;
-    margin-bottom: 30px;
+    /* padding-top: 20px ;
+    padding-bottom: 20px; */
+    /* margin: 30px 0; */
+    margin: 4.5vh 0;
+
     cursor: pointer;
   }
    
@@ -119,8 +125,11 @@ body{
 .weeks-days .days li::before {
     position: absolute;
     content: '';
-    height: 40px;
-    width: 40px;
+    /* height: 40px;
+    width: 40px; */
+    height: 5vh;
+    width: 5vh;
+
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -128,7 +137,7 @@ body{
     z-index: -1;
   }
   .days li:hover::before{
-    background-color: #efefef8f; /* 원 색상 */
+    background-color: #efefefbf; /* 원 색상 */
   }
 
 /* 선택된 날짜 스타일 추가 */
@@ -138,13 +147,20 @@ body{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 40px;
-    height: 40px;
+    /* width: 40px;
+    height: 40px; */
+
+    width: 5vh;
+    height: 5vh;
+
+
     background-color: #bedfe4; /* 원 색상 */
     border-radius: 50%;
     z-index: -1;
     display: inline-block;
-    line-height: 40px;
+    /* line-height: 40px; */
+    line-height: 4vh;
+
     text-align: center;
 }
 
@@ -158,21 +174,21 @@ body{
   }
 
 .weeks {
-    /* margin-top: 10px; */
     margin-bottom: 5px;
 }
 .current-year {
-  font-size: 22px; /* 연도 크기 */
+  font-size: 1.3rem;
   font-weight: 700;
   position: relative;
-  top: 5px;
+  top: 0.5vh;
 }
 
 .current-month {
-  font-size: 30px; /* 월 크기 */
+  font-size: 1.5rem;
+   /* 월 크기 */
   font-weight: 800;
   position: relative;
-  top: 5px;
+  top: 0.5vh;
 }
 
 
@@ -208,19 +224,21 @@ input[type="month"]:focus {
 }
 
 #monthPicker{
-  position: relative;
-  top: 15px;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: 2.5vh;
 }
 
 
 .calendar {
     display: inline;
-    /* width: 100%; */
-    width: 480px;
+    width: 27vw;
+    max-width: 35vw;
     background: #fff;
-    padding: 35px;
+    padding: 1vw;
     border-color: #0b99a9;
-    margin-left: 20px;
+    margin-left: 0;
+
 }
 
 
@@ -230,48 +248,35 @@ input[type="month"]:focus {
     padding:0;
     background:#0b99a9;
     height:2px;
-    width: 480px;
+    width: 100%;
     border:0;
-    position: relative;
-    left: -5px;
-}
-
-/* 캘린더 오른쪽 영역 */
-.calendar-right {
-  width: 510px;
-  height: 610px;
-  border: 4px;
-  margin: 0 40px;
-  position: relative;  /*팝업창의 위치상 부모요소*/
-  top: 25px;
 }
 
 
 .kcal {
-  width: 245px;
+  width: 24.5vw;
   height: 220px;
   background-color: rgb(255, 255, 255);  
   border-radius: 5px;
   outline: auto;
   outline-color: #e1e1e1;
-  margin-right: 25px;
+  margin-right: 2.5vw;
+
 }
 
 
 
 /* 전체 팝업창  */
 .popup {
-  /* display: none; */
-  position: absolute;
-  top: -40px;
-  left: -23px;
   border: 3px;
   background-color: rgb(190, 223, 228);
   border-radius: 5px;
-  width: 520px;
-  height: 650px;
-  z-index: 1000;
-  /* overflow: scroll; */
+  width: 29vw;
+  height: 70vh;
+  padding: 0 1vw;
+  padding-top: 1vh;
+  padding-bottom: 2vh;
+  position: relative;
 }
 
 .popup.show {
@@ -280,27 +285,31 @@ input[type="month"]:focus {
 
 #popup-date{
   position: absolute;
-  /* right: 20px; */
-  /* top: 12px; */
-  left: 410px;
-  top: -15px;
-  font-size: 23px;
+
+
+  left: 22vw;
+  top: -2.5vh;
+
+  font-size: 1.5rem;
   font-weight: 700;
-  /* color: hsl(0, 0%, 100%); */
   letter-spacing: 1px;
   color: hsl(0, 0%, 0%);
   text-shadow: -1px 0 rgb(255, 255, 255), 0 1px rgb(255, 255, 255), 1px 0 rgb(255, 255, 255), 0 -1px rgb(255, 255, 255);
 }
 
+/* 팝업창 아랫단 */
+.popup-content-2 {
+  position: relative;
+  top: 20vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 /* 팝업창 식단 섹션 */
 /* 식단 전체 */
 .popup-diet {
-  position: absolute;
-  left: 20px;
-  /* top: -40px; */
-  margin-top: 10px;
-  top: -85px;
+  text-align: left;
 }
 
 .diet-image input[type="file"] {
@@ -316,15 +325,17 @@ input[type="month"]:focus {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  /* gap: 10px; */
+  gap: 1vh;
+
 }
 .image-upload-box:first-child{
   margin-top: 2px;
 }
 
 .image-upload-box {
-  width: 220px;
-  height: 135px;
+  width: 12vw;
+  height: 14.8vh;
   border: 2px #ffffff;
   display: flex;
   align-items: center;
@@ -333,19 +344,19 @@ input[type="month"]:focus {
   position: relative;
   border-radius: 5px;
   background-color: #ffffff;
-  margin-top: 10px;
+  margin-top: 8px;
+
 }
 
 /* 스크롤바 생성 시 */
 .image-upload-box:last-child{
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
+/* 식단 이미지 */
 .image-upload-box img {
-  /* width: 100%;
-  height: 100%; */
-  width: 220px;
-  height: 135px;
+  width: 12vw;
+  height: 14.8vh;
   object-fit: cover;
   border-radius: 5px;
   margin-top: 5px;
@@ -362,40 +373,37 @@ input[type="month"]:focus {
 
 /* 오늘의 식단 */
 .p-popup-diet {
-  position: absolute;
-  left: 5px;
-  top: -45px;
   font-weight: 600;
-  font-size: 18px;
+  font-size: 1.1rem;
+  margin-left: 10px;
+  margin: 0;
 }
 
 
 .diet-image{
-  width: 200px;
-  height: 75px;
+
   background-color: #ffffff;
-  gap: 10px;
+  gap: 1vh;
+
 }
 
 /* 팝업창 인바디 섹션 */
 /* 인바디 파트 전체 */
 .popup-inbody {
-  position: absolute;
-  left: 250px;
-  top: -103px;
-  width: 250px;
-  height: 430px;
+  width: 20vw;
+  height: 30vh;
   text-align: left;
 }
+
 /* 오늘의 인바디 */
 .p-popup-inbody{
   position: absolute;
-  top: -17px;
-  left: -5px;
+  top: -0.05vh;
+  margin: 0 10px;
   font-weight: 600;
-  font-size: 18px;
-  margin-left: 10px;
+  font-size: 1.1rem;
 }
+
 .popup-inbody-check{
   width: 10px;
   height: 10px;
@@ -406,10 +414,12 @@ input[type="month"]:focus {
 /* 인바디 input 파트 전체 */
 .popup-inbody-input{
   position: absolute;
-  top: 30px; 
+  top: 28px; 
   background-color: hwb(0 100% 0%);
-  width: 250px;
-  height: 425px;
+  width: 16vw;
+  height: 46.3vh;
+  padding: 1px;
+  margin-left: 11px;
   border-radius: 5px;
 }
 
@@ -419,9 +429,10 @@ input[type="month"]:focus {
 /* 인바디 input 개별 요소들 */
 .popup-input {
   display: flex;
-  gap: 10px;
-  margin-top: 10px;
-  margin-left: 20px;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+
 }
 .popup-input:first-child{
   margin-bottom: 40px;
@@ -429,19 +440,16 @@ input[type="month"]:focus {
 
 /* 인바디 개별 input요소 p태그 */
 .popup-weight p{
-  font-size: 15px;
+  font-size: 0.9rem;
   font-weight: 500;
   margin: 6px 2px;
 }
 
-.input-weight{
-  margin-left: 0px;
-}
 
 /* 인바디 input창 */
 .popup-inbody-input input {
-  width: 120px;
-  height: 30px;
+  width: 8vw;
+  height: 3.5vh;
   font-size: 15px;
   border: 0;
   border-radius: 10px;
@@ -452,21 +460,17 @@ input[type="month"]:focus {
 
 /* 오늘의 운동 */
 .p-popup-exercise{
-  position: absolute; 
-  left: 23px;
-  top: -2px; 
+  position: absolute;
+  padding: auto;
+  top: -1vh; 
+  left: 0.5vw;
   font-weight: 600;
-  font-size: 18px;
+  font-size: 1.1rem;
   color: black;
 }
 
 .popup-content-1{
   position: relative;
-}
-
-.popup-content-2 {
-  position: absolute;
-  top: 280px;
 }
 
 /* 운동 추가하기 버튼 */
@@ -475,7 +479,6 @@ input[type="month"]:focus {
   top: 2px;
   width: 25px;
   height: 25px;
-  /* color: #7d7d7d; */
 }
 
 .btn-add:hover{
@@ -486,11 +489,9 @@ input[type="month"]:focus {
 /* 팝업창 운동 섹션 */
 .popup-exercise {
   position: absolute;
-  /* top: 72px; */
-  top: 45px;
-  left: 20px;
-  width: 480px;
-  height: 130px;
+  top: 5vh;
+  width: 29vw;
+  height: 14.8vh;
   background-color: #ffffff;
   border-radius: 5px;
   overflow: auto;
@@ -521,8 +522,8 @@ input[type="month"]:focus {
   margin: 10px;
 }
 
-.popup-exercise  li {
-  margin-left: 5px;
+.popup-exercise li {
+  /* margin-left: 2vw ; */
   text-align: left;
 }
 
@@ -530,6 +531,7 @@ input[type="month"]:focus {
   display: none;
 }
 
+/* 운동 추가 팝업창 */
 .popup-choice-exercise.show {
   display: block;
   position: absolute;
@@ -592,14 +594,10 @@ input[type="month"]:focus {
   position: absolute;
   top: 55px;
   left: 17px;
-  /* margin: 30px; */
 }
 
 .count-exercise p {
   margin: 0 5px;
-  /* position: absolute; */
-  /* top: 20px;
-  left: 20px; */
 }
 
 .input-count-exercise{
@@ -660,9 +658,7 @@ select optgroup{
 }
 
 .bi-x-square:hover{
-  /* background-color: rgba(55, 196, 170, 0.296); */
-  /* color: rgb(255, 76, 76); */
-  background-color: rgba(255, 87, 87, 0.441);
+  background-color: rgba(143, 143, 143, 0.441);
 }
 
 .btn-save-inbody:hover{
@@ -682,47 +678,52 @@ select optgroup{
   background-color: #fff;
   border-radius: 5px;
   border: #9a9a9a 1.5px solid;
-  width: 220px;
-  height: 40px;
-  position: absolute;
-  top: 370px;
-  left: 15px;
-  float: right;
-  font-size: 14px;
+  width: 14vw;
+  height: 4vh;
+  font-size: 13px;
   font-weight: 400;
-  margin: 0 auto;
+  margin: 8px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* 팝업창 없는 버전 최우측 */
 .D-day {
-  position: absolute;
-  top: 0;
-  left: 550px;
-  width: 430px;
-  height: 150px;
+  width: 25vw;
+  height: 18vh;
+  margin-left: 20px;
+  margin-bottom: 100px;
   background-color: rgb(255, 255, 255);  
   border-radius: 5px;
   outline: auto;
   outline-color: #e1e1e1;
+}
+
+.d-day{
+  font-size: 4rem;
+  font-weight: 600;
 }
 
 .graph {
-  position: absolute;
-  left: 550px;
-  top: 240px;
-  width: 430px;
-  height: 365px;
+  width: 25vw;
+  height: 30vh;
+  margin-left:20px;
   background-color: rgb(255, 255, 255);  
   border-radius: 5px;
   outline: auto;
   outline-color: #e1e1e1;
+}
+
+.d-day-graph{
+  left: 70vw;
+  top: 25vh;
 }
 
 
 .nunbody-image-box{
   background-color: rgba(190, 223, 228, 0.5);
-  width: 220px;
-  height: 290px;
+  width: 14vw;
+  height: 32vh;
   margin: 15px auto;
   border-radius: 5px;
   cursor: pointer;
@@ -747,8 +748,8 @@ select optgroup{
   margin-bottom: 10px;
 } 
 .nunbody-image-box img {
-  max-width: 100%;
-  max-height: 100%;
+  width: 14vw;
+  height: 32vh;
 }
 
 .nunbody-image-box p{
@@ -768,20 +769,21 @@ select optgroup{
   position: relative;
   padding-left: 30px;
   margin-right: 10px;
-  font-size: 18px;
+  margin-top: 10px;
+  font-size: 1rem;
 }
 
 .exercise-label::before {
   content: '';
   display: inline-block;
-  width: 20px;
-  height: 20px;
+  width: 1.3vw;
+  height: 1.3vw;
   border: 2px solid #0b99a9;
   border-radius: 50%;
   background-color: #fff;
   position: absolute;
   left: 0;
-  top: 4px;
+  top: 1px;
 }
 
 .exercise-checkbox:checked + .exercise-label::before {
@@ -792,20 +794,23 @@ select optgroup{
 .exercise-checkbox:checked + .exercise-label::after {
   content: '';
   display: block;
-  width: 6px;
-  height: 12px;
+  width: 0.4vw;
+  height: 0.7vw;
   border: solid white;
   border-width: 0 3px 3px 0;
   transform: rotate(45deg);
   position: absolute;
-  left: 7px;
-  top: 7px;
+  left: 0.5vw;
+  top:0.3vw;
 }
 
 #today-weight{
   position: absolute;
-  left: 100px;
-  margin: auto;
-  font-size: 17px;
-  font-weight: 600;
+  margin: 0 auto;
+  font-size: 1rem;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+

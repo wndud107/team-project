@@ -18,7 +18,7 @@
             <span class="current-year"></span>
             <span class="current-month"></span>
           </div>
-          <input type="month" id="monthPicker"/>
+          <input type="month" id="monthPicker" />
           <div class="icons">
             <span id="prev" class="btn-month btn-left">
               <svg xmlns="http://www.w3.org/2000/svg"  width="25" height="25" fill="currentColor"  class="bi bi-caret-left" viewBox="0 0 16 16" >
@@ -46,7 +46,7 @@
           <ul class="days"></ul>
         </div>
       </div>
-      <div class="calendar-right">
+      <!-- <div class="calendar-right"> -->
         <div id="popup" class="popup">
           <div class="popup-content-1">
             <p class="p-popup-exercise">오늘의 운동</p>
@@ -132,13 +132,13 @@
                   </div>
                   <input type="file" id="fileInput" style="display:none;" accept="image/*" onchange="previewInbodyImage(event)" >
                   <div class="popup-input popup-weight">
-                    <p class="weight">체중</p>
-                    <input type="text" id="weight" name="weight" class="inbody-input input-weight" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');" />
-                    <span id="today-weight"></span>
-                    <!-- <ul id="inbody-list"> </ul> -->
-                    <p>kg</p>
+                      <p class="weight">체중</p>
+                      <input type="text" id="weight" name="weight" class="inbody-input input-weight" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');" />
+                      <div id="today-weight"></div>
+                      <p>kg</p>
                   </div>
                   <button class="btn-save-inbody">저장</button>
+
                 </form>
               </div>
             </div>
@@ -146,15 +146,15 @@
         </div>
         <div class="d-day-graph">
           <div class="D-day">
-            <p>D-<%= dDay%></p>
-            <p></p>
-            <p></p>
+            <p class="p-weight-goal">목표 체중 : </p>
+            <p class="d-day">D-<%= dDay%></p>
+            <p class="p-remaining-weight">목표 체중까지 kg 남았습니다. </p>
           </div>
           <div class="graph">
             <p>graph</p>
           </div>
         </div>
-      </div>
+      <!-- </div> -->
     </div>
   </body>
 </html>

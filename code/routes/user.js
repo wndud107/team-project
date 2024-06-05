@@ -511,35 +511,40 @@ router.get("/ghwm-board", async (req, res) => {
 router.get("/free-content/:id", async function (req, res) {
   const id = req.params.id;
 
-  // Check if the id is a valid ObjectId
+  // ID가 유효한 ObjectId인지 확인합니다
   if (!ObjectId.isValid(id)) {
-    return res.status(400).send("Invalid ID format");
+    return res.status(400).send("유효하지 않은 ID 형식입니다");
   }
 
   try {
-    // Find the post by ID
+    // ID로 게시물을 찾습니다
     const post = await db.getDb().collection("free_board").findOne({ _id: new ObjectId(id) });
 
-    if (post) {
-      // Increment view count
-      await db.getDb().collection("free_board").updateOne(
-        { _id: new ObjectId(id) },
-        { $inc: { view: 1 } }
-      );
-
-      // Fetch comments
-      const comments = await db.getDb().collection('free_comment').find({ postId: new ObjectId(id) }).sort({ date: 1 }).toArray();
-
-      res.render("free-content", { data: post, user: req.session.user, comments });
-    } else {
-      console.log("No post found with id:", id);
-      res.status(404).send("게시물을 찾을 수 없습니다.");
+    if (!post) {
+      console.log("해당 ID로 게시물을 찾을 수 없습니다:", id);
+      return res.status(404).send("게시물을 찾을 수 없습니다.");
     }
+
+    // 작성자를 ID로 찾습니다
+    const author = await db.getDb().collection("User_info").findOne({ id: post.author });
+
+    // 조회수를 증가시킵니다
+    await db.getDb().collection("free_board").updateOne(
+      { _id: new ObjectId(id) },
+      { $inc: { view: 1 } }
+    );
+
+    res.render("free-content", {
+      data: post,
+      user: req.session.user,
+      authorProfilePhoto: author.profilePhoto // 작성자가 없으면 기본 프로필 사진을 사용합니다
+    });
   } catch (error) {
-    console.error("Error fetching content:", error);
-    res.status(500).send("Internal Server Error");
+    console.error("내용을 가져오는 중 오류 발생:", error);
+    res.status(500).send("서버 내부 오류");
   }
 });
+
 
 router.delete("/delete-free-post/:id", async function (req, res) {
   const id = req.params.id;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <%- include('includes/head') %>
   <link rel="stylesheet" href="/styles/board-content.css">
@@ -9,7 +9,6 @@
   <%- include('includes/header') %>
 
   <div class="container">
-
     <%- include('includes/aside') %> 
     <!-- 사이드바 -->
 
@@ -18,10 +17,12 @@
       <h1>자유게시판</h1>
       <div class="main-board">
 
-        <!--upper-->
+        <!--상단-->
         <div class="upper-part"> 
           <div class="upper-profile">
-            <img src="" alt="user-img">
+            <div class="profile-img-box">
+              <img src="<%= authorProfilePhoto %>" class="profile-img" alt="profile-img">
+            </div>
             <p> <%= data.author %></p>
           </div>
           <p class="upper-date">작성일 : <span id="formatted-date"></span></p>
@@ -32,7 +33,7 @@
           <p class="upper-views">조회수 : <%= data.view %></p>
         </div>
 
-        <!--content-->
+        <!--내용-->
         <div class="content">
           <h2 class="title"><%= data.title %></h2>
           <p class="contents"><%= data.content %></p>
@@ -57,52 +58,37 @@
         </div>
       </div>
 
-      <!-- 댓글 목록 -->
+      <!--댓글-->
       <div id="comments-section">
-        <% comments.forEach(comment => { %>
-          <div class="comment-item">
-            <div class="comment-details">
-              <p class="comment-author"><%= comment.author %></p>
-              <p class="comment-content"><%= comment.content %></p>
-              <p class="comment-date"><%= new Date(comment.date).toLocaleString('ko-KR') %></p>
-            </div>
-            <% if (user && user.id === comment.author) { %>
-              <div class="delete-container">
-                <p id="delete-comment-text" data-id="<%= comment._id %>">삭제</p>
-              </div>
-            <% } %>
-          </div>
-        <% }) %>
+        <!-- 댓글이 여기에 출력됩니다 -->
       </div>
-
-    
+      
       <div class="go-to-board">
         <a href="/free-board">글목록</a>
       </div>
     </main>
-    
   </div>
 
   <script>
-    // Date formatting function
+    // 날짜 형식 지정 함수
     function formatDate(date) {
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
       return new Date(date).toLocaleDateString('ko-KR', options);
     }
-  
-    // Get the raw date from server-rendered content
+
+    // 서버에서 렌더링된 콘텐츠에서 원시 날짜를 가져옵니다
     const rawDate = "<%= data.date %>";
     
-    // Format the date
+    // 날짜를 형식화합니다
     const formattedDate = formatDate(rawDate);
-  
-    // Insert the formatted date into the document
+
+    // 형식화된 날짜를 문서에 삽입합니다
     document.getElementById('formatted-date').textContent = formattedDate;
-  
-    // Delete post click event
+
+    // 삭제 텍스트 클릭 이벤트
     $('#delete-text').on('click', function() {
       const postId = $(this).data('id');
-  
+
       if (confirm('정말로 삭제하시겠습니까?')) {
         $.ajax({
           url: '/delete-free-post/' + postId,
@@ -117,33 +103,14 @@
         });
       }
     });
-  
-    // Edit post click event
+
+    // 수정 텍스트 클릭 이벤트
     $('#edit-text').on('click', function() {
       const postId = $(this).data('id');
       window.location.href = '/edit-free-board/' + postId;
     });
-  
-    // Use event delegation for deleting comments
-    $('#comments-section').on('click', '#delete-comment-text', function() {
-      const commentId = $(this).data('id');
-  
-      if (confirm('정말로 삭제하시겠습니까?')) {
-        $.ajax({
-          url: '/delete-free-comment/' + commentId,
-          type: 'DELETE',
-          success: function(result) {
-            alert('댓글이 삭제되었습니다.');
-            window.location.reload();
-          },
-          error: function(err) {
-            alert('댓글 삭제 중 오류가 발생했습니다.');
-          }
-        });
-      }
-    });
-  
-    // Comment form submission
+
+    // 댓글 양식 제출
     $('#comment-form').on('submit', function(e) {
       e.preventDefault();
       const comment = $('input[name="comment"]').val();
@@ -153,12 +120,13 @@
         return;
       }
       $.ajax({
-        url: '/post-free-comment',
+        url: '/post-comment',
         type: 'POST',
         data: { comment, postId },
         success: function(result) {
           // 댓글 등록 성공 시 처리
-          window.location.reload(); // 페이지를 새로고침하여 댓글을 표시
+          loadComments(); // 댓글을 다시 불러와서 새 댓글이 아래에 표시되도록 함
+          $('input[name="comment"]').val('');
         },
         error: function(err) {
           if (err.status === 401) {
@@ -170,6 +138,36 @@
         }
       });
     });
-  </script>   
+
+    // 댓글 불러오기
+    function loadComments() {
+      const postId = "<%= data._id %>";
+      $.ajax({
+        url: '/get-comments',
+        type: 'GET',
+        data: { postId },
+        success: function(comments) {
+          const commentsSection = $('#comments-section');
+          commentsSection.empty();
+          comments.forEach(comment => {
+            const commentElement = $('<div>').addClass('comment-item');
+            const commentAuthor = $('<p>').addClass('comment-author').text(comment.author);
+            const commentContent = $('<p>').addClass('comment-content').text(comment.content);
+            const commentDate = $('<p>').addClass('comment-date').text(new Date(comment.date).toLocaleString('ko-KR'));
+            commentElement.append(commentAuthor, commentContent, commentDate);
+            commentsSection.append(commentElement);
+          });
+        },
+        error: function(err) {
+          console.error('댓글을 불러오는 중 오류 발생:', err);
+        }
+      });
+    }
+
+    // 페이지 로드 시 댓글 불러오기
+    $(document).ready(function() {
+      loadComments();
+    });
+  </script>
 </body>
 </html>

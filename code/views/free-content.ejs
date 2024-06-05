@@ -24,11 +24,7 @@
           </div>
           <p class="upper-date">작성일 : <span id="formatted-date"></span></p>
         </div>
-        
-        <!-- 조회수 -->
-        <div class="upper-part">
-          <p class="upper-views">조회수 : <%= data.view %></p>
-        </div>
+
         <!--content-->
         <div class="content">
           <h2 class="title"><%= data.title %></h2>
@@ -37,13 +33,23 @@
             <img src="<%= data.path %>" width="400"/><p></p>
           <% } %>
         </div>
-        <!-- 로그인한 사용자가 작성자와 일치할 경우 수정/삭제 텍스트 표시 -->
-        <% if (user && user.id === data.author) { %>
-          <div class="edit-delete-container">
-            <p id="edit-text" data-id="<%= data._id %>">수정</p>
-            <p id="delete-text" data-id="<%= data._id %>">삭제</p>
+
+                
+        <div class="under-part">
+          <!-- 조회수 -->
+          <div class="upper-part">
+            <p class="upper-views">조회수 : <%= data.view %></p>
           </div>
-        <% } %>
+          <!-- 로그인한 사용자가 작성자와 일치할 경우 수정/삭제 텍스트 표시 -->
+          <% if (user && user.id === data.author) { %>
+            <div class="edit-delete-container">
+              <p id="edit-text" data-id="<%= data._id %>">수정</p>
+              <p id="delete-text" data-id="<%= data._id %>">삭제</p>
+            </div>
+          <% } %>
+        </div>
+
+
         <div class="comment-part">
           <form id="comment-form">
             <input class="comment" name="comment" type="text" placeholder="댓글을 입력하세요">

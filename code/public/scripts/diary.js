@@ -94,7 +94,8 @@ const updatePopupContent = (data, type) => {
                 mealContainers[meal.mealType].innerHTML = `<img src="/uploads/${meal.filename}" alt="${meal.mealType} 식단">`;
             }
         });
-    } else if (type === 'exercises') {
+    } 
+    if (type === 'exercises') {
         exerciseList.innerHTML = ''; // 초기화
 
         data.forEach((exercise) => {
@@ -234,6 +235,19 @@ function previewImage(event, boxId) {
         uploadBox.innerHTML = `<img src="${dataURL}" alt="Uploaded Image">`;
     };
     reader.readAsDataURL(input.files[0]);
+}
+
+// 눈바디 사진 미리보기 함수
+function previewInbodyImage(event) {
+    const placeholder = document.getElementById('photo-placeholder');
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            placeholder.innerHTML = '<img src="' + e.target.result + '" alt="Inbody Image">';
+        };
+        reader.readAsDataURL(file);
+    }
 }
 
 // DOMContentLoaded 이벤트 핸들러
@@ -389,49 +403,10 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('uploadInput2').addEventListener('change', (event) => uploadImage(event, 'uploadBox2'));
     document.getElementById('uploadInput3').addEventListener('change', (event) => uploadImage(event, 'uploadBox3'));
 
-    // 눈바디 사진 미리보기 함수
-    function previewInbodyImage(event) {
-        const placeholder = document.getElementById('photo-placeholder');
-        const file = event.target.files[0];
-        if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            placeholder.innerHTML = '<img src="' + e.target.result + '" alt="nunbody image">';
-        }
-        reader.readAsDataURL(file);
-        }
-    }
-
-    // 이미지 업로드 함수
-    function uploadImage(event, boxId) {
-        const input = event.target;
-        const file = input.files[0];
-        const formData = new FormData();
-        formData.append('photo', file);
-
-        const mealType = boxId === 'uploadBox1' ? '아침' : boxId === 'uploadBox2' ? '점심' : '저녁';
-        formData.append('mealType', mealType);
-
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function() {
-                const uploadBox = document.getElementById(boxId);
-                uploadBox.innerHTML = `<img src="${reader.result}" alt="Uploaded Image">`;
-            };
-            reader.readAsDataURL(file);
-
-            fetch('/upload', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())
-            .then(data => {
-                console.log('Image uploaded successfully:', data);
-            })
-            .catch(error => {
-                console.error('Error uploading image:', error);
-            });
-        }
+    // 인바디 사진 미리보기 이벤트 리스너
+    const inbodyInput = document.getElementById('fileInput'); // 파일 입력 요소 ID 확인
+    if (inbodyInput) {
+        inbodyInput.addEventListener('change', previewInbodyImage);
     }
 
     // 체중을 저장하는 이벤트 리스너
@@ -450,7 +425,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.log('Sending weight data:', weightData);
 
                 try {
-
                     const response = await fetch('/save-weight', {
                         method: 'POST',
                         headers: {
@@ -479,5 +453,3 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 });
-
-

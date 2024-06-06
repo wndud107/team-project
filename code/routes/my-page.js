@@ -149,6 +149,189 @@ router.post("/my-page", async function (req, res) {
   }
 });
 
+router.post('/change-id', async function(req, res) {
+  const user = req.session.user;
+  const { newId } = req.body;
+
+  if (!user) {
+    return res.json({ success: false, message: '로그인이 필요합니다.' });
+  }
+
+  try {
+    const userData = await db.getDb().collection('User_info').findOne({ id_join: newId });
+
+    if (userData) {
+      return res.json({ success: false, message: '이미 사용 중인 아이디입니다.' });
+    }
+
+    const updateResult = await db.getDb().collection('User_info').updateOne(
+      { id_join: user.id },
+      { $set: { id_join: newId } }
+    );
+
+    if (updateResult.modifiedCount === 1) {
+      req.session.user.id = newId;
+      return res.json({ success: true });
+    } else {
+      return res.json({ success: false, message: '아이디 변경에 실패했습니다.' });
+    }
+  } catch (error) {
+    console.error('Error changing ID:', error);
+    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+router.post('/change-name', async function(req, res) {
+  const user = req.session.user;
+  const { newName } = req.body;
+
+  if (!user) {
+    return res.json({ success: false, message: '로그인이 필요합니다.' });
+  }
+
+  try {
+    const updateResult = await db.getDb().collection('User_info').updateOne(
+      { id_join: user.id },
+      { $set: { name_join: newName } }
+    );
+
+    if (updateResult.modifiedCount === 1) {
+      return res.json({ success: true });
+    } else {
+      return res.json({ success: false, message: '이름 변경에 실패했습니다.' });
+    }
+  } catch (error) {
+    console.error('Error changing name:', error);
+    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+router.post('/change-nickname', async function(req, res) {
+  const user = req.session.user;
+  const { newNickname } = req.body;
+
+  if (!user) {
+    return res.json({ success: false, message: '로그인이 필요합니다.' });
+  }
+
+  try {
+    const updateResult = await db.getDb().collection('User_info').updateOne(
+      { id_join: user.id },
+      { $set: { nickname_join: newNickname } }
+    );
+
+    if (updateResult.modifiedCount === 1) {
+      return res.json({ success: true });
+    } else {
+      return res.json({ success: false, message: '닉네임 변경에 실패했습니다.' });
+    }
+  } catch (error) {
+    console.error('Error changing nickname:', error);
+    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+router.post('/change-birth', async function(req, res) {
+  const user = req.session.user;
+  const { newBirth } = req.body;
+
+  if (!user) {
+    return res.json({ success: false, message: '로그인이 필요합니다.' });
+  }
+
+  try {
+    const updateResult = await db.getDb().collection('User_info').updateOne(
+      { id_join: user.id },
+      { $set: { birth_join: newBirth } }
+    );
+
+    if (updateResult.modifiedCount === 1) {
+      return res.json({ success: true });
+    } else {
+      return res.json({ success: false, message: '생일 변경에 실패했습니다.' });
+    }
+  } catch (error) {
+    console.error('Error changing birth:', error);
+    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+router.post('/change-tel', async function(req, res) {
+  const user = req.session.user;
+  const { newTel } = req.body;
+
+  if (!user) {
+    return res.json({ success: false, message: '로그인이 필요합니다.' });
+  }
+
+  try {
+    const updateResult = await db.getDb().collection('User_info').updateOne(
+      { id_join: user.id },
+      { $set: { telnumber_join: newTel } }
+    );
+
+    if (updateResult.modifiedCount === 1) {
+      return res.json({ success: true });
+    } else {
+      return res.json({ success: false, message: '전화번호 변경에 실패했습니다.' });
+    }
+  } catch (error) {
+    console.error('Error changing telephone number:', error);
+    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+router.post('/change-height', async function(req, res) {
+  const user = req.session.user;
+  const { newHeight } = req.body;
+
+  if (!user) {
+    return res.json({ success: false, message: '로그인이 필요합니다.' });
+  }
+
+  try {
+    const updateResult = await db.getDb().collection('User_info').updateOne(
+      { id_join: user.id },
+      { $set: { height_join: newHeight } }
+    );
+
+    if (updateResult.modifiedCount === 1) {
+      return res.json({ success: true });
+    } else {
+      return res.json({ success: false, message: '키 변경에 실패했습니다.' });
+    }
+  } catch (error) {
+    console.error('Error changing height:', error);
+    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+router.post('/change-weight', async function(req, res) {
+  const user = req.session.user;
+  const { newWeight } = req.body;
+
+  if (!user) {
+    return res.json({ success: false, message: '로그인이 필요합니다.' });
+  }
+
+  try {
+    const updateResult = await db.getDb().collection('User_info').updateOne(
+      { id_join: user.id },
+      { $set: { weight_join: newWeight } }
+    );
+
+    if (updateResult.modifiedCount === 1) {
+      return res.json({ success: true });
+    } else {
+      return res.json({ success: false, message: '몸무게 변경에 실패했습니다.' });
+    }
+  } catch (error) {
+    console.error('Error changing weight:', error);
+    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+
 router.get("/my-board", async function (req, res) {
   const user = req.session.user;
 
@@ -185,5 +368,6 @@ router.get("/my-board", async function (req, res) {
     res.status(500).send("Internal Server Error");
   }
 });
+
 
 module.exports = router;

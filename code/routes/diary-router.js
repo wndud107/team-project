@@ -21,16 +21,18 @@ let storage = multer.diskStorage({
 
 let upload = multer({storage : storage});
 
+
+
 router.get("/diary", async function (req, res) {
     const user = req.session.user;
-  
+
     if (!user) {
       res.send(
         '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
       );
       return; // return을 추가하여 이후 코드가 실행되지 않도록 합니다.
     }
-  
+    
     try {
       const userData = await db
         .getDb()
@@ -42,8 +44,10 @@ router.get("/diary", async function (req, res) {
         const currentDate = new Date();
         const goalDate = new Date(userData.goal_date_join);
         const dDay = Math.ceil((goalDate - currentDate) / (1000 * 60 * 60 * 24));
-  
-        res.render("diary", { user: userData, dDay: dDay });
+        const goalWeight = userData.goal_weight_join;
+
+        res.render("diary", { user: userData, dDay: dDay , goalWeight:goalWeight} );
+
       } else {
         res.send(
           '<script>alert("사용자 정보를 불러오는 데 실패했습니다."); window.location.href = "/";</script>'
@@ -54,6 +58,7 @@ router.get("/diary", async function (req, res) {
       res.status(500).send("Internal Server Error");
     }
   });
+
   
   // 운동 저장하기 라우트 
   router.post("/save-exercise", async (req, res) => {
@@ -116,7 +121,8 @@ router.get("/diary", async function (req, res) {
         date,
         exercise,
         reps,
-        sets
+        sets,
+        checked
       });
       res.send("Exercise deleted successfully");
     } catch (error) {
@@ -146,7 +152,6 @@ router.get("/diary", async function (req, res) {
           console.error("Error renaming file:", err);
           return res.status(500).send("Error renaming file");
         }
-  
         try {
           await db
             .getDb()
@@ -177,6 +182,7 @@ router.get("/diary", async function (req, res) {
 router.post("/save-weight", async (req, res) => {
     const { weight, date } = req.body;
     const user = req.session.user;
+    
 
     if (!weight ) {
         return res.status(400).json({ message: "체중을 입력해주세요." });
@@ -207,6 +213,7 @@ router.post("/save-weight", async (req, res) => {
             .find({ date, author: user.id })
             .toArray();
         res.json(weight);
+
         } catch (error) {
         console.error("Error fetching weight:", error);
         res.status(500).send("Error fetching weight");
@@ -215,9 +222,9 @@ router.post("/save-weight", async (req, res) => {
 
     //체중 목록 삭제 
     router.post("/delete-weight", async function (req, res) {
-        const {  weight } = req.body;
+        const {  date, weight } = req.body;
         const user = req.session.user;
-        const { date } = req.query;
+        // const {  } = req.query;
 
         try {
         await db.getDb().collection("User_inbody").deleteOne({

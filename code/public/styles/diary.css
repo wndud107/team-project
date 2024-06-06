@@ -7,7 +7,7 @@ body{
 
 .container {
   margin: 0 auto; 
-  width: 100vw;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -310,8 +310,8 @@ input[type="month"]:focus {
 
 /* 식단 이미지 */
 .image-upload-box img {
-  width: 176px;
-  height: 108px;
+  width: 180px;
+  height: 110px;
   object-fit: cover;
   border-radius: 5px;
   margin-top: 5px;
@@ -696,8 +696,10 @@ select optgroup {
 }
 
 .nunbody-image-box img {
-  width: 185px;
+  width: 182px;
   height: 250px; 
+  border-radius: 5px;
+
 }
 
 .nunbody-image-box p {

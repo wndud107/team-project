@@ -1,19 +1,17 @@
-document
-  .getElementById("fileInput")
-  .addEventListener("change", function (event) {
-    const file = event.target.files[0];
-    const reader = new FileReader();
+document.getElementById("fileInput").addEventListener("change", function (event) {
+  const file = event.target.files[0];
+  const reader = new FileReader();
 
-    reader.onload = function (e) {
-      document.getElementById(
-        "photo-placeholder"
-      ).style.backgroundImage = `url(${e.target.result})`;
-    };
+  reader.onload = function (e) {
+    document.getElementById(
+      "photo-placeholder"
+    ).style.backgroundImage = `url(${e.target.result})`;
+  };
 
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  });
+  if (file) {
+    reader.readAsDataURL(file);
+  }
+});
 
 // 아이디
 function showIdChangeForm() {
@@ -26,10 +24,10 @@ function hideIdChangeForm() {
 }
 
 async function changeId() {
-  const newName = document.getElementById("newId").value;
+  const newId = document.getElementById("newId").value;
 
   if (!newId) {
-    alert("변경할 아이디을 입력해 주세요.");
+    alert("변경할 아이디를 입력해 주세요.");
     return;
   }
 
@@ -50,12 +48,10 @@ async function changeId() {
       alert("아이디 변경에 실패했습니다: " + result.message);
     }
   } catch (error) {
-    console.error("Error changing Name:", error);
+    console.error("Error changing ID:", error);
     alert("아이디 변경 중 오류가 발생했습니다.");
   }
 }
-
-
 
 // 이름
 async function changeName() {
@@ -97,7 +93,6 @@ function hideNameChangeForm() {
     document.getElementById("nameChangeForm").style.display = "none";
 }
 
-
 // nickname
 async function changeNickname() {
   const newNickname = document.getElementById("newNickname").value;
@@ -113,7 +108,7 @@ async function changeNickname() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ newNicknaame: newNickname }),
+      body: JSON.stringify({ newNickname: newNickname }),
     });
 
     const result = await response.json();
@@ -125,7 +120,7 @@ async function changeNickname() {
     }
   } catch (error) {
     console.error("Error changing Nickname:", error);
-    alert("이름 변경 중 오류가 발생했습니다.");
+    alert("닉네임 변경 중 오류가 발생했습니다.");
   }
 }
 
@@ -204,7 +199,7 @@ async function changeTel() {
       alert("번호 변경에 실패했습니다: " + result.message);
     }
   } catch (error) {
-    console.error("Error changing Name:", error);
+    console.error("Error changing Tel:", error);
     alert("번호 변경 중 오류가 발생했습니다.");
   }
 }
@@ -220,9 +215,9 @@ function hideTelChangeForm() {
 
 // height
 async function changeHeight() {
-  const newName = document.getElementById("newHeight").value;
+  const newHeight = document.getElementById("newHeight").value;
 
-  if (!newName) {
+  if (!newHeight) {
     alert("변경할 키를 입력해 주세요.");
     return;
   }
@@ -233,7 +228,7 @@ async function changeHeight() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ newTel: newTel }),
+      body: JSON.stringify({ newHeight: newHeight }),
     });
 
     const result = await response.json();
@@ -244,7 +239,7 @@ async function changeHeight() {
       alert("키 변경에 실패했습니다: " + result.message);
     }
   } catch (error) {
-    console.error("Error changing Name:", error);
+    console.error("Error changing Height:", error);
     alert("키 변경 중 오류가 발생했습니다.");
   }
 }
@@ -284,7 +279,7 @@ async function changeWeight() {
       alert("무게 변경에 실패했습니다: " + result.message);
     }
   } catch (error) {
-    console.error("Error changing Name:", error);
+    console.error("Error changing Weight:", error);
     alert("무게 변경 중 오류가 발생했습니다.");
   }
 }
@@ -292,7 +287,7 @@ async function changeWeight() {
 function showWeightChangeForm() {
     document.getElementById("weightDisplay").style.display = "none";
     document.getElementById("weightChangeForm").style.display = "flex";
-  }
+}
 function hideWeightChangeForm() {
     document.getElementById("weightDisplay").style.display = "flex";
     document.getElementById("weightChangeForm").style.display = "none";

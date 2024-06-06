@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="/styles/diary.css" />
     <script src="/scripts/diary.js" defer></script>
   </head>
-
   <body>
     <%- include('includes/header') %>
     <div class="container">
@@ -18,7 +17,7 @@
             <span class="current-year"></span>
             <span class="current-month"></span>
           </div>
-          <input type="month" id="monthPicker" />
+          <input type="month" id="monthPicker"/>
           <div class="icons">
             <span id="prev" class="btn-month btn-left">
               <svg xmlns="http://www.w3.org/2000/svg"  width="25" height="25" fill="currentColor"  class="bi bi-caret-left" viewBox="0 0 16 16" >
@@ -121,7 +120,7 @@
             <div class="popup-inbody">
               <p class="p-popup-inbody">오늘의 눈바디</p>
               <div class="popup-inbody-input">
-                <form id="save-inbody" name="wei"  method="post" enctype="multipart/form-data">
+                <form id="save-inbody" name="weight" method="post" enctype="multipart/form-data">
                   <span class="save-inbody"></span>
                   <div class="nunbody-image-box" id="photo-placeholder" onclick="document.getElementById('fileInput').click();">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-bounding-box" viewBox="0 0 16 16">
@@ -138,7 +137,6 @@
                       <p>kg</p>
                   </div>
                   <button class="btn-save-inbody">저장</button>
-
                 </form>
               </div>
             </div>
@@ -146,15 +144,24 @@
         </div>
         <div class="d-day-graph">
           <div class="D-day">
-            <p class="p-weight-goal">목표 체중 : </p>
+            <p class="p-weight-goal">목표 체중 : <%= goalWeight%> kg</p>
             <p class="d-day">D-<%= dDay%></p>
-            <p class="p-remaining-weight">목표 체중까지 kg 남았습니다. </p>
           </div>
           <div class="graph">
-            <p>graph</p>
+            <div class="choice-inbody-graph">
+              <form action="">
+              <select name="" id="">
+                <option value="">체중</option>
+                <option value="">골격근량</option>
+                <option value=""></option>
+              </select>    
+              </form>
+            </div>
+            <div class="inbody-graph">
+              <p></p>
+            </div>
           </div>
         </div>
-      <!-- </div> -->
     </div>
   </body>
 </html>

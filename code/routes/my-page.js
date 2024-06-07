@@ -348,13 +348,16 @@ router.get("/my-board", async function (req, res) {
     const infoBoardPosts = await db.getDb().collection("info_board").find({ author: user.id }).toArray();
     const childBoardPosts = await db.getDb().collection("child_board").find({ author: user.id }).toArray();
 
-    const userPosts = [
+    let userPosts = [
       ...freeBoardPosts.map((post) => ({ ...post, board: "free", board_name: "자유게시판" })),
       ...endBoardPosts.map((post) => ({ ...post, board: "end", board_name: "오운완게시판" })),
       ...infoBoardPosts.map((post) => ({ ...post, board: "info", board_name: "정보게시판" })),
       ...ghwmBoardPosts.map((post) => ({ ...post, board: "ghwm", board_name: "G.H.W.M 게시판" })),
       ...childBoardPosts.map((post) => ({ ...post, board: "child", board_name: "헬린이게시판" })),
     ];
+
+    // Sort posts by date in descending order
+    userPosts = userPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     // 각 게시물의 댓글 수를 가져오는 부분 추가
     const userPostsWithComments = await Promise.all(userPosts.map(async (post) => {
@@ -368,6 +371,7 @@ router.get("/my-board", async function (req, res) {
     res.status(500).send("Internal Server Error");
   }
 });
+
 
 
 module.exports = router;

@@ -201,35 +201,35 @@
         .collection("free_board")
         .find()
         .sort({ date: -1 })
-        .limit(4)
+        .limit(8)
         .toArray();
       const endBoardPosts = await db
         .getDb()
         .collection("end_board")
         .find()
         .sort({ date: -1 })
-        .limit(4)
+        .limit(8)
         .toArray();
       const infoBoardPosts = await db
         .getDb()
         .collection("info_board")
         .find()
         .sort({ date: -1 })
-        .limit(4)
+        .limit(8)
         .toArray();
       const childBoardPosts = await db
         .getDb()
         .collection("child_board")
         .find()
         .sort({ date: -1 })
-        .limit(4)
+        .limit(8)
         .toArray();
       const ghwmBoardPosts = await db
         .getDb()
         .collection("ghwm_board")
         .find()
         .sort({ date: -1 })
-        .limit(4)
+        .limit(8)
         .toArray();
 
       res.render("main-board", {

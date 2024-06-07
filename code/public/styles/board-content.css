@@ -264,6 +264,25 @@ tbody tr:nth-child(even) td {
 }
 
 /* 댓글 목록 */
+
+.comment-profile {
+    display: flex;
+    align-items: center;
+}
+
+.comment-profile-img-box {
+    width: 20px;
+    height: 20px; 
+    border-radius: 100%;
+    overflow: hidden;
+    margin-right: 10px;
+}
+.comment-profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 #comments-section {
     border: 0.3px solid rgb(0,53,89);
     border-bottom: none;
@@ -308,9 +327,11 @@ tbody tr:nth-child(even) td {
     object-fit: cover;
 }
 
+
 @media (max-width:738px){
     .sidebar{
         width:30%;
     }
 }
 
+v

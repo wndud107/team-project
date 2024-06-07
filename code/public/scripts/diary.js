@@ -51,7 +51,7 @@ const renderCalendar = () => {
                 selectedDate = new Date(currYear, currMonth, parseInt(target.textContent));
                 popupDate.innerText = ` ${months[currMonth]} ${selectedDate.getDate()}일`;
                 popup.classList.add('show'); // 팝업 기능
-                fetchDataForDate(selectedDate);
+                fetchDataForDateAndExercise(selectedDate);
                 fetchWeight(); // 체중 데이터를 불러와서 todayWeight 요소에 표시
                 document.querySelectorAll('.days li').forEach(d => d.classList.remove('selected'));
                 target.classList.add('selected');
@@ -60,108 +60,103 @@ const renderCalendar = () => {
     });
 }
 
-const fetchDataForDate = (date) => {
+const fetchDataForDateAndExercise = (date) => {
     const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-    fetch(`/meals?date=${formattedDate}`)
-        .then(response => response.json())
-        .then(data => {
-            updatePopupContent(data, 'meals');
-        })
-        .catch(error => console.error('Error fetching meals:', error));
-
-    fetch(`/exercises?date=${formattedDate}`)
-        .then(response => response.json())
-        .then(data => {
-            updatePopupContent(data, 'exercises');
-        })
-        .catch(error => console.error('Error fetching exercises:', error));
+    
+    Promise.all([
+        fetch(`/meals?date=${formattedDate}`).then(response => response.json()),
+        fetch(`/exercises?date=${formattedDate}`).then(response => response.json())
+    ])
+    .then(([mealsData, exercisesData]) => {
+        updateMealsPopupContent(mealsData);
+        updateExercisesPopupContent(exercisesData);
+    })
+    .catch(error => console.error('Error fetching data:', error));
 }
 
-const updatePopupContent = (data, type) => {
-    if (type === 'meals') {
-        const mealContainers = {
-            아침: document.getElementById('uploadBox1'),
-            점심: document.getElementById('uploadBox2'),
-            저녁: document.getElementById('uploadBox3')
-        };
+const updateMealsPopupContent = (data) => {
+    const mealContainers = {
+        아침: document.getElementById('uploadBox1'),
+        점심: document.getElementById('uploadBox2'),
+        저녁: document.getElementById('uploadBox3')
+    };
 
-        for (let key in mealContainers) {
-            mealContainers[key].innerHTML = `<p>+</p><p>${key} 식단</p>`;
-        }
-
-        data.forEach(meal => {
-            if (mealContainers[meal.mealType]) {
-                mealContainers[meal.mealType].innerHTML = `<img src="/uploads/${meal.filename}" alt="${meal.mealType} 식단">`;
-            }
-        });
-    } 
-    if (type === 'exercises') {
-        exerciseList.innerHTML = ''; // 초기화
-
-        data.forEach((exercise) => {
-            const listItem = document.createElement("li");
-            const checkboxId = `exerciseCheckbox${exercise._id}`;
-
-            listItem.innerHTML = `
-                <span>
-                    <input type="checkbox" class="exercise-checkbox" id="${checkboxId}" ${exercise.checked ? 'checked' : ''} >
-                    <label for="${checkboxId}" class="exercise-label"> 
-                        ${exercise.exercise} [${exercise.reps}회 x ${exercise.sets}세트]
-                        <button class="delete-exercise">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square" viewBox="0 0 16 16">
-                        <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
-                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-                        </svg>
-                        </button>
-                    </label>
-                </span>
-            `;
-            exerciseList.appendChild(listItem);
-
-            // 체크박스 상태 업데이트 함수
-            const checkExercise = listItem.querySelector('.exercise-checkbox');
-            checkExercise.addEventListener('click', () => {
-                fetch('/update-exercise', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ id: exercise._id, checked: checkExercise.checked }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Update successful:', data);
-                })
-                .catch(error => console.error('Error updating status:', error));
-            });
-
-            // 삭제 버튼 클릭 이벤트 추가
-            const deleteButton = listItem.querySelector('.delete-exercise');
-            deleteButton.addEventListener('click', () => {
-                fetch(`/delete-exercise`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        date: exercise.date,
-                        exercise: exercise.exercise,
-                        reps: exercise.reps,
-                        sets: exercise.sets,
-                        id: exercise._id
-                    })
-                })
-                .then(response => response.text())
-                .then(data => {
-                    console.log('Exercise deleted successfully:', data);
-                    exerciseList.removeChild(listItem);
-                })
-                .catch(error => {
-                    console.error('Error deleting exercise:', error);
-                });
-            });
-        });
+    for (let key in mealContainers) {
+        mealContainers[key].innerHTML = `<p>+</p><p>${key} 식단</p>`;
     }
+
+    data.forEach(meal => {
+        if (mealContainers[meal.mealType]) {
+            mealContainers[meal.mealType].innerHTML = `<img src="/uploads/${meal.filename}" alt="${meal.mealType} 식단">`;
+        }
+    });
+}
+
+const updateExercisesPopupContent = (data) => {
+    exerciseList.innerHTML = ''; // 초기화
+
+    data.forEach((exercise) => {
+        const listItem = document.createElement("li");
+        const checkboxId = `exerciseCheckbox${exercise._id}`;
+
+        listItem.innerHTML = `
+            <span>
+                <input type="checkbox" class="exercise-checkbox" id="${checkboxId}" ${exercise.checked ? 'checked' : ''} >
+                <label for="${checkboxId}" class="exercise-label"> 
+                    ${exercise.exercise} [${exercise.reps}회 x ${exercise.sets}세트]
+                    <button class="delete-exercise">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square" viewBox="0 0 16 16">
+                    <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                    </svg>
+                    </button>
+                </label>
+            </span>
+        `;
+        exerciseList.appendChild(listItem);
+
+        // 체크박스 상태 업데이트 함수
+        const checkExercise = listItem.querySelector('.exercise-checkbox');
+        checkExercise.addEventListener('click', () => {
+            fetch('/update-exercise', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: exercise._id, checked: checkExercise.checked }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Update successful:', data);
+            })
+            .catch(error => console.error('Error updating status:', error));
+        });
+
+        // 삭제 버튼 클릭 이벤트 추가
+        const deleteButton = listItem.querySelector('.delete-exercise');
+        deleteButton.addEventListener('click', () => {
+            fetch('/delete-exercise', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: exercise._id })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Exercise deleted successfully:', data);
+                exerciseList.removeChild(listItem);
+            })
+            .catch(error => {
+                console.error('Error deleting exercise:', error);
+            });
+        });
+    });
 }
 
 const fetchWeight = async () => {
@@ -258,7 +253,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // 페이지 로드 시 오늘 날짜 데이터를 가져오기
     const today = new Date();
     selectedDate = today;
-    fetchDataForDate(today);  // 오늘 날짜의 데이터를 가져오는 함수 호출
+    fetchDataForDateAndExercise(today);  // 오늘 날짜의 데이터를 가져오는 함수 호출
     fetchWeight();
 
     document.querySelectorAll('.days li').forEach(day => {
@@ -372,7 +367,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 if (!response.ok) {
                                     throw new Error('Network response was not ok');
                                 }
-                                return response.text();
+                                return response.json();
                             })
                             .then(data => {
                                 console.log('Exercise deleted successfully:', data);
@@ -386,7 +381,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         exerciseSelect.value = "";
                         reps.value = "";
                         sets.value = "";
-                        fetchDataForDate(selectedDate);
+                        fetchDataForDateAndExercise(selectedDate);
                     })
                     .catch(error => {
                         console.error('Error saving exercise:', error);
@@ -399,9 +394,9 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // 식단 사진 업로드 이벤트 핸들러
-    document.getElementById('uploadInput1').addEventListener('change', (event) => uploadImage(event, 'uploadBox1'));
-    document.getElementById('uploadInput2').addEventListener('change', (event) => uploadImage(event, 'uploadBox2'));
-    document.getElementById('uploadInput3').addEventListener('change', (event) => uploadImage(event, 'uploadBox3'));
+    document.getElementById('uploadInput1').addEventListener('change', (event) => previewImage(event, 'uploadBox1'));
+    document.getElementById('uploadInput2').addEventListener('change', (event) => previewImage(event, 'uploadBox2'));
+    document.getElementById('uploadInput3').addEventListener('change', (event) => previewImage(event, 'uploadBox3'));
 
     // 인바디 사진 미리보기 이벤트 리스너
     const inbodyInput = document.getElementById('fileInput'); // 파일 입력 요소 ID 확인

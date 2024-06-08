@@ -5,34 +5,165 @@ const path = require("path");
 const formidable = require("formidable");
 const { ObjectId } = require("mongodb");
 const db = require("../data/database");
+let multer = require('multer');
+
+const dir = path.join(__dirname, '../public/meal_images');
+
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir, { recursive: true });
+}
 
 const router = express.Router();
 
-let multer = require('multer');
 
-let storage = multer.diskStorage({
-  destination : function(req, file, done){
-    done(null, './public/image')
+
+// Multer 설정
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const dir = path.join(__dirname, '../public/meal_images');
+    cb(null, dir); // 파일이 저장될 경로
   },
-  filename : function(req, file, done){
-    done(null, file.originalname)
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname); // 파일명 설정 (현재 시간 + 원래 파일명)
   }
-})
+});
 
-let upload = multer({storage : storage});
+const upload = multer({storage : storage});
+
+// router.post('/photo', upload.single('picture'), function(rea, res){
+//   console.log(req.file.path);
+// })
+
+
+// 아침 식단 사진 저장 라우트
+router.post('/save-meals', upload.fields([{ name: 'morningMeal' }, { name: 'lunchMeal' }, { name: 'dinnerMeal' }]), async (req, res) => {
+  console.log('파일 업로드 시작');
+  const { date } = req.body;
+  const user = req.session.user;
+  console.log('req.body:', req.body); // req.body 출력하여 값 확인
+  const mealData = [];
+  
+  if (req.files.morningMeal) {
+    mealData.push({
+      author: user.id,
+      date: date,
+      mealType: '아침',
+      filename: req.files.morningMeal[0].filename,
+      imagePath: req.files.morningMeal[0].path
+    });
+  }
+
+  if (req.files.lunchMeal) {
+    mealData.push({
+      author: user.id,
+      date: date,
+      mealType: '점심',
+      filename: req.files.lunchMeal[0].filename,
+      imagePath: req.files.lunchMeal[0].path
+    });
+  }
+
+  if (req.files.dinnerMeal) {
+    mealData.push({
+      author: user.id,
+      date: date,
+      mealType: '저녁',
+      filename: req.files.dinnerMeal[0].filename,
+      imagePath: req.files.dinnerMeal[0].path
+    });
+  }
+
+  try {
+    if (mealData.length > 0) {
+      await db.getDb().collection("User_diary_meals").insertMany(mealData);
+      res.redirect('/diary');
+    } else {
+      res.status(400).send("파일 업로드 실패");
+    }
+  } catch (error) {
+    console.error("Error saving meal:", error);
+    res.status(500).send("Error saving meal");
+  }
+});
+
+
+// 식단 목록 가져오기 라우트
+router.get("/meals", async (req, res) => {
+  const { date } = req.query;
+  const user = req.session.user;
+  try {
+    const meals = await db.getDb().collection("User_diary_meals")
+    .find({ date, author: user.id })
+    .toArray();
+    res.json(meals);
+  } catch (error) {
+    console.error("Error fetching meals:", error);
+    res.status(500).send("Error fetching meals");
+  }
+});
+
+router.delete('/delete-meal/:id', async (req, res) => {
+  const mealId = req.params.id;
+  try {
+    const result = await db.getDb().collection("User_diary_meals").deleteOne({ _id: new ObjectId(mealId) });
+    if (result.deletedCount > 0) {
+      res.json({ message: "Meal deleted successfully" });
+    } else {
+      res.status(404).json({ message: "Meal not found" });
+    }
+  } catch (error) {
+    console.error("Error deleting meal:", error);
+    res.status(500).json({ message: "Error deleting meal" });
+  }
+});
+
+
+
+ // 사진 업로드 라우트
+//  router.post("/upload", (req, res) => {
+//   const form = new formidable.IncomingForm();
+//   form.uploadDir = path.join(__dirname, "..", "public", "uploads");
+//   form.keepExtensions = true;
+
+//   form.parse(req, async (err, fields, files) => {
+//     if (err) {
+//       console.error("Error uploading file:", err);
+//       return res.status(500).send("Error uploading file");
+//     }
+
+//     const { date, mealType } = fields;
+//     const oldPath = files.photo.path;
+//     const newPath = path.join(form.uploadDir, files.photo.name);
+
+//     fs.rename(oldPath, newPath, async (err) => {
+//       if (err) {
+//         console.error("Error renaming file:", err);
+//         return res.status(500).send("Error renaming file");
+//       }
+//       try {
+//         await db
+//           .getDb()
+//           .collection("User_diary_meals")
+//           .insertOne({ date, mealType, filename: files.photo.name });
+//         res.send("File uploaded and data saved successfully");
+//       } catch (error) {
+//         console.error("Error saving data:", error);
+//         res.status(500).send("Error saving data");
+//       }
+//     });
+//   });
+// });
 
 
 
 router.get("/diary", async function (req, res) {
     const user = req.session.user;
-
     if (!user) {
       res.send(
         '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
       );
       return; // return을 추가하여 이후 코드가 실행되지 않도록 합니다.
     }
-    
     try {
       const userData = await db
         .getDb()
@@ -111,72 +242,23 @@ router.get("/diary", async function (req, res) {
     }
   });
   
-  //운동 목록 삭제 
+  // 운동 목록 삭제
   router.post("/delete-exercise", async function (req, res) {
-    const { date, exercise, reps, sets, checked } = req.body;
+    const { id } = req.body;
     const user = req.session.user;
     try {
-      await db.getDb().collection("User_diary").deleteOne({
-        author: user.id,
-        date,
-        exercise,
-        reps,
-        sets,
-        checked
-      });
-      res.send("Exercise deleted successfully");
+        await db.getDb().collection("User_diary").deleteOne({
+            _id: new ObjectId(id),
+            author: user.id
+        });
+        res.status(200).json({ message: 'Exercise data deleted successfully' });
     } catch (error) {
-      console.error("Error deleting exercise:", error);
-      res.status(500).send("Error deleting exercise");
+        console.error("Error deleting exercise:", error);
+        res.status(500).send("Error deleting exercise");
     }
   });
   
-  // 사진 업로드 라우트
-  router.post("/upload", (req, res) => {
-    const form = new formidable.IncomingForm();
-    form.uploadDir = path.join(__dirname, "..", "public", "uploads");
-    form.keepExtensions = true;
-  
-    form.parse(req, async (err, fields, files) => {
-      if (err) {
-        console.error("Error uploading file:", err);
-        return res.status(500).send("Error uploading file");
-      }
-  
-      const { date, mealType } = fields;
-      const oldPath = files.photo.path;
-      const newPath = path.join(form.uploadDir, files.photo.name);
-  
-      fs.rename(oldPath, newPath, async (err) => {
-        if (err) {
-          console.error("Error renaming file:", err);
-          return res.status(500).send("Error renaming file");
-        }
-        try {
-          await db
-            .getDb()
-            .collection("Meals")
-            .insertOne({ date, mealType, filename: files.photo.name });
-          res.send("File uploaded and data saved successfully");
-        } catch (error) {
-          console.error("Error saving data:", error);
-          res.status(500).send("Error saving data");
-        }
-      });
-    });
-  });
-  
-  // 식단 가져오기 라우트
-  router.get("/meals", async (req, res) => {
-    const { date } = req.query;
-    try {
-      const meals = await db.getDb().collection("Meals").find({ date }).toArray();
-      res.json(meals);
-    } catch (error) {
-      console.error("Error fetching meals:", error);
-      res.status(500).send("Error fetching meals");
-    }
-  });
+
   
 // 체중 저장하기 라우트 
 router.post("/save-weight", async (req, res) => {
@@ -224,7 +306,6 @@ router.post("/save-weight", async (req, res) => {
     router.post("/delete-weight", async function (req, res) {
         const {  date, weight } = req.body;
         const user = req.session.user;
-        // const {  } = req.query;
 
         try {
         await db.getDb().collection("User_inbody").deleteOne({
@@ -238,5 +319,7 @@ router.post("/save-weight", async (req, res) => {
         res.status(500).send("Error deleting weight");
         }
     });
+
+
 
 module.exports = router;

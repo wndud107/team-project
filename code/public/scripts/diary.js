@@ -60,6 +60,7 @@ const renderCalendar = () => {
     });
 }
 
+// 식단 사진 추가
 const fetchDataForDateAndExercise = (date) => {
     const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     
@@ -74,6 +75,8 @@ const fetchDataForDateAndExercise = (date) => {
     .catch(error => console.error('Error fetching data:', error));
 }
 
+
+
 const updateMealsPopupContent = (data) => {
     const mealContainers = {
         아침: document.getElementById('uploadBox1'),
@@ -87,10 +90,16 @@ const updateMealsPopupContent = (data) => {
 
     data.forEach(meal => {
         if (mealContainers[meal.mealType]) {
-            mealContainers[meal.mealType].innerHTML = `<img src="/uploads/${meal.filename}" alt="${meal.mealType} 식단">`;
+            mealContainers[meal.mealType].innerHTML =
+             `<img src="/uploads/${meal.filename}" alt="${meal.mealType} 식단">
+              <button class="delete-morning">삭제</button>
+             `;
         }
     });
 }
+
+
+
 
 const updateExercisesPopupContent = (data) => {
     exerciseList.innerHTML = ''; // 초기화
@@ -221,29 +230,43 @@ monthPicker.addEventListener('change', (event) => {
 monthPicker.value = `${currYear}-${String(currMonth + 1).padStart(2, '0')}`;
 
 // 이미지 미리보기 함수
-function previewImage(event, boxId) {
+function previewImage(event, uploadBoxId) {
     const input = event.target;
+    const uploadBox = document.getElementById(uploadBoxId);
     const reader = new FileReader();
     reader.onload = function() {
-        const dataURL = reader.result;
-        const uploadBox = document.getElementById(boxId);
-        uploadBox.innerHTML = `<img src="${dataURL}" alt="Uploaded Image">`;
+      uploadBox.innerHTML = `<img src="${reader.result}" class="image-preview" />`;
     };
     reader.readAsDataURL(input.files[0]);
-}
+  }
+  
+  document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', function(event) {
+      const hiddenDate = form.querySelector('input[name="date"]');
+      const selectedDate = document.getElementById('popup-date').textContent;
+      hiddenDate.value = selectedDate;
+    });
+  });
+
+
 
 // 눈바디 사진 미리보기 함수
-function previewInbodyImage(event) {
-    const placeholder = document.getElementById('photo-placeholder');
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            placeholder.innerHTML = '<img src="' + e.target.result + '" alt="Inbody Image">';
-        };
-        reader.readAsDataURL(file);
+function previewImage(event, uploadBoxId) {
+    const input = event.target;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      
+      reader.onload = function(e) {
+        const preview = document.getElementById(uploadBoxId);
+        preview.innerHTML = '<img src="' + e.target.result + '" alt="Preview" />';
+      };
+      
+      reader.readAsDataURL(file);
+    } else {
+      console.error("파일이 유효하지 않습니다.");
     }
-}
+  }
 
 // DOMContentLoaded 이벤트 핸들러
 document.addEventListener("DOMContentLoaded", function() {
@@ -394,9 +417,9 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // 식단 사진 업로드 이벤트 핸들러
-    document.getElementById('uploadInput1').addEventListener('change', (event) => previewImage(event, 'uploadBox1'));
-    document.getElementById('uploadInput2').addEventListener('change', (event) => previewImage(event, 'uploadBox2'));
-    document.getElementById('uploadInput3').addEventListener('change', (event) => previewImage(event, 'uploadBox3'));
+    // document.getElementById('uploadInput1').addEventListener('change', (event) => previewImage(event, 'uploadBox1'));
+    // document.getElementById('uploadInput2').addEventListener('change', (event) => previewImage(event, 'uploadBox2'));
+    // document.getElementById('uploadInput3').addEventListener('change', (event) => previewImage(event, 'uploadBox3'));
 
     // 인바디 사진 미리보기 이벤트 리스너
     const inbodyInput = document.getElementById('fileInput'); // 파일 입력 요소 ID 확인

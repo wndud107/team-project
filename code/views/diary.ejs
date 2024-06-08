@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/styles/shared.css" />
     <link rel="stylesheet" href="/styles/diary.css" />
     <script src="/scripts/diary.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
   </head>
   <body>
     <%- include('includes/header') %>
@@ -91,29 +92,50 @@
             <div class="popup-diet">
               <p class="p-popup-diet">오늘의 식단</p>
               <div class="image-upload-container">
-                <form action="/upload" method="post">
-                  <div class="image-upload-box" onclick="document.getElementById('uploadInput1').click()"  >
-                    <input type="file" id="uploadInput1" accept="image/*" onchange="previewImage(event, 'uploadBox1')" />
-                    <div id="uploadBox1" class="placeholder">
-                      <p>+</p>
-                      <p>아침 식단 </p>
+                <form action="/save-meals" method="post" enctype="multipart/form-data">
+                  <input type="hidden" id="hiddenDate" name="date" />
+                  <input type="file" name="morningMeal" id="uploadInput1" accept="image/*" style="display:none;" onchange="previewImage(event, 'uploadBox1')" required />
+                    <div id="uploadBox1" class="placeholder image-upload-box"  onclick="document.getElementById('uploadInput1').click();">
+                      <p class="p-meals"> + <br> 아침 식단</p> <br>
+                      <!-- <p class="p-meals">아침 식단</p> -->
                     </div>
-                  </div>
-                  <div class="image-upload-box" onclick="document.getElementById('uploadInput2').click()" >
+                  <button type="submit">저장</button>
+                </form>
+                <form action="/save-meals" method="post" enctype="multipart/form-data">
+                  <input type="hidden" id="hiddenDate" name="date" />
+                  <input type="file" name="lunchMeal" id="uploadInput2" accept="image/*" style="display:none;" onchange="previewImage(event, 'uploadBox2')" required />
+                    <div id="uploadBox2" class="placeholder image-upload-box"  onclick="document.getElementById('uploadInput2').click();">
+                      <p class="p-meals"> + <br> 점심 식단</p> <br>
+                      <!-- <p class="p-meals">아침 식단</p> -->
+                    </div>
+                  <button type="submit">저장</button>
+                </form>
+                <form action="/save-meals" method="post" enctype="multipart/form-data">
+                  <input type="hidden" id="hiddenDate" name="date" />
+                  <input type="file" name="dinnerMeal" id="uploadInput1" accept="image/*" style="display:none;" onchange="previewImage(event, 'uploadBox3')" required />
+                    <div id="uploadBox3" class="placeholder image-upload-box"  onclick="document.getElementById('uploadInput3').click();">
+                      <p class="p-meals"> + <br> 저녁 식단</p> <br>
+                      <!-- <p class="p-meals">아침 식단</p> -->
+                    </div>
+                  <button type="submit">저장</button>
+                </form>
+
+<!-- 
+                  <button class="image-upload-box" onclick="document.getElementById('uploadInput2').click()" >
                     <input type="file" id="uploadInput2" accept="image/*" onchange="previewImage(event, 'uploadBox2')" />
                     <div id="uploadBox2" class="placeholder">
                       <p>+</p>
                       <p>점심 식단</p>
                     </div>
-                  </div>
-                  <div class="image-upload-box" onclick="document.getElementById('uploadInput3').click()" >
+                  </button>
+                  <button class="image-upload-box" onclick="document.getElementById('uploadInput3').click()" >
                     <input type="file"  id="uploadInput3"  accept="image/*" onchange="previewImage(event, 'uploadBox3')" />
                     <div id="uploadBox3" class="placeholder">
                       <p>+</p>
                       <p>저녁 식단</p>
                     </div>
-                  </div>
-                </form>
+                  </button>
+           -->
               </div>
             </div>
             <!--인바디-->            
@@ -158,8 +180,7 @@
               </form>
             </div>
             <div class="inbody-graph">
-              <p></p>
-            </div>
+              <canvas id="line-chart" width="300" height="250">  </canvas>            </div>
           </div>
         </div>
     </div>

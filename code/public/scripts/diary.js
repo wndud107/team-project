@@ -18,6 +18,7 @@ let date = new Date(),
     currYear = date.getFullYear(),
     currMonth = date.getMonth(),
     selectedDate = date.getDate();
+    exerciseLogs = [];
 
 const renderCalendar = () => {
     let firstDayofMonth = new Date(currYear, currMonth, 1).getDay(),
@@ -32,9 +33,14 @@ const renderCalendar = () => {
 
     for (let i = 1; i <= lastDateofMonth; i++) {
         let isToday = i === new Date().getDate() && currMonth === new Date().getMonth()
-            && currYear === new Date().getFullYear() ? "active" : "";
+                    && currYear === new Date().getFullYear() ? "active" : "";
         let isSelected = i === selectedDate ? "selected" : "";
-        liTag += `<li class="${isToday} ${isSelected}">${i}</li>`;
+       // 날짜에 해당하는 exerciseLogs 값 찾기
+       const formattedDate = `${currYear}-${String(currMonth + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+       const log = exerciseLogs.find(log => log._id === formattedDate);
+       let hasExercise = log && log.count > 0 ? "has-exercise" : "";
+
+       liTag += `<li class="${isToday} ${isSelected} ${hasExercise}">${i}</li>`;
     }
 
     for (let i = lastDayofMonth; i < 6; i++) {
@@ -75,8 +81,6 @@ const fetchDataForDateAndExercise = (date) => {
     .catch(error => console.error('Error fetching data:', error));
 }
 
-
-
 const updateMealsPopupContent = (data) => {
     const mealContainers = {
         아침: document.getElementById('uploadBox1'),
@@ -90,16 +94,10 @@ const updateMealsPopupContent = (data) => {
 
     data.forEach(meal => {
         if (mealContainers[meal.mealType]) {
-            mealContainers[meal.mealType].innerHTML =
-             `<img src="/uploads/${meal.filename}" alt="${meal.mealType} 식단">
-              <button class="delete-morning">삭제</button>
-             `;
+            mealContainers[meal.mealType].innerHTML = `<img src="/uploads/${meal.filename}" alt="${meal.mealType} 식단">`;
         }
     });
 }
-
-
-
 
 const updateExercisesPopupContent = (data) => {
     exerciseList.innerHTML = ''; // 초기화
@@ -168,6 +166,21 @@ const updateExercisesPopupContent = (data) => {
     });
 }
 
+// 운동 한날인지 확인 관련
+const fetchExerciseLogs = async () => {
+    try {
+        const response = await fetch('/exercise-logs');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        exerciseLogs = await response.json();
+        console.log('Exercise logs:', exerciseLogs);  // 가져온 데이터 확인
+        renderCalendar();  // 운동 로그 가져온 후 달력 다시 렌더링
+    } catch (error) {
+        console.error('Error fetching exercise logs:', error);
+    }
+};
+
 const fetchWeight = async () => {
     const formattedDate = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
 
@@ -235,41 +248,40 @@ function previewImage(event, uploadBoxId) {
     const uploadBox = document.getElementById(uploadBoxId);
     const reader = new FileReader();
     reader.onload = function() {
-      uploadBox.innerHTML = `<img src="${reader.result}" class="image-preview" />`;
+        uploadBox.innerHTML = `<img src="${reader.result}" class="image-preview" />`;
     };
     reader.readAsDataURL(input.files[0]);
-  }
-  
-  document.querySelectorAll('form').forEach(form => {
+}
+
+document.querySelectorAll('form').forEach(form => {
     form.addEventListener('submit', function(event) {
-      const hiddenDate = form.querySelector('input[name="date"]');
-      const selectedDate = document.getElementById('popup-date').textContent;
-      hiddenDate.value = selectedDate;
+        const hiddenDate = form.querySelector('input[name="date"]');
+        const selectedDate = document.getElementById('popup-date').textContent;
+        hiddenDate.value = selectedDate;
     });
-  });
-
-
+});
 
 // 눈바디 사진 미리보기 함수
-function previewImage(event, uploadBoxId) {
+function previewInbodyImage(event) {
     const input = event.target;
     if (input.files && input.files[0]) {
-      const file = input.files[0];
-      const reader = new FileReader();
-      
-      reader.onload = function(e) {
-        const preview = document.getElementById(uploadBoxId);
-        preview.innerHTML = '<img src="' + e.target.result + '" alt="Preview" />';
-      };
-      
-      reader.readAsDataURL(file);
+        const file = input.files[0];
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            const preview = document.getElementById('photo-placeholder');
+            preview.innerHTML = '<img src="' + e.target.result + '" alt="Inbody Image">';
+        };
+        
+        reader.readAsDataURL(file);
     } else {
-      console.error("파일이 유효하지 않습니다.");
+        console.error("파일이 유효하지 않습니다.");
     }
-  }
+}
 
 // DOMContentLoaded 이벤트 핸들러
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", async function() {
+    await fetchExerciseLogs();
     const closePopup = document.querySelector(".close2");
     const addExerciseFormButton = document.getElementById("add-exercise-button");
 
@@ -417,9 +429,9 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // 식단 사진 업로드 이벤트 핸들러
-    // document.getElementById('uploadInput1').addEventListener('change', (event) => previewImage(event, 'uploadBox1'));
-    // document.getElementById('uploadInput2').addEventListener('change', (event) => previewImage(event, 'uploadBox2'));
-    // document.getElementById('uploadInput3').addEventListener('change', (event) => previewImage(event, 'uploadBox3'));
+    document.getElementById('uploadInput1').addEventListener('change', (event) => previewImage(event, 'uploadBox1'));
+    document.getElementById('uploadInput2').addEventListener('change', (event) => previewImage(event, 'uploadBox2'));
+    document.getElementById('uploadInput3').addEventListener('change', (event) => previewImage(event, 'uploadBox3'));
 
     // 인바디 사진 미리보기 이벤트 리스너
     const inbodyInput = document.getElementById('fileInput'); // 파일 입력 요소 ID 확인

@@ -11,13 +11,10 @@ body{
   display: flex;
   justify-content: center;
   align-items: center;
-  /* 전체화면 - 헤더 영역 크기 */
-  /* height: calc(100vh-55px);   */
   margin-top: 7vh;
   background-color: #ffffff;
   gap:10px;
 }
-
 
 .year-month{
   font-family: 'Noto Sans Kr';
@@ -28,7 +25,6 @@ body{
   top: -10px;
 }
 
-/* 월 넘기기 버튼 < >  */
 .icons{
   margin-bottom : -25px ;
   margin-left: 0;
@@ -38,8 +34,6 @@ body{
   text-align: left;
   margin-right: 10px;
 }
-
-
 
 .btn-month:hover{
   color:  #0b99a9;
@@ -54,7 +48,6 @@ body{
   position: absolute;
   left: 1px;
   top: -10px;
-
 }
 
 .calendar .year-month {
@@ -93,12 +86,11 @@ body{
 }
 
 .weeks-days .days li {
-    z-index: 1;
+    z-index: 2;
     margin: 35px 0; 
     cursor: pointer;
 }
-   
-/* 현재 달이 아닌 날짜 색 */
+
 .days li.inactive {
     color: #aaa;
 }
@@ -116,13 +108,12 @@ body{
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 50%;
-    z-index: -1;
+    z-index: 0;
 }
 .days li:hover::before{
-    background-color: #efefefbf; /* 원 색상 */
+    background-color: #efefefbf;
 }
 
-/* 선택된 날짜 스타일 추가 */
 .days li.selected::before {
     content: '';
     position: absolute;
@@ -131,7 +122,7 @@ body{
     transform: translate(-50%, -50%);
     width: 35px;
     height: 35px;
-    background-color: #bedfe4; /* 원 색상 */
+    background-color: #bedfe4;
     border-radius: 50%;
     z-index: -1;
     display: inline-block;
@@ -139,13 +130,29 @@ body{
     text-align: center;
 }
 
+.days li.has-exercise::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 45px;
+    height: 45px;
+    background-color: #9AE1D4;
+    border-radius: 50%;
+    z-index: -3; 
+    display: inline-block;
+    line-height: 32px;
+    text-align: center;
+}
+
 .days li.selected {
     position: relative;
 }
 
-/* 오늘 날짜 */
 .days li.active::before {
-    background: #0b99a9;
+  z-index: -2; 
+  background: #0B98A9;
 }
 
 .weeks {
@@ -165,7 +172,6 @@ body{
   top: 4px; 
 }
 
-/* 달력 버튼만 남기기 */
 input[type="month"] {
   position: relative;
   width: 30px; 
@@ -208,7 +214,7 @@ input[type="month"]:focus {
     background: #fff;
     padding: 10px; 
     border-color: #0b99a9;
-    position: relative; /* 추가: icons의 위치를 기준으로 설정 */
+    position: relative;
 }
 
 .hr-calendar {
@@ -224,16 +230,13 @@ input[type="month"]:focus {
   display: block;
 }
 
-
-/* 전체 팝업창  */
 .popup {
-  /* margin: 0 auto; */
   border: 3px;
   background-color: rgb(190, 223, 228);
   border-radius: 5px;
   width: 400px;
   height: 520px;
-  padding: 0 10px; /* padding 조정 */
+  padding: 0 10px;
   padding-top: 10px;
   padding-bottom: 20px;
   margin-left: 20px;
@@ -241,14 +244,13 @@ input[type="month"]:focus {
   display: flex;
   flex-direction: column;
   align-items: center;
-  
 }
 
 #popup-date {
   position: absolute;
-  left: 300px; /* 위치 조정 */
+  left: 300px;
   top: -15px; 
-  font-size: 20px; /* 크기 조정 */
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: 1px;
   color: hsl(0, 0%, 0%);
@@ -257,14 +259,13 @@ input[type="month"]:focus {
 
 .popup-content-2 {
   position: relative;
-  top: 155px; /* 위치 조정 */
+  top: 155px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 11px;
 }
 
-/* 팝업창 식단 섹션 */
 .popup-diet {
   text-align: left;
 }
@@ -282,7 +283,7 @@ input[type="month"]:focus {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px; /* 간격 조정 */
+  gap: 10px;
 }
 
 .image-upload-box:first-child {
@@ -303,12 +304,10 @@ input[type="month"]:focus {
   margin-top: 8px;
 }
 
-/* 스크롤바 생성 시 */
 .image-upload-box:last-child {
   margin-bottom: 10px;
 }
 
-/* 식단 이미지 */
 .image-upload-box img {
   width: 180px;
   height: 110px;
@@ -331,11 +330,8 @@ input[type="month"]:focus {
   font-size: 18px;
   margin: 0;
   margin-left: 10px;
-
 }
 
-
-/* 팝업창 인바디 섹션 */
 .popup-inbody {
   width: 200px;
   height: 344px;
@@ -344,7 +340,7 @@ input[type="month"]:focus {
 
 .p-popup-inbody {
   position: absolute;
-  top: 0; /* 위치 조정 */
+  top: 0;
   margin: 0 20px;
   font-weight: 600;
   font-size: 18px;
@@ -357,7 +353,6 @@ input[type="month"]:focus {
   top: 10px;
 }
 
-/* 인바디 input 파트 전체 */
 .popup-inbody-input {
   position: absolute;
   top: 28px;
@@ -380,11 +375,11 @@ input[type="month"]:focus {
 }
 
 .popup-input:first-child {
-  margin-bottom: 30px; /* 간격 조정 */
+  margin-bottom: 30px;
 }
 
 .popup-weight p {
-  font-size: 12px; /* 크기 조정 */
+  font-size: 12px;
   font-weight: 500;
   margin: 6px 2px;
 }
@@ -400,17 +395,15 @@ input[type="month"]:focus {
   background-color: rgb(190, 223, 228);
 }
 
-/* 오늘의 운동 */
 .p-popup-exercise {
   position: absolute;
   padding: auto;
-  top: -10px; /* 위치 조정 */
-  left: 10px; /* 위치 조정 */
+  top: -10px;
+  left: 10px;
   font-weight: 600;
   font-size: 18px;
   color: black;
   margin-left: 10px;
-  
 }
 
 .popup-content-1 {
@@ -418,7 +411,6 @@ input[type="month"]:focus {
   margin: 0 auto;
 }
 
-/* 운동 추가하기 버튼 */
 .bi-plus-circle {
   position: relative;
   top: 2px;
@@ -433,7 +425,6 @@ input[type="month"]:focus {
 .popup-exercise {
   position: absolute;
   top: 40px;
-  /* left: 8px; */
   margin: 0 auto;
   width: 100%;
   height: 104px;
@@ -455,7 +446,6 @@ input[type="month"]:focus {
 .p-add-exercise {
   font-size: 17px;
   margin: -1px 5px;
-  /* position: relative; */
 }
 
 .p-add-exercise:hover {
@@ -481,7 +471,6 @@ input[type="month"]:focus {
 .popup-choice-exercise.show {
   display: block;
   position: absolute;
-  /* margin-top: 80px;  */
   top: 80px;
   left: 300px;
   width: 230px;
@@ -533,7 +522,6 @@ input[type="month"]:focus {
   border: 1px solid #0b99a9;
 }
 
-/* 회x세트 토탈 */
 .count-exercise {
   display: flex;
   position: absolute;
@@ -553,14 +541,12 @@ input[type="month"]:focus {
   padding-left: 5px;
 }
 
-/* input=num 화살표 없애기 */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-/* 운동 '추가' 버튼 */
 #add-exercise-button {
   padding: 5px;
   position: absolute;
@@ -619,7 +605,7 @@ select optgroup {
   border-radius: 5px;
   border: #9a9a9a 1.5px solid;
   width: 176px;
-  height: 32px; /* 크기 조정 */
+  height: 32px;
   font-size: 13px;
   font-weight: 400;
   margin: 8px auto;
@@ -646,7 +632,6 @@ select optgroup {
   font-size: 64px; 
   font-weight: 600;
   margin: 20px auto;
-  /* margin-bottom: 150px; */
 }
 
 .graph {
@@ -655,7 +640,6 @@ select optgroup {
   margin-top: 80px;
   margin-left: 30px;
   background-color: rgb(255, 255, 255);
-
 }
 
 .inbody-graph {
@@ -699,7 +683,6 @@ select optgroup {
   width: 182px;
   height: 250px; 
   border-radius: 5px;
-
 }
 
 .nunbody-image-box p {
@@ -756,7 +739,7 @@ select optgroup {
 #today-weight {
   position: absolute;
   margin: 0 auto;
-  font-size: 16px; /* 1rem -> 16px */
+  font-size: 16px;
   font-weight: 500;
   display: flex;
   justify-content: center;

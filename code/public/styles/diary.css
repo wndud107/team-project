@@ -65,6 +65,7 @@ body{
   outline: auto;
   outline-color: #0b99a9;
   padding-top: 4px;
+  width: 380px;
   position: relative;
   top: -30px; 
 }
@@ -138,7 +139,8 @@ body{
     transform: translate(-50%, -50%);
     width: 45px;
     height: 45px;
-    background-color: #9AE1D4;
+    border: 2px solid #9AE1D4;
+    background-color: transparent; /* 배경 투명 설정 */
     border-radius: 50%;
     z-index: -3; 
     display: inline-block;
@@ -235,10 +237,9 @@ input[type="month"]:focus {
   background-color: rgb(190, 223, 228);
   border-radius: 5px;
   width: 400px;
-  height: 520px;
+  height: 650px;
   padding: 0 10px;
   padding-top: 10px;
-  padding-bottom: 20px;
   margin-left: 20px;
   position: relative;
   display: flex;
@@ -247,9 +248,8 @@ input[type="month"]:focus {
 }
 
 #popup-date {
-  position: absolute;
-  left: 300px;
-  top: -15px; 
+  float: right;
+  margin-right: 5px;
   font-size: 20px;
   font-weight: 700;
   letter-spacing: 1px;
@@ -341,7 +341,8 @@ input[type="month"]:focus {
 .p-popup-inbody {
   position: absolute;
   top: 0;
-  margin: 0 20px;
+  width: 150px;
+  margin-left: 10px;
   font-weight: 600;
   font-size: 18px;
 }
@@ -355,12 +356,12 @@ input[type="month"]:focus {
 
 .popup-inbody-input {
   position: absolute;
-  top: 28px;
   background-color: hwb(0 100% 0%);
+  top: 35px;
   width: 190px;
   height: 340px;
   padding: 1px;
-  margin-left: 11px;
+  margin-left: 1px;
   border-radius: 5px;
 }
 
@@ -398,8 +399,6 @@ input[type="month"]:focus {
 .p-popup-exercise {
   position: absolute;
   padding: auto;
-  top: -10px;
-  left: 10px;
   font-weight: 600;
   font-size: 18px;
   color: black;

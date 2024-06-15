@@ -113,7 +113,52 @@ tbody tr:nth-child(even) td {
     background-color: #f7f7f7;
 }
 
-#update-board {
+.title-column {
+    width: 60%;
+}
+
+.author-column {
+    width: 20%;
+}
+
+.date-column {
+    width: 20%;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.pagination-arrow, .pagination-page {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 0 5px;
+    color: rgb(11, 154, 167);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.pagination-arrow:hover, .pagination-page:hover {
+    background-color: rgb(55, 196, 170);
+    color: white;
+    border-radius: 4px;
+}
+
+.current-page {
+    font-weight: bold;
+    color: rgb(11, 154, 167);
+}
+
+.btn-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.btn {
+    display: inline-block;
     background-color: rgb(11, 154, 167);
     border-radius: 6px;
     border: 1px solid rgb(11, 154, 167);
@@ -121,21 +166,16 @@ tbody tr:nth-child(even) td {
     font-size: 15px;
     font-weight: bold;
     color: white;
-    margin: auto;
     text-decoration: none;
 }
 
-#update-board:hover {
+.btn:hover {
     background-color: rgb(55, 196, 170);
     border-color: rgb(55, 196, 170);
 }
 
-.btn {
-    margin-top: 20px;
-}
-
-@media (max-width:738px){
+@media (max-width: 738px) {
     .sidebar {
-        width:30%
+        width: 30%;
     }
 }

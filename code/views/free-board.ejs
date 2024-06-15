@@ -13,22 +13,37 @@
             <table>
                 <thead>
                     <tr>
-                        <th>제목</th>
-                        <th>작성자</th>
-                        <th>작성일</th>
+                        <th class="title-column">제목</th>
+                        <th class="author-column">작성자</th>
+                        <th class="date-column">작성일</th>
                     </tr>
                 </thead>
                 <tbody>
                     <% for(let i = 0; i < data.length; i++){ %>
                         <tr>
-                            <td><a href="/free-content/<%= data[i]._id %>"><%= data[i].title %></a></td>
-                            <td><%= data[i].author %></td>
-                            <td><%= data[i].date %></td>
+                            <td class="title-column"><a href="/free-content/<%= data[i]._id %>"><%= data[i].title %></a></td>
+                            <td class="author-column"><%= data[i].author %></td>
+                            <td class="date-column"><%= data[i].date %></td>
                         </tr>
                     <% } %>
                 </tbody>
             </table>
-            <div class="btn">
+            <div class="pagination">
+                <% if (currentPage > 1) { %>
+                    <a href="/free-board?page=<%= currentPage - 1 %>" class="pagination-arrow">이전</a>
+                <% } %>
+                <% for (let i = 1; i <= totalPages; i++) { %>
+                    <% if (i === currentPage) { %>
+                        <span class="pagination-page current-page"><%= i %></span>
+                    <% } else { %>
+                        <a href="/free-board?page=<%= i %>" class="pagination-page"><%= i %></a>
+                    <% } %>
+                <% } %>
+                <% if (currentPage < totalPages) { %>
+                    <a href="/free-board?page=<%= currentPage + 1 %>" class="pagination-arrow">다음</a>
+                <% } %>
+            </div>
+            <div class="btn-container">
                 <a href="#" class="btn btn-primary" id="update-board">작성하기</a>
             </div>
         </main>

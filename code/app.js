@@ -6,6 +6,7 @@ const userRoutes = require('./routes/user');
 const mypageRoutes = require('./routes/my-page');
 const diaryRoutes = require('./routes/diary-router.js');
 const commentRoutes = require('./routes/comment.js');
+const boardRoutes = require('./routes/board');
 const db = require('./data/database');
 
 const app = express();
@@ -36,6 +37,7 @@ app.use(userRoutes);
 app.use(mypageRoutes);
 app.use(diaryRoutes);
 app.use(commentRoutes);
+app.use(boardRoutes);
 
 app.use(function (error, req, res, next) {
   console.error(error);

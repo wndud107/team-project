@@ -237,7 +237,7 @@ input[type="month"]:focus {
   background-color: rgb(190, 223, 228);
   border-radius: 5px;
   width: 400px;
-  height: 650px;
+  height: 630px;
   padding: 0 10px;
   padding-top: 10px;
   margin-left: 20px;
@@ -249,7 +249,7 @@ input[type="month"]:focus {
 
 #popup-date {
   float: right;
-  margin-right: 5px;
+  margin-right: 3px;
   font-size: 20px;
   font-weight: 700;
   letter-spacing: 1px;
@@ -259,7 +259,7 @@ input[type="month"]:focus {
 
 .popup-content-2 {
   position: relative;
-  top: 155px;
+  margin-top: 155px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -283,7 +283,7 @@ input[type="month"]:focus {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 4px;
 }
 
 .image-upload-box:first-child {
@@ -328,21 +328,17 @@ input[type="month"]:focus {
 .p-popup-diet {
   font-weight: 600;
   font-size: 18px;
-  margin: 0;
-  margin-left: 10px;
+  margin-left: 4px;
 }
 
 .popup-inbody {
   width: 200px;
-  height: 344px;
+  height: 454px;
   text-align: left;
 }
 
 .p-popup-inbody {
-  position: absolute;
-  top: 0;
-  width: 150px;
-  margin-left: 10px;
+  margin-left: 4px;
   font-weight: 600;
   font-size: 18px;
 }
@@ -359,7 +355,7 @@ input[type="month"]:focus {
   background-color: hwb(0 100% 0%);
   top: 35px;
   width: 190px;
-  height: 340px;
+  height: 395px;
   padding: 1px;
   margin-left: 1px;
   border-radius: 5px;
@@ -402,7 +398,7 @@ input[type="month"]:focus {
   font-weight: 600;
   font-size: 18px;
   color: black;
-  margin-left: 10px;
+  margin-left: 3px;
 }
 
 .popup-content-1 {
@@ -423,8 +419,7 @@ input[type="month"]:focus {
 
 .popup-exercise {
   position: absolute;
-  top: 40px;
-  margin: 0 auto;
+  margin-top: 40px;
   width: 100%;
   height: 104px;
   background-color: #ffffff;
@@ -583,6 +578,7 @@ select optgroup {
   border: none;
   width: 12.8px;
   height: 12.8px;
+  margin-left: 3px;
 }
 
 .bi-x-square:hover {

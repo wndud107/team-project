@@ -327,11 +327,27 @@ tbody tr:nth-child(even) td {
     object-fit: cover;
 }
 
+.delete-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0;
+}
+
+#delete-comment-text {
+    font-size: 14px;
+    color: #e74c3c;
+    cursor: pointer;
+    padding: 4px 8px;
+    margin-bottom: 4px;
+    border-radius: 6px;
+}
+
+#delete-comment-text:hover {
+    background-color: rgb(247,247,247);
+}
 
 @media (max-width:738px){
     .sidebar{
         width:30%;
     }
 }
-
-v

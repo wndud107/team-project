@@ -11,7 +11,7 @@
   </head>
   <body>
     <%- include('includes/header') %>
-    <div class="container">
+    <main class="container">
       <div class="calendar">
         <div class="year-month">
           <div class="current-date">
@@ -68,7 +68,7 @@
 
           <div id="popup-choice-exercise" class="popup-choice-exercise">
             <span>
-              <svg  class="close2"  xmlns="http://www.w3.org/2000/svg"  width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16" >
+              <svg class="close2" xmlns="http://www.w3.org/2000/svg"  width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16" >
                 <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z" />
               </svg>
             </span>
@@ -82,7 +82,7 @@
               <div class="count-exercise">
                 <input type="number" id="reps" name="reps" class="input-count-exercise"  onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');"  min="1" max="3000" />
                 <p>회 x</p>
-                <input type="number"  id="sets" name="sets" class="input-count-exercise"  onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');" min="1" max="3000" />
+                <input type="number" id="sets" name="sets" class="input-count-exercise"  onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');" min="1" max="3000" />
                 <p>세트</p>
               </div>
               <button id="add-exercise-button" type="submit">추가</button>
@@ -91,72 +91,83 @@
           <div class="popup-content-2">
             <div class="popup-diet">
               <p class="p-popup-diet">오늘의 식단</p>
-              <div class="image-upload-container">
-                <form action="/save-meals" method="post" enctype="multipart/form-data">
-                  <input type="hidden" id="hiddenDate" name="date" />
-                  <input type="file" name="morningMeal" id="uploadInput1" accept="image/*" style="display:none;" onchange="previewImage(event, 'uploadBox1')" required />
-                    <div id="uploadBox1" class="placeholder image-upload-box"  onclick="document.getElementById('uploadInput1').click();">
-                      <p class="p-meals"> + <br> 아침 식단</p> <br>
-                      <!-- <p class="p-meals">아침 식단</p> -->
-                    </div>
-                  <button type="submit">저장</button>
-                </form>
-                <form action="/save-meals" method="post" enctype="multipart/form-data">
-                  <input type="hidden" id="hiddenDate" name="date" />
-                  <input type="file" name="lunchMeal" id="uploadInput2" accept="image/*" style="display:none;" onchange="previewImage(event, 'uploadBox2')" required />
-                    <div id="uploadBox2" class="placeholder image-upload-box"  onclick="document.getElementById('uploadInput2').click();">
-                      <p class="p-meals"> + <br> 점심 식단</p> <br>
-                      <!-- <p class="p-meals">아침 식단</p> -->
-                    </div>
-                  <button type="submit">저장</button>
-                </form>
-                <form action="/save-meals" method="post" enctype="multipart/form-data">
-                  <input type="hidden" id="hiddenDate" name="date" />
-                  <input type="file" name="dinnerMeal" id="uploadInput1" accept="image/*" style="display:none;" onchange="previewImage(event, 'uploadBox3')" required />
-                    <div id="uploadBox3" class="placeholder image-upload-box"  onclick="document.getElementById('uploadInput3').click();">
-                      <p class="p-meals"> + <br> 저녁 식단</p> <br>
-                      <!-- <p class="p-meals">아침 식단</p> -->
-                    </div>
-                  <button type="submit">저장</button>
-                </form>
+              <div class="image-upload-container" id="meal-section meals-container">
+                  <form id="form1" action="/save-meals" method="post" enctype="multipart/form-data" onsubmit="saveMeal(event, 'uploadInput1', 'uploadBox1')">
+                      <input type="hidden" id="hiddenDate1" name="date"/>
+                      <input type="file" name="morningMeal" id="uploadInput1" accept="image/*" style="display:none;" onchange="previewImage(event, 'uploadBox1', 'saveButton1')" onchange= "saveMeal('아침', 'fileInput1')" required />
+                      <div id="uploadBox1" class="placeholder image-upload-box" onclick="document.getElementById('uploadInput1').click();">
+                          <p class="p-meals"> + <br> 아침 식단</p>
+                      </div>
+                      <button type="submit" class="saveButton1 btn-save-meals" style="display:none;">저장</button>
+                      <button type="button" class="deleteButton1 btn-save-meals" onclick="cancelFunction()" style="display:none;">삭제</button>
+                      <button type="button" class="changeButton1 btn-save-meals" onclick="updateFunction()" style="display:none;">변경</button>
+                  </form>
+                  <div class="morning">
+                    <% meals.filter(meal => meal.mealType === '아침').forEach(meal => { %>
+                        <div>
+                            <img class="img-meal img-morning" src="/meal_images/<%= meal.filename %>" alt="<%= meal.mealType %> 이미지">
+                        </div>
+                    <% }) %>
+                  </div>
 
-<!-- 
-                  <button class="image-upload-box" onclick="document.getElementById('uploadInput2').click()" >
-                    <input type="file" id="uploadInput2" accept="image/*" onchange="previewImage(event, 'uploadBox2')" />
-                    <div id="uploadBox2" class="placeholder">
-                      <p>+</p>
-                      <p>점심 식단</p>
-                    </div>
-                  </button>
-                  <button class="image-upload-box" onclick="document.getElementById('uploadInput3').click()" >
-                    <input type="file"  id="uploadInput3"  accept="image/*" onchange="previewImage(event, 'uploadBox3')" />
-                    <div id="uploadBox3" class="placeholder">
-                      <p>+</p>
-                      <p>저녁 식단</p>
-                    </div>
-                  </button>
-           -->
-              </div>
+                  <form id="form2" action="/save-meals" method="post" enctype="multipart/form-data" onsubmit="saveMeal(event, 'uploadInput2', 'uploadBox2')">
+                      <input type="hidden" id="hiddenDate2" name="date"/>
+                      <input type="file" name="lunchMeal" id="uploadInput2" accept="image/*" style="display:none;" onchange="previewImage(event, 'uploadBox2', 'saveButton2')" onchange="saveMeal('점심', 'fileInput2')" required />
+                      <div id="uploadBox2" class="placeholder image-upload-box" onclick="document.getElementById('uploadInput2').click();">
+                          <p class="p-meals"> + <br> 점심 식단</p>
+                      </div>
+                      <button type="submit" class="saveButton2 btn-save-meals" style="display:none;">저장</button>
+                      <button type="button" class="deleteButton2 btn-save-meals" onclick="cancelFunction()" style="display:none;">삭제</button>
+                      <button type="button" class="changeButton2 btn-save-meals" onclick="updateFunction()" style="display:none;">변경</button>
+                  </form>
+                  <div class="lunch">
+                    <% meals.filter(meal => meal.mealType === '점심').forEach(meal => { %>
+                        <div>
+                            <img class="img-meal img-lunch" src="/meal_images/<%= meal.filename %>" alt="<%= meal.mealType %> 이미지">
+                        </div>
+                    <% }) %>
+                  </div>
+
+                  <form id="form3" action="/save-meals" method="post" enctype="multipart/form-data" onsubmit="saveMeal(event, 'uploadInput3', 'uploadBox3')">
+                      <input type="hidden" id="hiddenDate3" name="date"/>
+                      <input type="file" name="dinnerMeal" id="uploadInput3" accept="image/*" style="display:none;" onchange="previewImage(event, 'uploadBox3', 'saveButton3')" onchange="saveMeal('저녁', 'fileInput3')" required />
+                      <div id="uploadBox3" class="placeholder image-upload-box " onclick="document.getElementById('uploadInput3').click();">
+                          <p class="p-meals"> + <br> 저녁 식단</p>
+                      </div>
+                      <button type="submit" class="saveButton3 btn-save-meals" style="display:none;">저장</button>
+                      <button type="button" class="deleteButton3 btn-save-meals" onclick="cancelFunction()" style="display:none;">삭제</button>
+                      <button type="button" class="changeButton3 btn-save-meals" onclick="updateFunction()" style="display:none;">변경</button>
+                  </form>
+                  <div class="dinner">
+                    <% meals.filter(meal => meal.mealType === '저녁').forEach(meal => { %>
+                        <div>
+                            <img class="img-meal img-dinner" src="/meal_images/<%= meal.filename %>" alt="<%= meal.mealType %> 이미지">
+                        </div>
+                    <% }) %>
+                  </div>
+                </div>
             </div>
             <!--인바디-->            
             <div class="popup-inbody">
               <p class="p-popup-inbody">오늘의 눈바디</p>
               <div class="popup-inbody-input">
                 <form id="save-inbody" name="weight" method="post" enctype="multipart/form-data">
-                  <span class="save-inbody"></span>
-                  <div class="nunbody-image-box" id="photo-placeholder" onclick="document.getElementById('fileInput').click();">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-bounding-box" viewBox="0 0 16 16">
-                      <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5"/>
-                      <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-                    </svg>
-                    <p>오늘의 눈바디 사진을 <br/> 등록해주세요.</p>
-                  </div>
-                  <input type="file" id="fileInput" style="display:none;" accept="image/*" onchange="previewInbodyImage(event)" >
-                  <div class="popup-input popup-weight">
-                      <p class="weight">체중</p>
-                      <input type="text" id="weight" name="weight" class="inbody-input input-weight" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');" />
-                      <div id="today-weight"></div>
-                      <p>kg</p>
+                  <div class="save-inbody inbody-part">
+                    <div class="nunbody-image-box" id="photo-placeholder" onclick="document.getElementById('fileInput').click();">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-bounding-box" viewBox="0 0 16 16">
+                        <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5"/>
+                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                      </svg>
+                      <p>오늘의 눈바디 사진을 <br/> 등록해주세요.</p>
+                    </div>
+                    <input type="file" id="fileInput" style="display:none;" accept="image/*" onchange="previewInbodyImage(event)" >
+                    <!-- <button type="submit" class="btn-save-nunbody" style="display:none;">저장</button> -->
+                    <div class="popup-input popup-weight">
+                        <label for="weight" class="weight">체중</label>
+                        <input type="text" id="weight" name="weight" class="inbody-input input-weight" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');" />
+                        <div id="today-weight"></div>
+                        <p>kg</p>
+                    </div>
                   </div>
                   <button class="btn-save-inbody">저장</button>
                 </form>
@@ -166,23 +177,26 @@
         </div>
         <div class="d-day-graph">
           <div class="D-day">
-            <p class="p-weight-goal">목표 체중 : <%= goalWeight%> kg</p>
+            <p class="p-weight-goal"> 목표 체중 : <%= goalWeight%> kg </p>
             <p class="d-day">D-<%= dDay%></p>
           </div>
           <div class="graph">
             <div class="choice-inbody-graph">
               <form action="">
-              <select name="" id="">
-                <option value="">체중</option>
-                <option value="">골격근량</option>
-                <option value=""></option>
-              </select>    
+                <select name="" id="dataSelector">
+                  <option value="weight">체중</option>
+                  <option value="muscle">골격근량</option>
+                  <option value=""></option>
+                </select>    
               </form>
             </div>
             <div class="inbody-graph">
-              <canvas id="line-chart" width="300" height="250">  </canvas>            </div>
+              <canvas id="weightChart" width="300" height="250"></canvas>   
+            </div>
           </div>
         </div>
-    </div>
+    </main>
   </body>
 </html>
+
+

@@ -64,9 +64,30 @@
   });
 
   router.post("/join", async function (req, res) {
-    const {
+  const {
+    id_join,
+    pw_join,
+    name_join,
+    birth_join,
+    telnumber_join,
+    height_join,
+    weight_join,
+    goal_weight_join,
+    goal_date_join,
+    nickname_join,
+  } = req.body;
+
+  try {
+    const existingUser = await db.getDb().collection("User_info").findOne({ id_join });
+    if (existingUser) {
+      return res.status(400).json({ error: "이미 존재하는 아이디입니다. 다른 아이디를 입력하세요." });
+    }
+
+    const hashedPassword = await bcrypt.hash(pw_join, 12);
+
+    await db.getDb().collection("User_info").insertOne({
       id_join,
-      pw_join,
+      pw_join: hashedPassword,
       name_join,
       birth_join,
       telnumber_join,
@@ -75,35 +96,15 @@
       goal_weight_join,
       goal_date_join,
       nickname_join,
-    } = req.body;
-  
-    try {
-      const existingUser = await db.getDb().collection("User_info").findOne({ id_join });
-      if (existingUser) {
-        return res.status(400).json({ error: "이미 존재하는 아이디입니다. 다른 아이디를 입력하세요." });
-      }
-  
-      const hashedPassword = await bcrypt.hash(pw_join, 12);
-  
-      await db.getDb().collection("User_info").insertOne({
-        id_join,
-        pw_join: hashedPassword,
-        name_join,
-        birth_join,
-        telnumber_join,
-        height_join,
-        weight_join,
-        goal_weight_join,
-        goal_date_join,
-        nickname_join,
-      });
-  
-      res.status(200).json({ success: true });
-    } catch (error) {
-      console.error("Error inserting user:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
-  });  
+      profilePhoto: "" // 프로필 사진 필드 추가
+    });
+
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error("Error inserting user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
   router.get("/complete-join", function (req, res) {
     res.render("complete-join");

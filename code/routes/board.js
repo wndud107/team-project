@@ -21,29 +21,6 @@ let storage = multer.diskStorage({
 
 let upload = multer({ storage: storage });
 
-const express = require("express");
-const bcrypt = require("bcryptjs");
-const fs = require("fs");
-const path = require("path");
-const formidable = require("formidable");
-const { ObjectId } = require("mongodb");
-const db = require("../data/database");
-
-const router = express.Router();
-
-let multer = require("multer");
-
-let storage = multer.diskStorage({
-    destination: function (req, file, done) {
-      done(null, "./public/image");
-    },
-    filename: function (req, file, done) {
-      done(null, file.originalname);
-    },
-});
-
-let upload = multer({ storage: storage });
-
 router.get("/main-board", async (req, res) => {
   try {
     const boards = [

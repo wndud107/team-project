@@ -141,6 +141,22 @@ body{
     border: 2px solid #9AE1D4;
     background-color: transparent; /* 배경 투명 설정 */
     border-radius: 50%;
+    z-index: -4; 
+    display: inline-block;
+    line-height: 32px;
+    text-align: center;
+}
+
+.days li.all-checked::after{
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    background-color: #9AE1D4; /* 배경 투명 설정 */
+    border-radius: 50%;
     z-index: -3; 
     display: inline-block;
     line-height: 32px;

@@ -10,7 +10,7 @@ const router = express.Router();
 
 let multer = require("multer");
 
-let storage = multer.diskStorage({f
+let storage = multer.diskStorage({
     destination: function (req, file, done) {
       done(null, "./public/image");
     },

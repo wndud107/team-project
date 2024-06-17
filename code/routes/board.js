@@ -10,7 +10,7 @@ const router = express.Router();
 
 let multer = require("multer");
 
-let storage = multer.diskStorage({
+let storage = multer.diskStorage({f
     destination: function (req, file, done) {
       done(null, "./public/image");
     },
@@ -961,69 +961,69 @@ router.get("/end-content/:id", async function (req, res) {
   });
 
   // 정보게시판
-  router.get("/info-content/:id", async function (req, res) {
-    const id = req.params.id;
+ router.get("/info-content/:id", async function (req, res) {
+  const id = req.params.id;
 
-    try {
-      // ID로 게시물을 찾습니다
-      const post = await db
-        .getDb()
-        .collection("info_board")
-        .findOne({ _id: new ObjectId(id) });
+  try {
+    // ID로 게시물을 찾습니다
+    const post = await db
+      .getDb()
+      .collection("info_board")
+      .findOne({ _id: new ObjectId(id) });
 
-      if (!post) {
-        console.log("해당 ID로 게시물을 찾을 수 없습니다:", id);
-        return res.status(404).send("게시물을 찾을 수 없습니다.");
-      }
-
-      // 작성자를 ID로 찾습니다
-      const author = await db
-        .getDb()
-        .collection("User_info")
-        .findOne({ id_join: post.author });
-
-      // 프로필 사진이 없는 경우 기본 사진 설정
-      const authorProfilePhoto = author && author.profilePhoto ? author.profilePhoto : '기본프로필.png';
-
-      // 조회수를 증가시킵니다
-      await db
-        .getDb()
-        .collection("info_board")
-        .updateOne({ _id: new ObjectId(id) }, { $inc: { view: 1 } });
-
-      // Fetch comments
-      const comments = await db
-        .getDb()
-        .collection("info_comment")
-        .find({ postId: new ObjectId(id) })
-        .sort({ date: 1 })
-        .toArray();
-
-      // 댓글 작성자 프로필 사진 가져오기
-      const commentsWithProfilePhotos = await Promise.all(
-        comments.map(async (comment) => {
-          const commentAuthor = await db
-            .getDb()
-            .collection("User_info")
-            .findOne({ id_join: comment.author });
-          
-          const commentAuthorProfilePhoto = commentAuthor && commentAuthor.profilePhoto ? commentAuthor.profilePhoto : '기본프로필.png';
-          
-          return { ...comment, authorProfilePhoto: commentAuthorProfilePhoto };
-        })
-      );
-
-      res.render("info-content", {
-        data: post,
-        user: req.session.user,
-        authorProfilePhoto: authorProfilePhoto,
-        comments
-      });
-    } catch (error) {
-      console.error("내용을 가져오는 중 오류 발생:", error);
-      res.status(500).send("서버 내부 오류");
+    if (!post) {
+      console.log("해당 ID로 게시물을 찾을 수 없습니다:", id);
+      return res.status(404).send("게시물을 찾을 수 없습니다.");
     }
-  });
+
+    // 작성자를 ID로 찾습니다
+    const author = await db
+      .getDb()
+      .collection("User_info")
+      .findOne({ id_join: post.author });
+
+    // 프로필 사진이 없는 경우 기본 사진 설정
+    const authorProfilePhoto = author && author.profilePhoto ? author.profilePhoto : '기본프로필.png';
+
+    // 조회수를 증가시킵니다
+    await db
+      .getDb()
+      .collection("info_board")
+      .updateOne({ _id: new ObjectId(id) }, { $inc: { view: 1 } });
+
+    // Fetch comments
+    const comments = await db
+      .getDb()
+      .collection("info_comment")
+      .find({ postId: new ObjectId(id) })
+      .sort({ date: 1 })
+      .toArray();
+
+    // 댓글 작성자 프로필 사진 가져오기
+    const commentsWithProfilePhotos = await Promise.all(
+      comments.map(async (comment) => {
+        const commentAuthor = await db
+          .getDb()
+          .collection("User_info")
+          .findOne({ id_join: comment.author });
+
+        const commentAuthorProfilePhoto = commentAuthor && commentAuthor.profilePhoto ? commentAuthor.profilePhoto : '기본프로필.png';
+
+        return { ...comment, authorProfilePhoto: commentAuthorProfilePhoto };
+      })
+    );
+
+    res.render("info-content", {
+      data: post,
+      user: req.session.user,
+      authorProfilePhoto: authorProfilePhoto,
+      comments: commentsWithProfilePhotos
+    });
+  } catch (error) {
+    console.error("내용을 가져오는 중 오류 발생:", error);
+    res.status(500).send("서버 내부 오류");
+  }
+});
 
 
   router.delete("/delete-info-post/:id", async function (req, res) {

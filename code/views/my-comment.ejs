@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('includes/head') %>
+    <link rel="stylesheet" href="/styles/my-comment.css">
+</head>
+<body>
+    <%- include('includes/header') %>
+    <h1>내가 쓴 댓글</h1>
+    
+    <div class="comment-list">
+        <% if (comments.length > 0) { %>
+            <% comments.forEach(comment => { %>
+                <div class="comment">
+                    <!--댓글-->
+                    <h4>
+                        <a href="/<%= comment.boardType %>-content/<%= comment.postId %>">
+                            내용: <%= comment.content %>
+                        </a>
+                    </h4>
+                    <div class="low-element">
+                        <p>작성일: <%= new Date(comment.date).toLocaleDateString("ko-KR") %></p>
+                    </div>
+                </div>
+            <% }) %> 
+        <% } else { %>
+            <style>.board-list {border-bottom: 1px solid rgb(11, 154, 167);};</style>
+            <p>작성한 댓글이 없습니다.</p>
+        <% } %>
+    </div>
+</body>
+</html>

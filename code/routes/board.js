@@ -294,18 +294,26 @@ router.get("/main-board", async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = 13;
     const skip = (page - 1) * limit;
+    const search = req.query.search || '';
+    const searchType = req.query.searchType || 'title';
 
     try {
+        const query = search
+            ? searchType === 'author'
+                ? { author: { $regex: search, $options: 'i' } }
+                : { title: { $regex: search, $options: 'i' } }
+            : {};
+
         const data = await db
             .getDb()
             .collection("info_board")
-            .find()
+            .find(query)
             .sort({ date: -1 })
             .skip(skip)
             .limit(limit)
             .toArray();
 
-        const totalPosts = await db.getDb().collection("info_board").countDocuments();
+        const totalPosts = await db.getDb().collection("info_board").countDocuments(query);
         const totalPages = Math.ceil(totalPosts / limit);
 
         const formattedData = data.map((item) => ({
@@ -315,139 +323,171 @@ router.get("/main-board", async (req, res) => {
             date: formatDate(item.date),
         }));
 
-        res.render("info-board", { data: formattedData, currentPage: page, totalPages: totalPages });
+        res.render("info-board", { data: formattedData, currentPage: page, totalPages: totalPages, search: search, searchType: searchType });
     } catch (error) {
         console.error("Error fetching data from MongoDB:", error);
         res.status(500).send("Internal Server Error");
     }
 });
 
-  router.get("/free-board", async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = 13;
-    const skip = (page - 1) * limit;
+router.get("/free-board", async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = 13;
+  const skip = (page - 1) * limit;
+  const search = req.query.search || '';
+  const searchType = req.query.searchType || 'title';
 
-    try {
-        const data = await db
-            .getDb()
-            .collection("free_board")
-            .find()
-            .sort({ date: -1 })
-            .skip(skip)
-            .limit(limit)
-            .toArray();
+  try {
+      const query = search
+          ? searchType === 'author'
+              ? { author: { $regex: search, $options: 'i' } }
+              : { title: { $regex: search, $options: 'i' } }
+          : {};
 
-        const totalPosts = await db.getDb().collection("free_board").countDocuments();
-        const totalPages = Math.ceil(totalPosts / limit);
+      const data = await db
+          .getDb()
+          .collection("free_board")
+          .find(query)
+          .sort({ date: -1 })
+          .skip(skip)
+          .limit(limit)
+          .toArray();
 
-        const formattedData = data.map((item) => ({
-            _id: item._id,
-            title: item.title,
-            author: item.author,
-            date: formatDate(item.date),
-        }));
+      const totalPosts = await db.getDb().collection("free_board").countDocuments(query);
+      const totalPages = Math.ceil(totalPosts / limit);
 
-        res.render("free-board", { data: formattedData, currentPage: page, totalPages: totalPages });
-    } catch (error) {
-        console.error("Error fetching data from MongoDB:", error);
-        res.status(500).send("Internal Server Error");
-    }
+      const formattedData = data.map((item) => ({
+          _id: item._id,
+          title: item.title,
+          author: item.author,
+          date: formatDate(item.date),
+      }));
+
+      res.render("free-board", { data: formattedData, currentPage: page, totalPages: totalPages, search: search, searchType: searchType });
+  } catch (error) {
+      console.error("Error fetching data from MongoDB:", error);
+      res.status(500).send("Internal Server Error");
+  }
 });
 
 router.get("/end-board", async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = 13;
-    const skip = (page - 1) * limit;
+  const page = parseInt(req.query.page) || 1;
+  const limit = 13;
+  const skip = (page - 1) * limit;
+  const search = req.query.search || '';
+  const searchType = req.query.searchType || 'title';
 
-    try {
-        const data = await db
-            .getDb()
-            .collection("end_board")
-            .find()
-            .sort({ date: -1 })
-            .skip(skip)
-            .limit(limit)
-            .toArray();
+  try {
+      const query = search
+          ? searchType === 'author'
+              ? { author: { $regex: search, $options: 'i' } }
+              : { title: { $regex: search, $options: 'i' } }
+          : {};
 
-        const totalPosts = await db.getDb().collection("end_board").countDocuments();
-        const totalPages = Math.ceil(totalPosts / limit);
+      const data = await db
+          .getDb()
+          .collection("end_board")
+          .find(query)
+          .sort({ date: -1 })
+          .skip(skip)
+          .limit(limit)
+          .toArray();
 
-        const formattedData = data.map((item) => ({
-            _id: item._id,
-            title: item.title,
-            author: item.author,
-            date: formatDate(item.date),
-        }));
+      const totalPosts = await db.getDb().collection("end_board").countDocuments(query);
+      const totalPages = Math.ceil(totalPosts / limit);
 
-        res.render("end-board", { data: formattedData, currentPage: page, totalPages: totalPages });
-    } catch (error) {
-        console.error("Error fetching data from MongoDB:", error);
-        res.status(500).send("Internal Server Error");
-    }
+      const formattedData = data.map((item) => ({
+          _id: item._id,
+          title: item.title,
+          author: item.author,
+          date: formatDate(item.date),
+      }));
+
+      res.render("end-board", { data: formattedData, currentPage: page, totalPages: totalPages, search: search, searchType: searchType });
+  } catch (error) {
+      console.error("Error fetching data from MongoDB:", error);
+      res.status(500).send("Internal Server Error");
+  }
 });
 
 router.get("/child-board", async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = 13;
-    const skip = (page - 1) * limit;
+  const page = parseInt(req.query.page) || 1;
+  const limit = 13;
+  const skip = (page - 1) * limit;
+  const search = req.query.search || '';
+  const searchType = req.query.searchType || 'title';
 
-    try {
-        const data = await db
-            .getDb()
-            .collection("child_board")
-            .find()
-            .sort({ date: -1 })
-            .skip(skip)
-            .limit(limit)
-            .toArray();
+  try {
+      const query = search
+          ? searchType === 'author'
+              ? { author: { $regex: search, $options: 'i' } }
+              : { title: { $regex: search, $options: 'i' } }
+          : {};
 
-        const totalPosts = await db.getDb().collection("child_board").countDocuments();
-        const totalPages = Math.ceil(totalPosts / limit);
+      const data = await db
+          .getDb()
+          .collection("child_board")
+          .find(query)
+          .sort({ date: -1 })
+          .skip(skip)
+          .limit(limit)
+          .toArray();
 
-        const formattedData = data.map((item) => ({
-            _id: item._id,
-            title: item.title,
-            author: item.author,
-            date: formatDate(item.date),
-        }));
+      const totalPosts = await db.getDb().collection("child_board").countDocuments(query);
+      const totalPages = Math.ceil(totalPosts / limit);
 
-        res.render("child-board", { data: formattedData, currentPage: page, totalPages: totalPages });
-    } catch (error) {
-        console.error("Error fetching data from MongoDB:", error);
-        res.status(500).send("Internal Server Error");
-    }
+      const formattedData = data.map((item) => ({
+          _id: item._id,
+          title: item.title,
+          author: item.author,
+          date: formatDate(item.date),
+      }));
+
+      res.render("child-board", { data: formattedData, currentPage: page, totalPages: totalPages, search: search, searchType: searchType });
+  } catch (error) {
+      console.error("Error fetching data from MongoDB:", error);
+      res.status(500).send("Internal Server Error");
+  }
 });
 
 router.get("/ghwm-board", async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = 13;
-    const skip = (page - 1) * limit;
+  const page = parseInt(req.query.page) || 1;
+  const limit = 13;
+  const skip = (page - 1) * limit;
+  const search = req.query.search || '';
+  const searchType = req.query.searchType || 'title';
 
-    try {
-        const data = await db
-            .getDb()
-            .collection("ghwm_board")
-            .find()
-            .sort({ date: -1 })
-            .skip(skip)
-            .limit(limit)
-            .toArray();
+  try {
+      const query = search
+          ? searchType === 'author'
+              ? { author: { $regex: search, $options: 'i' } }
+              : { title: { $regex: search, $options: 'i' } }
+          : {};
 
-        const totalPosts = await db.getDb().collection("ghwm_board").countDocuments();
-        const totalPages = Math.ceil(totalPosts / limit);
+      const data = await db
+          .getDb()
+          .collection("ghwm_board")
+          .find(query)
+          .sort({ date: -1 })
+          .skip(skip)
+          .limit(limit)
+          .toArray();
 
-        const formattedData = data.map((item) => ({
-            _id: item._id,
-            title: item.title,
-            author: item.author,
-            date: formatDate(item.date),
-        }));
+      const totalPosts = await db.getDb().collection("ghwm_board").countDocuments(query);
+      const totalPages = Math.ceil(totalPosts / limit);
 
-        res.render("ghwm-board", { data: formattedData, currentPage: page, totalPages: totalPages });
-    } catch (error) {
-        console.error("Error fetching data from MongoDB:", error);
-        res.status(500).send("Internal Server Error");
-    }
+      const formattedData = data.map((item) => ({
+          _id: item._id,
+          title: item.title,
+          author: item.author,
+          date: formatDate(item.date),
+      }));
+
+      res.render("ghwm-board", { data: formattedData, currentPage: page, totalPages: totalPages, search: search, searchType: searchType });
+  } catch (error) {
+      console.error("Error fetching data from MongoDB:", error);
+      res.status(500).send("Internal Server Error");
+  }
 });
 
   // 자유게시판

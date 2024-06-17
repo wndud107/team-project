@@ -126,7 +126,7 @@ const updateExercisesPopupContent = (data) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ id: exercise._id })
+                body: JSON.stringify({ id: exercise._id, date: exercise.date })
             })
             .then(response => {
                 if (!response.ok) {
@@ -138,6 +138,7 @@ const updateExercisesPopupContent = (data) => {
             .then(data => {
                 console.log('Exercise deleted successfully:', data);
                 exerciseList.removeChild(listItem);
+                fetchExerciseLogs(); // 운동 삭제 후 해당 날짜의 운동 기록 수를 다시 로드하여 갱신
             })
             .catch(error => {
                 console.error('Error deleting exercise:', error);
@@ -439,7 +440,7 @@ if (addExerciseFormButton) {
                             headers: {
                                 'Content-Type': 'application/json'
                             },
-                            body: JSON.stringify({ id: checkboxId })
+                            body: JSON.stringify({ id: checkboxId, date: exercise.date })
                         })
                         .then(response => {
                             if (!response.ok) {
@@ -450,6 +451,7 @@ if (addExerciseFormButton) {
                         .then(data => {
                             console.log('Exercise deleted successfully:', data);
                             exerciseList.removeChild(listItem);
+                            fetchExerciseLogs(); // 운동 삭제 후 해당 날짜의 운동 기록 수를 다시 로드하여 갱신
                         })
                         .catch(error => {
                             console.error('Error deleting exercise:', error);

@@ -253,19 +253,39 @@ router.post("/delete-exercise", async function (req, res) {
   const { id, date } = req.body;
   const user = req.session.user;
   try {
-    await db.getDb().collection("User_diary").deleteOne({
-        _id: new ObjectId(id),
-        author: user.id
+    // 운동 삭제
+    const deleteResult = await db.getDb().collection("User_diary").deleteOne({
+      _id: new ObjectId(id),
+      author: user.id
     });
 
+    if (deleteResult.deletedCount === 0) {
+      throw new Error('Exercise not found or not authorized to delete');
+    }
+
+    console.log(`Deleted exercise id: ${id} for user: ${user.id} on date: ${date}`);
+
     // 해당 날짜의 운동 기록 수 감소
-    await db.getDb().collection("User_diary_exlogs").updateOne(
+    const updateResult = await db.getDb().collection("User_diary_exlogs").updateOne(
       { author: user.id, date: date },
-      { $inc: { count: -1 } });
+      { $inc: { count: -1 } }
+    );
+
+    console.log(`Update result: ${JSON.stringify(updateResult)}`);
+
+    // 기록이 0이 되면 해당 날짜의 로그 삭제
+    if (updateResult.matchedCount > 0) {
+      const log = await db.getDb().collection("User_diary_exlogs").findOne({ author: user.id, date: date });
+      console.log(`Log found: ${JSON.stringify(log)}`);
+      if (log && log.count <= 0) {
+        const deleteLogResult = await db.getDb().collection("User_diary_exlogs").deleteOne({ author: user.id, date: date });
+        console.log(`Deleted log result: ${JSON.stringify(deleteLogResult)}`);
+      }
+    }
 
     res.status(200).json({ message: 'Exercise data deleted successfully' });
   } catch (error) {
-    console.error("Error deleting exercise:", error);
+    console.error("Error deleting exercise:", error.message);
     res.status(500).send("Error deleting exercise");
   }
 });

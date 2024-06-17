@@ -2,10 +2,10 @@
     <div class="profile">
         <div class="profile-image"><img src="" alt="..."></div>
         <div class="profile-name"><%= user ? user.name : '' %></div>
-        <form method="POST" action="/my-page">
+        <form method="GET" action="/my-page">
             <button class="profile-button">내 정보</button>
         </form>
-        <form method="POST" action="/logout">
+        <form method="GET" action="/logout">
             <button class="profile-button">로그아웃</button>
         </form>
     </div>

@@ -78,6 +78,7 @@ router.post("/upload-profile-photo", upload.single('profilePhoto'), async functi
 
 
 // 프로필 페이지 렌더링 라우트
+// 프로필 페이지 렌더링 라우트
 router.get("/my-page", async function (req, res) {
   const user = req.session.user;
 
@@ -90,13 +91,16 @@ router.get("/my-page", async function (req, res) {
   try {
     const userData = await db.getDb().collection("User_info").findOne({ id_join: user.id });
 
+    const inbodyData = await db.getDb().collection("User_inbody").find({ id_join: user.id }).sort({ date: -1 }).limit(1).toArray();
+    const latestInbody = inbodyData.length ? inbodyData[0] : null;
+
     if (userData) {
       // 목표 날짜와 현재 날짜의 차이를 계산하여 D-Day 구하기
       const currentDate = new Date();
       const goalDate = new Date(userData.goal_date_join);
       const dDay = Math.ceil((goalDate - currentDate) / (1000 * 60 * 60 * 24));
 
-      res.render("my-page", { user: userData, dDay: dDay });
+      res.render("my-page", { user: userData, dDay: dDay, inbody: latestInbody });
     } else {
       res.send(
         '<script>alert("사용자 정보를 불러오는 데 실패했습니다."); window.location.href = "/";</script>'
@@ -105,6 +109,35 @@ router.get("/my-page", async function (req, res) {
   } catch (error) {
     console.error("Error fetching user data:", error);
     res.status(500).send("Internal Server Error");
+  }
+});
+
+// 인바디 데이터 저장 라우트
+router.post('/save-inbody', async function (req, res) {
+  const user = req.session.user;
+  const { weight, SMM, BFM, BMI, BFP } = req.body;
+
+  if (!user) {
+    return res.json({ success: false, message: '로그인이 필요합니다.' });
+  }
+
+  const currentDate = new Date();
+  const inbodyData = {
+    id_join: user.id,
+    date: currentDate,
+    weight: weight,
+    SMM: SMM,
+    BFM: BFM,
+    BMI: BMI,
+    BFP: BFP
+  };
+
+  try {
+    await db.getDb().collection('User_inbody').insertOne(inbodyData);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error saving inbody data:', error);
+    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
   }
 });
 
@@ -405,5 +438,59 @@ router.get("/my-comment", async function (req, res) {
   }
 });
 
+// 체중 업데이트
+router.post('/change-weight', async function(req, res) {
+  const user = req.session.user;
+  const { newWeight } = req.body;
+
+  if (!user) {
+    return res.json({ success: false, message: '로그인이 필요합니다.' });
+  }
+
+  try {
+    const updateResult = await db.getDb().collection('User_info').updateOne(
+      { id_join: user.id },
+      { $set: { weight_join: newWeight } }
+    );
+
+    if (updateResult.modifiedCount === 1) {
+      return res.json({ success: true });
+    } else {
+      return res.json({ success: false, message: '몸무게 변경에 실패했습니다.' });
+    }
+  } catch (error) {
+    console.error('Error changing weight:', error);
+    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+// 인바디 데이터 저장
+router.post('/save-inbody', async function (req, res) {
+  const user = req.session.user;
+  const { weight, SMM, BFM, BMI, BFP } = req.body;
+
+  if (!user) {
+    return res.json({ success: false, message: '로그인이 필요합니다.' });
+  }
+
+  const currentDate = new Date();
+  const inbodyData = {
+    id_join: user.id,
+    date: currentDate,
+    weight: weight,
+    SMM: SMM,
+    BFM: BFM,
+    BMI: BMI,
+    BFP: BFP
+  };
+
+  try {
+    await db.getDb().collection('User_inbody').insertOne(inbodyData);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error saving inbody data:', error);
+    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
+  }
+});
 
 module.exports = router;

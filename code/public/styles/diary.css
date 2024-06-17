@@ -5,15 +5,14 @@ body{
   box-sizing: border-box;
 }
 
-.container {
-  margin: 0 auto; 
+.container { 
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 7vh;
   background-color: #ffffff;
-  gap:10px;
+  gap: 30px;
 }
 
 .year-month{
@@ -137,8 +136,8 @@ body{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     border: 2px solid #9AE1D4;
     background-color: transparent; /* 배경 투명 설정 */
     border-radius: 50%;
@@ -238,11 +237,11 @@ input[type="month"]:focus {
   border-radius: 5px;
   width: 400px;
   height: 630px;
-  padding: 0 10px;
-  padding-top: 10px;
-  margin-left: 20px;
+  padding: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
   position: relative;
-  display: flex;
+  display: inline-block;
   flex-direction: column;
   align-items: center;
 }
@@ -259,7 +258,7 @@ input[type="month"]:focus {
 
 .popup-content-2 {
   position: relative;
-  margin-top: 155px;
+  margin-top: 165px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -268,6 +267,7 @@ input[type="month"]:focus {
 
 .popup-diet {
   text-align: left;
+  height: 450px;
 }
 
 .diet-image input[type="file"] {
@@ -292,7 +292,7 @@ input[type="month"]:focus {
 
 .image-upload-box {
   width: 180px;
-  height: 108px;
+  height: 125px;
   border: 2px #ffffff;
   display: flex;
   align-items: center;
@@ -302,6 +302,7 @@ input[type="month"]:focus {
   border-radius: 5px;
   background-color: #ffffff;
   margin-top: 8px;
+  text-align: center;
 }
 
 .image-upload-box:last-child {
@@ -310,10 +311,9 @@ input[type="month"]:focus {
 
 .image-upload-box img {
   width: 180px;
-  height: 110px;
+  height: 125px;
   object-fit: cover;
   border-radius: 5px;
-  margin-top: 5px;
 }
 
 .image-upload-box input[type="file"] {
@@ -353,9 +353,9 @@ input[type="month"]:focus {
 .popup-inbody-input {
   position: absolute;
   background-color: hwb(0 100% 0%);
-  top: 35px;
+  margin-top: 10px;
   width: 190px;
-  height: 395px;
+  height: 398px;
   padding: 1px;
   margin-left: 1px;
   border-radius: 5px;
@@ -403,7 +403,7 @@ input[type="month"]:focus {
 
 .popup-content-1 {
   position: relative;
-  margin: 0 auto;
+  margin: 5px auto;
 }
 
 .bi-plus-circle {
@@ -610,9 +610,8 @@ select optgroup {
 }
 
 .p-weight-goal {
-  width: 320px;
+  width: 350px;
   height: 50px;
-  margin-left: 30px;
   margin-bottom: 10px;
   background-color: rgb(255, 255, 255);
   border-radius: 5px;
@@ -623,6 +622,12 @@ select optgroup {
   align-items: center;
 }
 
+.d-day-graph{
+  width: 400px;
+  height: 600px;
+  margin: 10px;
+}
+
 .d-day {
   font-size: 64px; 
   font-weight: 600;
@@ -630,10 +635,9 @@ select optgroup {
 }
 
 .graph {
-  width: 320px;
+  width: 350px;
   height: 280px;
   margin-top: 80px;
-  margin-left: 30px;
   background-color: rgb(255, 255, 255);
 }
 
@@ -642,8 +646,6 @@ select optgroup {
   outline: auto;
   outline-color: #e1e1e1;
   background-color: rgb(255, 255, 255);
-  width: 320px;
-  height: 220px;
 }
 
 .nunbody-image-box {
@@ -740,3 +742,29 @@ select optgroup {
   justify-content: center;
   align-items: center;
 }
+
+.btn-save-meals {
+  /* display: none; */
+  width: 180px;
+  height: 125px;
+  border-radius: 5px;
+  border: #0da6b749 solid 2px;
+
+  font-size: 18px;
+  font-weight: 500;
+  /* text-shadow: -1px 0 rgb(255, 255, 255), 0 1px rgb(255, 255, 255), 1px 0 rgb(255, 255, 255), 0 -1px rgb(255, 255, 255); */
+  background-color: #ffffff93;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  object-fit: cover;
+  position: absolute;
+  margin-top: -125px;
+} 
+
+.save-button {
+  /* display: block; */
+  margin-top: 10px;
+  z-index: 1000;
+} 

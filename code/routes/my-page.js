@@ -1,290 +1,409 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <%- include('includes/head') %>
-  <link rel="stylesheet" href="styles/my-page.css" />
-  <script src="/scripts/change-my-page.js" defer></script>
-</head>
-<body>
-  <%- include('includes/header') %>
-  <main>
-    <div class="container1">
-      <h2 class="h2">My Page</h2>
-      <div class="container2">
-        <div class="profile">
-          <div class="photo">
-            <% if (user.profilePhoto) { %>
-            <div
-              class="photo-placeholder"
-              id="photo-placeholder"
-              style="
-                background-image: url('<%= user.profilePhoto %>');
-                width: 150px;
-                height: 150px;
-                background-size: cover;
-                background-position: center;
-              "
-            ></div>
-            <% } else { %>
-            <div
-              class="photo-placeholder"
-              id="photo-placeholder"
-              style="
-                background-image: url('/image/default-placeholder.png');
-                width: 150px;
-                height: 150px;
-                background-size: cover;
-                background-position: center;
-              "
-            ></div>
-            <% } %>
-            <p>
-              회원님을 알릴 수 있는 사진을 등록해 주세요.<br />등록된 사진은
-              회원님의 게시물이나 댓글들에 사용됩니다.
-            </p>
-            <form id="profileForm" action="/upload-profile-photo" method="POST" enctype="multipart/form-data">
-              <input type="file" id="fileInput" name="profilePhoto" accept=".jpg" style="display: none" onchange="previewPhoto()"/>
-              <div id="button-group">
-                <button type="button" onclick="document.getElementById('fileInput').click();" class="profile-photo-btn" id="change-button">사진 변경</button>
-                <button type="submit" class="profile-photo-btn" id="save-button" style="display: none;">저장</button>
-                <button type="button" onclick="resetPhoto()" class="profile-photo-btn" id="cancel-button" style="display: none;">취소</button>
-              </div>
-            </form>
-          </div>
-          <div class="nickname-box">
-            <h3><%= user.nickname_join %></h3>
-            <a href="change-nickname">닉네임 변경</a>
-          </div>
-        </div>
+const express = require("express");
+const multer = require("multer");
+const path = require("path");
+const { ObjectId } = require("mongodb");
+const db = require("../data/database");
+const fs = require('fs');
 
-        <div class="D-DAY">
-          <h3>목표 몸무게 <br /><%= user.goal_weight_join %> Kg</h3>
-          <h2>D-<%= dDay %></h2>
-          <a href="#">D-DAY 설정</a>
-        </div>
-      </div>
-    </div>
+const router = express.Router();
 
-    <div class="User_info">
-      <h2>회원 정보</h2>
-      <div class="basic-info">
-        <div class="info-row" id="idDisplay">
-          <label>아이디</label>
-          <span id="currentId"><%= user.id_join %></span>
-          <a class="btn" href="#" onclick="showIdChangeForm()">아이디 변경</a>
-        </div>
+// Multer 저장소 설정
+let storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./public/image"); // 경로를 './public/images'로 설정
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
 
-        <div
-          class="change-info-row"
-          id="idChangeForm"
-          style="display: none; margin-top: 10px"
-        >
-          <label for="newId">아이디</label>
-          <input
-            type="text"
-            id="newId"
-            class="new-input"
-            placeholder="변경할 아이디 입력"
-          />
-          <div class="new-button">
-            <button onclick="hideIdChangeForm()">취소</button>
-            <button onclick="changeId()">변경</button>
-          </div>
-        </div>
+const fileFilter = (req, file, cb) => {
+  const fileTypes = /jpg|jpeg|png|webp/;
+  const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = fileTypes.test(file.mimetype);
 
-        <div class="info-row">
-          <label>비밀번호</label>
-          <span>********</span>
-          <a class="btn" href="change-pw">비밀번호 변경</a>
-        </div>
+  if (extname && mimetype) {
+    return cb(null, true);
+  } else {
+    cb(new Error("Only .jpg, .jpeg, .png, and .webp files are allowed!"));
+  }
+};
 
-        <div class="info-row" id="nameDisplay">
-          <label>이름</label>
-          <span><%= user.name_join %></span>
-          <a class="btn" href="#" onclick="showNameChangeForm()">이름 수정</a>
-        </div>
-        <div
-          class="change-info-row"
-          id="nameChangeForm"
-          style="display: none; margin-top: 10px"
-        >
-          <label for="newName">이름</label>
-          <input
-            type="text"
-            id="newName"
-            class="new-input"
-            placeholder="변경할 이름 입력"
-          />
-          <div class="new-button">
-            <button onclick="hideNameChangeForm()">취소</button>
-            <button onclick="changeName()">변경</button>
-          </div>
-        </div>
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+});
 
-        <div class="info-row" id="nicknameDisplay">
-          <label>닉네임</label>
-          <span><%= user.nickname_join %></span>
-          <a class="btn" href="#" onclick="showNicknameChangeForm()"
-            >닉네임 변경</a
-          >
-        </div>
-        <div
-          class="change-info-row"
-          id="nicknameChangeForm"
-          style="display: none; margin-top: 10px"
-        >
-          <label for="newNickname">닉네임</label>
-          <input
-            type="text"
-            id="newNickname"
-            class="new-input"
-            placeholder="변경할 닉네임 입력"
-          />
-          <div class="new-button">
-            <button onclick="hideNicknameChangeForm()">취소</button>
-            <button onclick="changeNickname()">변경</button>
-          </div>
-        </div>
+// 프로필 사진 업로드 처리 라우트
+router.post("/upload-profile-photo", upload.single('profilePhoto'), async function (req, res) {
+  const user = req.session.user;
 
-        <div class="info-row" id="birthDisplay">
-          <label>생년월일</label>
-          <span><%= user.birth_join %></span>
-          <a class="btn" href="#" onclick="showBirthChangeForm()"
-            >생년월일 변경</a
-          >
-        </div>
-        <div
-          class="change-info-row"
-          id="birthChangeForm"
-          style="display: none; margin-top: 10px"
-        >
-          <label for="newBirth">생년월일</label>
-          <input
-            type="date"
-            id="newBirth"
-            class="new-input"
-            placeholder="변경할 생년월일 입력"
-          />
-          <div class="new-button">
-            <button onclick="hideBirthChangeForm()">취소</button>
-            <button onclick="changeBirth()">변경</button>
-          </div>
-        </div>
+  if (!user) {
+    return res.send(
+      '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
+    );
+  }
 
-        <div class="info-row" id="telDisplay">
-          <label>휴대전화</label>
-          <span><%= user.telnumber_join %></span>
-          <a class="btn" href="#" onclick="showTelChangeForm()"
-            >휴대전화 변경</a
-          >
-        </div>
-        <div
-          class="change-info-row"
-          id="telChangeForm"
-          style="display: none; margin-top: 10px"
-        >
-          <label for="newTel">전화번호</label>
-          <input
-            type="tel"
-            id="newTel"
-            class="new-input"
-            placeholder="변경할 전화번호 입력"
-          />
-          <div class="new-button">
-            <button onclick="hideTelChangeForm()">취소</button>
-            <button onclick="changeTel()">변경</button>
-          </div>
-        </div>
+  if (!req.file) {
+    return res.send(
+      '<script>alert("파일이 업로드되지 않았습니다. 다시 시도해 주세요."); window.location.href = "/my-page";</script>'
+    );
+  }
 
-        <div class="info-row" id="heightDisplay">
-          <label>키</label>
-          <span><%= user.height_join %>cm</span>
-          <a class="btn" href="#" onclick="showHeightChangeForm()">키 변경</a>
-        </div>
-        <div
-          class="change-info-row"
-          id="heightChangeForm"
-          style="display: none; margin-top: 10px"
-        >
-          <label for="newHeight">키</label>
-          <input
-            type="number"
-            id="newHeight"
-            class="new-input"
-            placeholder="변경할 키 입력"
-          />
-          <div class="new-button">
-            <button onclick="hideHeightChangeForm()">취소</button>
-            <button onclick="changeHeight()">변경</button>
-          </div>
-        </div>
+  try {
+    const userInfo = await db.getDb().collection("User_info").findOne({ id_join: user.id });
+    const oldProfilePhoto = userInfo.profilePhoto;
 
-        <div class="info-row" id="weightDisplay">
-          <label>몸무게</label>
-          <span><%= user.weight_join %>kg</span>
-          <a class="btn" href="#" onclick="showWeightChangeForm()"
-            >몸무게 변경</a
-          >
-        </div>
-        <div
-          class="change-info-row"
-          id="weightChangeForm"
-          style="display: none; margin-top: 10px"
-        >
-          <label for="newWeight">몸무게</label>
-          <input
-            type="number"
-            id="newWeight"
-            class="new-input"
-            placeholder="변경할 몸무게 입력"
-          />
-          <div class="new-button">
-            <button onclick="hideWeightChangeForm()">취소</button>
-            <button onclick="changeWeight()">변경</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    const profilePhotoUrl = `/image/${req.file.filename}`;
+    await db.getDb().collection("User_info").updateOne(
+      { id_join: user.id },
+      { $set: { profilePhoto: profilePhotoUrl } }
+    );
 
-    <div class="User_info board_and_comment">
-      <h2>게시판 이용 내역</h2>
-      <div class="my-board">
-        <div class="board-use-record">
-          <div class="my-board record-list">
-            <a href="/my-board">내가 쓴 글</a>
-          </div>
-          <div class="my-comment record-list">
-            <a href="/my-comment">내가 쓴 댓글</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <script>
-    function previewPhoto() {
-      const file = document.getElementById("fileInput").files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          document.getElementById(
-            "photo-placeholder"
-          ).style.backgroundImage = `url(${e.target.result})`;
-          document.getElementById('change-button').style.display = 'none';
-          document.getElementById('save-button').style.display = 'inline-block';
-          document.getElementById('cancel-button').style.display = 'inline-block';
-        };
-        reader.readAsDataURL(file);
-      }
+    // 이전 사진 삭제
+    if (oldProfilePhoto && oldProfilePhoto !== "/image/default-placeholder.png") {
+      fs.unlink(path.join(__dirname, "..", "public", oldProfilePhoto), (err) => {
+        if (err) {
+          console.error("Error deleting old profile photo:", err);
+        }
+      });
     }
 
-    function resetPhoto() {
-      document.getElementById('photo-placeholder').style.backgroundImage = `url('<%= user.profilePhoto %>')`;
-      document.getElementById('change-button').style.display = 'inline-block';
-      document.getElementById('save-button').style.display = 'none';
-      document.getElementById('cancel-button').style.display = 'none';
-      document.getElementById('fileInput').value = ''; // 파일 선택 초기화
+    res.redirect("/my-page");
+  } catch (error) {
+    console.error("Error updating profile photo:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
+// 프로필 페이지 렌더링 라우트
+router.get("/my-page", async function (req, res) {
+  const user = req.session.user;
+
+  if (!user) {
+    return res.send(
+      '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
+    );
+  }
+
+  try {
+    const userData = await db.getDb().collection("User_info").findOne({ id_join: user.id });
+
+    if (userData) {
+      // 목표 날짜와 현재 날짜의 차이를 계산하여 D-Day 구하기
+      const currentDate = new Date();
+      const goalDate = new Date(userData.goal_date_join);
+      const dDay = Math.ceil((goalDate - currentDate) / (1000 * 60 * 60 * 24));
+
+      res.render("my-page", { user: userData, dDay: dDay });
+    } else {
+      res.send(
+        '<script>alert("사용자 정보를 불러오는 데 실패했습니다."); window.location.href = "/";</script>'
+      );
     }
-  </script>
-</body>
-</html>
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// 나머지 라우트
+router.post("/my-page", async function (req, res) {
+  const user = req.session.user;
+
+  if (!user) {
+    return res.send(
+      '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
+    );
+  }
+
+  try {
+    const userData = await db.getDb().collection("User_info").findOne({ id_join: user.id });
+
+    const freeBoardPosts = await db.getDb().collection("free_board").find({ author: user.id }).toArray();
+    const endBoardPosts = await db.getDb().collection("end_board").find({ author: user.id }).toArray();
+    const ghwmBoardPosts = await db.getDb().collection("ghwm_board").find({ author: user.id }).toArray();
+    const infoBoardPosts = await db.getDb().collection("info_board").find({ author: user.id }).toArray();
+    const childBoardPosts = await db.getDb().collection("child_board").find({ author: user.id }).toArray();
+
+    const userPosts = [
+      ...freeBoardPosts.map((post) => ({ ...post, board: "자유게시판" })),
+      ...endBoardPosts.map((post) => ({ ...post, board: "오운완게시판" })),
+      ...infoBoardPosts.map((post) => ({ ...post, board: "정보게시판" })),
+      ...ghwmBoardPosts.map((post) => ({ ...post, board: "헬린이게시판" })),
+      ...childBoardPosts.map((post) => ({ ...post, board: "G.H.W.M 게시판" })),
+    ];
+
+    if (userData) {
+      res.render("my-page", { user: userData, posts: userPosts });
+    } else {
+      res.send(
+        '<script>alert("사용자 정보를 불러오는 데 실패했습니다."); window.location.href = "/";</script>'
+      );
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+router.post('/change-id', async function(req, res) {
+  const user = req.session.user;
+  const { newId } = req.body;
+
+  if (!user) {
+    return res.json({ success: false, message: '로그인이 필요합니다.' });
+  }
+
+  try {
+    const userData = await db.getDb().collection('User_info').findOne({ id_join: newId });
+
+    if (userData) {
+      return res.json({ success: false, message: '이미 사용 중인 아이디입니다.' });
+    }
+
+    const updateResult = await db.getDb().collection('User_info').updateOne(
+      { id_join: user.id },
+      { $set: { id_join: newId } }
+    );
+
+    if (updateResult.modifiedCount === 1) {
+      req.session.user.id = newId;
+      return res.json({ success: true });
+    } else {
+      return res.json({ success: false, message: '아이디 변경에 실패했습니다.' });
+    }
+  } catch (error) {
+    console.error('Error changing ID:', error);
+    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+router.post('/change-name', async function(req, res) {
+  const user = req.session.user;
+  const { newName } = req.body;
+
+  if (!user) {
+    return res.json({ success: false, message: '로그인이 필요합니다.' });
+  }
+
+  try {
+    const updateResult = await db.getDb().collection('User_info').updateOne(
+      { id_join: user.id },
+      { $set: { name_join: newName } }
+    );
+
+    if (updateResult.modifiedCount === 1) {
+      return res.json({ success: true });
+    } else {
+      return res.json({ success: false, message: '이름 변경에 실패했습니다.' });
+    }
+  } catch (error) {
+    console.error('Error changing name:', error);
+    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+router.post('/change-nickname', async function(req, res) {
+  const user = req.session.user;
+  const { newNickname } = req.body;
+
+  if (!user) {
+    return res.json({ success: false, message: '로그인이 필요합니다.' });
+  }
+
+  try {
+    const updateResult = await db.getDb().collection('User_info').updateOne(
+      { id_join: user.id },
+      { $set: { nickname_join: newNickname } }
+    );
+
+    if (updateResult.modifiedCount === 1) {
+      return res.json({ success: true });
+    } else {
+      return res.json({ success: false, message: '닉네임 변경에 실패했습니다.' });
+    }
+  } catch (error) {
+    console.error('Error changing nickname:', error);
+    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+router.post('/change-birth', async function(req, res) {
+  const user = req.session.user;
+  const { newBirth } = req.body;
+
+  if (!user) {
+    return res.json({ success: false, message: '로그인이 필요합니다.' });
+  }
+
+  try {
+    const updateResult = await db.getDb().collection('User_info').updateOne(
+      { id_join: user.id },
+      { $set: { birth_join: newBirth } }
+    );
+
+    if (updateResult.modifiedCount === 1) {
+      return res.json({ success: true });
+    } else {
+      return res.json({ success: false, message: '생일 변경에 실패했습니다.' });
+    }
+  } catch (error) {
+    console.error('Error changing birth:', error);
+    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+router.post('/change-tel', async function(req, res) {
+  const user = req.session.user;
+  const { newTel } = req.body;
+
+  if (!user) {
+    return res.json({ success: false, message: '로그인이 필요합니다.' });
+  }
+
+  try {
+    const updateResult = await db.getDb().collection('User_info').updateOne(
+      { id_join: user.id },
+      { $set: { telnumber_join: newTel } }
+    );
+
+    if (updateResult.modifiedCount === 1) {
+      return res.json({ success: true });
+    } else {
+      return res.json({ success: false, message: '전화번호 변경에 실패했습니다.' });
+    }
+  } catch (error) {
+    console.error('Error changing telephone number:', error);
+    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+router.post('/change-height', async function(req, res) {
+  const user = req.session.user;
+  const { newHeight } = req.body;
+
+  if (!user) {
+    return res.json({ success: false, message: '로그인이 필요합니다.' });
+  }
+
+  try {
+    const updateResult = await db.getDb().collection('User_info').updateOne(
+      { id_join: user.id },
+      { $set: { height_join: newHeight } }
+    );
+
+    if (updateResult.modifiedCount === 1) {
+      return res.json({ success: true });
+    } else {
+      return res.json({ success: false, message: '키 변경에 실패했습니다.' });
+    }
+  } catch (error) {
+    console.error('Error changing height:', error);
+    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+router.post('/change-weight', async function(req, res) {
+  const user = req.session.user;
+  const { newWeight } = req.body;
+
+  if (!user) {
+    return res.json({ success: false, message: '로그인이 필요합니다.' });
+  }
+
+  try {
+    const updateResult = await db.getDb().collection('User_info').updateOne(
+      { id_join: user.id },
+      { $set: { weight_join: newWeight } }
+    );
+
+    if (updateResult.modifiedCount === 1) {
+      return res.json({ success: true });
+    } else {
+      return res.json({ success: false, message: '몸무게 변경에 실패했습니다.' });
+    }
+  } catch (error) {
+    console.error('Error changing weight:', error);
+    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+
+router.get("/my-board", async function (req, res) {
+  const user = req.session.user;
+
+  if (!user) {
+    return res.send(
+      '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
+    );
+  }
+
+  try {
+    const freeBoardPosts = await db.getDb().collection("free_board").find({ author: user.id }).toArray();
+    const endBoardPosts = await db.getDb().collection("end_board").find({ author: user.id }).toArray();
+    const ghwmBoardPosts = await db.getDb().collection("ghwm_board").find({ author: user.id }).toArray();
+    const infoBoardPosts = await db.getDb().collection("info_board").find({ author: user.id }).toArray();
+    const childBoardPosts = await db.getDb().collection("child_board").find({ author: user.id }).toArray();
+
+    let userPosts = [
+      ...freeBoardPosts.map((post) => ({ ...post, board: "free", board_name: "자유게시판" })),
+      ...endBoardPosts.map((post) => ({ ...post, board: "end", board_name: "오운완게시판" })),
+      ...infoBoardPosts.map((post) => ({ ...post, board: "info", board_name: "정보게시판" })),
+      ...ghwmBoardPosts.map((post) => ({ ...post, board: "ghwm", board_name: "G.H.W.M 게시판" })),
+      ...childBoardPosts.map((post) => ({ ...post, board: "child", board_name: "헬린이게시판" })),
+    ];
+
+    // Sort posts by date in descending order
+    userPosts = userPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    // 각 게시물의 댓글 수를 가져오는 부분 추가
+    const userPostsWithComments = await Promise.all(userPosts.map(async (post) => {
+      const commentCount = await db.getDb().collection('free_comment').countDocuments({ postId: new ObjectId(post._id) });
+      return { ...post, commentCount };
+    }));
+
+    res.render("my-board", { posts: userPostsWithComments });
+  } catch (error) {
+    console.error("Error fetching user posts:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+router.get("/my-comment", async function (req, res) {
+  const user = req.session.user;
+
+  if (!user) {
+    return res.send(
+      '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
+    );
+  }
+
+  try {
+    const freeBoardComments = await db.getDb().collection("free_comment").find({ author: user.id }).toArray();
+    const endBoardComments = await db.getDb().collection("end_comment").find({ author: user.id }).toArray();
+    const ghwmBoardComments = await db.getDb().collection("ghwm_comment").find({ author: user.id }).toArray();
+    const infoBoardComments = await db.getDb().collection("info_comment").find({ author: user.id }).toArray();
+    const childBoardComments = await db.getDb().collection("child_comment").find({ author: user.id }).toArray();
+
+    const userComments = [
+      ...freeBoardComments.map(comment => ({ ...comment, boardType: 'free' })),
+      ...endBoardComments.map(comment => ({ ...comment, boardType: 'end' })),
+      ...ghwmBoardComments.map(comment => ({ ...comment, boardType: 'ghwm' })),
+      ...infoBoardComments.map(comment => ({ ...comment, boardType: 'info' })),
+      ...childBoardComments.map(comment => ({ ...comment, boardType: 'child' }))
+    ];
+
+    // Sort comments by date in descending order
+    const userCommentsSorted = userComments.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    res.render("my-comment", { comments: userCommentsSorted });
+  } catch (error) {
+    console.error("Error fetching user comments:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
+module.exports = router;

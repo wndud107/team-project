@@ -41,8 +41,9 @@ const renderCalendar = () => {
         const formattedDate = `${currYear}-${String(currMonth + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
         const log = exerciseLogs.find(log => log._id === formattedDate);
         let hasExercise = log && log.count > 0 ? "has-exercise" : "";
+        let allChecked = log && log.allChecked ? "all-checked" : "";
 
-        liTag += `<li class="${isToday} ${isSelected} ${hasExercise}">${i}</li>`;
+        liTag += `<li class="${isToday} ${isSelected} ${hasExercise} ${allChecked}" data-date="${formattedDate} ">${i}</li>`;
     }
 
     for (let i = lastDayofMonth; i < 6; i++) {
@@ -110,7 +111,7 @@ const updateExercisesPopupContent = (data) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id: exercise._id, checked: checkExercise.checked }),
+                body: JSON.stringify({ id: exercise._id, date: exercise.date, checked: checkExercise.checked }),
             })
             .then(response => response.json())
             .then(data => {

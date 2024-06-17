@@ -67,11 +67,20 @@
         </div>
 
         <!-- 댓글 목록 -->
-        <div id="comments-section">
+<div id="comments-section">
           <% comments.forEach(comment => { %>
           <div class="comment-item">
             <div class="comment-details">
-              <p class="comment-author"><%= comment.author %></p>
+              <div class="comment-profile">
+                <div class="comment-profile-img-box">
+                  <img
+                    src="<%= comment.authorProfilePhoto %>"
+                    class="comment-profile-img"
+                    alt="profile-img"
+                  />
+                </div>
+                <p class="comment-author"><%= comment.author %></p>
+              </div>
               <p class="comment-content"><%= comment.content %></p>
               <p class="comment-date">
                 <%= new Date(comment.date).toLocaleString('ko-KR') %>

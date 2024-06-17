@@ -30,16 +30,25 @@ router.get("/main-board", async (req, res) => {
       "child_board",
       "ghwm_board",
     ];
+
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
     const popularPostsPromises = boards.map((board) =>
-      db.getDb().collection(board).find().sort({ view: -1 }).toArray()
+      db
+        .getDb()
+        .collection(board)
+        .find({ date: { $gte: startOfDay, $lte: endOfDay } })
+        .sort({ view: -1 })
+        .toArray()
+        .then((posts) => posts.map((post) => ({ ...post, board: board }))) // 여기에 board 필드 설정
     );
+
     const popularPostsData = await Promise.all(popularPostsPromises);
     const popularPosts = popularPostsData
       .flat()
-      .map((post) => ({
-        ...post,
-        board: post.board, // board 필드 포함
-      }))
       .sort((a, b) => b.view - a.view)
       .slice(0, 8);
 
@@ -1351,3 +1360,4 @@ router.post("/photo", upload.single("picture"), function (req, res) {
 });
 
 module.exports = router;
+

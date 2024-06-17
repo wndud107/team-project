@@ -292,3 +292,97 @@ function hideWeightChangeForm() {
     document.getElementById("weightDisplay").style.display = "flex";
     document.getElementById("weightChangeForm").style.display = "none";
 }
+
+
+function showInbodyInput() {
+  document.querySelectorAll('.inbody-element').forEach(element => {
+    element.style.display = 'none';
+  });
+  document.querySelectorAll('.new-input').forEach(input => {
+    input.style.display = 'inline-block';
+  });
+  document.getElementById('editInbody').style.display = 'none';
+  document.getElementById('saveInbody').style.display = 'inline-block';
+  document.getElementById('cancelInbody').style.display = 'inline-block';
+}
+
+
+function cancelInbody() {
+  document.querySelectorAll('.inbody-element').forEach(element => {
+    element.style.display = 'inline-block';
+  });
+  document.querySelectorAll('.new-input').forEach(input => {
+    input.style.display = 'none';
+    input.value = '';
+  });
+  document.getElementById('editInbody').style.display = 'inline-block';
+  document.getElementById('saveInbody').style.display = 'none';
+  document.getElementById('cancelInbody').style.display = 'none';
+}
+
+
+// 인바디 데이터 저장 및 업데이트 함수
+async function saveInbody() {
+  const weight = document.getElementById('newWeight').value;
+  const SMM = document.getElementById('newSMM').value;
+  const BFM = document.getElementById('newBFM').value;
+  const BMI = document.getElementById('newBMI').value;
+  const BFP = document.getElementById('newBFP').value;
+
+  try {
+    // 체중 업데이트
+    const weightResponse = await fetch('/change-weight', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ newWeight: weight }),
+    });
+
+    const weightResult = await weightResponse.json();
+    if (!weightResult.success) {
+      alert('체중 업데이트에 실패했습니다: ' + weightResult.message);
+      return;
+    }
+
+    // 인바디 데이터 저장
+    const inbodyResponse = await fetch('/save-inbody', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ weight, SMM, BFM, BMI, BFP }),
+    });
+
+    const inbodyResult = await inbodyResponse.json();
+    if (inbodyResult.success) {
+      // DOM 업데이트
+      document.getElementById('currentWeight').innerText = weight + ' kg';
+      document.getElementById('currentSMM').innerText = SMM + ' kg';
+      document.getElementById('currentBFM').innerText = BFM + ' kg';
+      document.getElementById('currentBMI').innerText = BMI;
+      document.getElementById('currentBFP').innerText = BFP + ' %';
+
+      cancelInbody();
+      alert('인바디 데이터가 성공적으로 저장되었습니다.');
+    } else {
+      alert('인바디 데이터 저장에 실패했습니다.');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('데이터 저장 중 오류가 발생했습니다.');
+  }
+}
+
+// 페이지 로드 시 인바디 데이터 표시
+window.addEventListener('DOMContentLoaded', (event) => {
+  const inbody = JSON.parse(document.getElementById('inbodyData').value);
+
+  if (inbody) {
+    document.getElementById('currentWeight').innerText = inbody.weight + ' kg';
+    document.getElementById('currentSMM').innerText = inbody.SMM + ' kg';
+    document.getElementById('currentBFM').innerText = inbody.BFM + ' kg';
+    document.getElementById('currentBMI').innerText = inbody.BMI;
+    document.getElementById('currentBFP').innerText = inbody.BFP + ' %';
+  }
+});

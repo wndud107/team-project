@@ -220,12 +220,27 @@ router.get("/exercises", async (req, res) => {
   
 // 운동 상태 업데이트 라우트
 router.post('/update-exercise', async (req, res) => {
-  const { id, checked } = req.body;
+  const { id, date, checked } = req.body;
+  const user = req.session.user;
   try {
     const result = await db.getDb().collection('User_diary').updateOne(
-      { _id: new ObjectId(id) },
+      { _id: new ObjectId(id), author: user.id },
       { $set: { checked: checked } }
     );
+
+    // 해당 운동의 날짜 가져오기
+    const exercise = await db.getDb().collection('User_diary').findOne({ author: user.id });
+
+    // 해당 날짜의 모든 운동의 checked 상태 확인
+    const allExercises = await db.getDb().collection('User_diary').find({ author: user.id, date: date }).toArray();
+    const allChecked = allExercises.every(ex => ex.checked);
+
+    await db.getDb().collection("User_diary_exlogs").updateOne(
+      { author: user.id, date: date },
+      { $set: { allChecked: allChecked, count: allExercises.length } },
+      { upsert: true }
+    );
+
     res.json({ message: 'Exercise updated successfully', result });
   } catch (error) {
     console.error('Error updating exercise status:', error);
@@ -239,9 +254,14 @@ router.get("/exercise-logs", async (req, res) => {
   try {
     const exerciseLogs = await db.getDb().collection("User_diary_exlogs").aggregate([
         { $match: { author: user.id } },
-        { $group: { _id: "$date", count: { $sum: 1 } } }
+        { $group: { _id: "$date", 
+          count: { $sum: "$count" }, 
+          allChecked: { $first: "$allChecked" } } }
     ]).toArray();
+
     res.json(exerciseLogs);
+
+
   } catch (error) {
     console.error("Error fetching exercise logs:", error);
     res.status(500).send("Error fetching exercise logs");

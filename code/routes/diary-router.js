@@ -7,7 +7,7 @@ const { ObjectId } = require("mongodb");
 const db = require("../data/database");
 const multer = require('multer');
 
-const dir = path.join(__dirname, '../public/meal_images');
+const dir = path.join(__dirname, './public/meal_images');
 
 if (!fs.existsSync(dir)){
     fs.mkdirSync(dir, { recursive: true });
@@ -15,10 +15,10 @@ if (!fs.existsSync(dir)){
 
 const router = express.Router();
 
+
 // Multer 설정
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const dir = path.join(__dirname, '../public/meal_images');
     cb(null, dir); // 파일이 저장될 경로
   },
   filename: function (req, file, cb) {
@@ -26,11 +26,19 @@ const storage = multer.diskStorage({
   }
 });
 
+// 정적 파일 제공을 위해 /meal_images 경로 설정
+router.use('/meal_images', express.static(dir));
+
+// JSON 및 URL-encoded 데이터 파싱
+router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
+
 const upload = multer({storage : storage});
+
 
 // 아침, 점심, 저녁 식단 사진 저장 라우트
 router.post('/save-meals', upload.fields([{ name: 'morningMeal' }, { name: 'lunchMeal' }, { name: 'dinnerMeal' }]), async (req, res) => {
-  console.log('파일 업로드 시작');
+  console.log('파일 업로드');
   const { date } = req.body;
   const user = req.session.user;
   console.log('req.body:', req.body); // req.body 출력하여 값 확인
@@ -65,12 +73,13 @@ router.post('/save-meals', upload.fields([{ name: 'morningMeal' }, { name: 'lunc
       imagePath: req.files.dinnerMeal[0].path
     });
   }
-
+  
   try {
     if (mealData.length > 0) {
       await db.getDb().collection("User_diary_meals").insertMany(mealData);
-      res.redirect('/diary');
-    } else {
+      res.redirect(`/diary?date=${date}`); // 리다이렉트 후 /diary 라우트에서 meals를 불러오도록 함
+    } 
+    else {
       res.status(400).send("파일 업로드 실패");
     }
   } catch (error) {
@@ -78,6 +87,8 @@ router.post('/save-meals', upload.fields([{ name: 'morningMeal' }, { name: 'lunc
     res.status(500).send("Error saving meal");
   }
 });
+
+
 
 // 식단 목록 가져오기 라우트
 router.get("/meals", async (req, res) => {
@@ -93,6 +104,8 @@ router.get("/meals", async (req, res) => {
     res.status(500).send("Error fetching meals");
   }
 });
+
+
 
 // 식단 삭제 라우트
 router.delete('/delete-meal/:id', async (req, res) => {
@@ -110,8 +123,12 @@ router.delete('/delete-meal/:id', async (req, res) => {
   }
 });
 
+
+
 router.get("/diary", async function (req, res) {
     const user = req.session.user;
+    const { date } = req.query;
+
     if (!user) {
       res.send(
         '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
@@ -123,26 +140,39 @@ router.get("/diary", async function (req, res) {
         .getDb()
         .collection("User_info")
         .findOne({ id_join: user.id });
-  
-      if (userData) {
-        const currentDate = new Date();
-        const goalDate = new Date(userData.goal_date_join);
-        const dDay = Math.ceil((goalDate - currentDate) / (1000 * 60 * 60 * 24));
-        const goalWeight = userData.goal_weight_join;
 
-        // 해당 유저의 날짜별 운동 기록을 불러오기
-        const exerciseLogs = await db.getDb().collection("User_diary_exlogs").find({ author: user.id }).toArray();
+        if (userData) {
+          const currentDate = new Date();
+          const goalDate = new Date(userData.goal_date_join);
+          const dDay = Math.ceil((goalDate - currentDate) / (1000 * 60 * 60 * 24));
+          const goalWeight = userData.goal_weight_join;
 
-        res.render("diary", { user: userData, dDay: dDay , goalWeight:goalWeight, exerciseLogs: exerciseLogs} );
-      } else {
-        res.send(
-          '<script>alert("사용자 정보를 불러오는 데 실패했습니다."); window.location.href = "/";</script>'
-        );
-      }
-    } catch (error) {
+          // 해당 유저의 날짜별 운동 기록을 불러오기
+          const exerciseLogs = await db.getDb().collection("User_diary_exlogs").find({ author: user.id }).toArray();
+          
+           // 해당 유저의 식단 기록 불러오기
+          const meals = await db.getDb().collection("User_diary_meals").find({ author: user.id , date }).toArray();
+          
+          res.render("diary", { 
+            user: userData, 
+            dDay: dDay , 
+            goalWeight:goalWeight, 
+            exerciseLogs: exerciseLogs,
+            meals,
+            selectedDate: date // 선택된 날짜를 템플릿에 전달합니다.
+          });
+        } else {
+          res.send(
+            '<script>alert("사용자 정보를 불러오는 데 실패했습니다."); window.location.href = "/";</script>'
+          );
+        }
+
+    } 
+    catch (error) {
       console.error("Error fetching user data:", error);
       res.status(500).send("Internal Server Error");
     }
+
   });
 
 // 운동 저장하기 라우트 
@@ -263,6 +293,25 @@ router.post("/save-weight", async (req, res) => {
   console.log(`Date: ${date}, Weight: ${weight}`);
 });
 
+// 체중 및 사진 저장 라우트
+router.post('/save-inbody', upload.single('photo'), async (req, res) => {
+  const { date } = req.body;
+  const user = req.session.user;
+  const inbodyData = {
+      author: user.id,
+      date: date,
+      photo: req.file.filename
+  };
+  try {
+      await db.getDb().collection('User_inbody').insertOne(inbodyData);
+      res.redirect('/diary');
+  } catch (error) {
+      console.error('체중 데이터 저장 실패', error);
+      res.status(500).send('체중 데이터 저장 실패');
+  }
+});
+
+
 // 체중 목록 가져오기 라우트
 router.get("/weight", async (req, res) => {
   const { date } = req.query;
@@ -277,6 +326,40 @@ router.get("/weight", async (req, res) => {
   } catch (error) {
     console.error("Error fetching weight:", error);
     res.status(500).send("Error fetching weight");
+  }
+});
+
+// 날짜별 체중 데이터 가져오기 라우트
+router.get('/weights', async (req, res) => {
+  const user = req.session.user;
+
+  try {
+    const weights = await db
+                    .getDb()
+                    .collection('User_inbody')
+                    .find({ author: user.id })
+                    .sort({ date: 1 }) // 날짜 순으로 정렬
+                    .toArray();
+    res.json(weights);
+  } catch (error) {
+    console.error("Error fetching weights:", error);
+    res.status(500).send("Error fetching weights");
+  }
+});
+
+// 골격근량 데이터 가져오기 라우트
+router.get('/muscle-weights', async (req, res) => {
+  const user = req.session.user;
+  try {
+    const muscleWeights = await db.collection('User_inbody')
+                                  .find({ author: user.id })
+                                  .project({ date: 1, muscle: 1 }) // 골격근량 데이터만 선택
+                                  .sort({ date: 1 }) // 날짜 순으로 정렬
+                                  .toArray();
+    res.json(muscleWeights);
+  } catch (error) {
+    console.error("Error fetching muscle weights:", error);
+    res.status(500).send("Error fetching muscle weights");
   }
 });
 
@@ -297,5 +380,10 @@ router.post("/delete-weight", async function (req, res) {
     res.status(500).send("Error deleting weight");
   }
 });
+
+
+const uploadDir = path.join(__dirname, './public/nunbody_images');
+
+
 
 module.exports = router;

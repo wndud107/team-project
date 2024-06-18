@@ -258,35 +258,36 @@
         <h2>최근 인바디</h2>
         <div class="info-row" id="inbody_weight">
           <label>체중</label>
-          <span id="currentWeight" class="inbody-element"><%= inbody.weight %>kg</span>
+          <span id="currentWeight" class="inbody-element"><%= user.weight_join %>kg</span>
           <input type="number" id="newWeight" class="new-input" style="display: none;" placeholder="체중 입력" required/>
           <p class="use-flex"></p>
         </div>
 
         <div class="info-row" id="inbody_SMM">
           <label>골격근량</label>
-          <span id="currentSMM" class="inbody-element"><%= inbody.SMM %>kg</span>
+          <span id="currentSMM" class="inbody-element"><%= inbody && inbody.SMM ? inbody.SMM + 'kg': '-' %></span>
           <input type="number" id="newSMM" class="new-input" style="display: none;" placeholder="골격근량 입력" required/>
           <p class="use-flex"></p>
         </div>
+        
 
         <div class="info-row" id="inbody_bfm">
           <label>체지방량</label>
-          <span id="currentBFM" class="inbody-element"><%= inbody.BFM %>kg</span>
+          <span id="currentBFM" class="inbody-element"><%= inbody && inbody.BFM + 'kg' ? inbody.BFM : '-' %></span>
           <input type="number" id="newBFM" class="new-input" style="display: none;" placeholder="체지방량 입력" required/>
           <p class="use-flex"></p>
         </div>
 
         <div class="info-row" id="inbody_bmi">
           <label>BMI</label>
-          <span id="currentBMI" class="inbody-element"><%= inbody.BMI %></span>
+          <span id="currentBMI" class="inbody-element"><%= inbody && inbody.BMI ? inbody.BMI + 'kg/m^2': '-' %></span>
           <input type="number" id="newBMI" class="new-input" style="display: none;" placeholder="BMI 입력" required/>
           <p class="use-flex"></p>
         </div>
 
         <div class="info-row" id="inbody_bfp">
           <label>체지방률</label>
-          <span id="currentBFP" class="inbody-element"><%= inbody.BFP %>%</span>
+          <span id="currentBFP" class="inbody-element"><%= inbody && inbody.BFP ? inbody.BFP +'%': '-' %></span>
           <input type="number" id="newBFP" class="new-input" style="display: none;" placeholder="체지방률 입력" required/>
           <p class="use-flex"></p>
         </div>

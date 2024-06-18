@@ -78,7 +78,6 @@ router.post("/upload-profile-photo", upload.single('profilePhoto'), async functi
 
 
 // 프로필 페이지 렌더링 라우트
-// 프로필 페이지 렌더링 라우트
 router.get("/my-page", async function (req, res) {
   const user = req.session.user;
 
@@ -92,7 +91,7 @@ router.get("/my-page", async function (req, res) {
     const userData = await db.getDb().collection("User_info").findOne({ id_join: user.id });
 
     const inbodyData = await db.getDb().collection("User_inbody").find({ id_join: user.id }).sort({ date: -1 }).limit(1).toArray();
-    const latestInbody = inbodyData.length ? inbodyData[0] : null;
+    const latestInbody = inbodyData.length ? inbodyData[0] : { SMM: 0, weight: 0, BFM: 0, BMI: 0, BFP: 0 };  // 기본값 설정
 
     if (userData) {
       // 목표 날짜와 현재 날짜의 차이를 계산하여 D-Day 구하기
@@ -111,6 +110,7 @@ router.get("/my-page", async function (req, res) {
     res.status(500).send("Internal Server Error");
   }
 });
+
 
 // 인바디 데이터 저장 라우트
 router.post('/save-inbody', async function (req, res) {

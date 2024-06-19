@@ -791,9 +791,9 @@ select optgroup {
   /* display: block; */
   font-size: 18px;
   font-weight: 600;
-  background-color: #ffffffba;
-  width: 180px;
-  height: 132px;
+  background-color: #ffffff;
+  width: 80px;
+  height: 32px;
   border-radius: 5px;
   border: #0da6b749 solid 2px;
   /* margin-top: 10px; */
@@ -805,21 +805,21 @@ select optgroup {
 
 .saveButton1{
   position: absolute; /* 절대 위치 */
-  top: 35px; /* 상단에 위치 */
-  left: 0; /* 왼쪽에 위치 */
+  top: 80px; /* 상단에 위치 */
+  left: 50px; /* 왼쪽에 위치 */
   z-index: 2; /* 이미지 위에 위치하도록 설정 */
 }
 
 .saveButton2{
   position: absolute; /* 절대 위치 */
-  top: 187px; /* 상단에 위치 */
-  left: 0; /* 왼쪽에 위치 */
+  top: 237px; /* 상단에 위치 */
+  left: 50px; /* 왼쪽에 위치 */
   z-index: 2; /* 이미지 위에 위치하도록 설정 */
 }
 .saveButton3{
   position: absolute; /* 절대 위치 */
-  top: 337px; /* 상단에 위치 */
-  left: 0; /* 왼쪽에 위치 */
+  top: 367px; /* 상단에 위치 */
+  left: 50px; /* 왼쪽에 위치 */
   z-index: 2; /* 이미지 위에 위치하도록 설정 */
 }
 

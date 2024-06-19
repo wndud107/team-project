@@ -27,10 +27,7 @@
   router.post("/login", async function (req, res) {
     const { userid, userpw } = req.body;
     try {
-      const user = await db
-        .getDb()
-        .collection("User_info")
-        .findOne({ id_join: userid });
+      const user = await db.getDb().collection("User_info").findOne({ id_join: userid });
   
       if (!user || !(await bcrypt.compare(userpw, user.pw_join))) {
         return res.render("login", {
@@ -41,10 +38,10 @@
   
       req.session.user = {
         id: user.id_join,
-        name: user.name_join,
-        profileImage: user.profilePhoto || '/images/기본프로필.png' // 프로필 이미지 추가
+        name_join: user.name_join,
+        profilePhoto: user.profilePhoto // 프로필 사진 세션에 저장
       };
-      res.redirect("/index");
+      res.redirect("/main-board");
     } catch (error) {
       console.error("Error finding user:", error);
       res.status(500).send("Internal Server Error");

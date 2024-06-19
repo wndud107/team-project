@@ -10,9 +10,8 @@
     
     <div class="comment-list">
         <% if (comments.length > 0) { %>
-            <% comments.forEach(comment => { %>
-                <div class="comment">
-                    <!--댓글-->
+            <% comments.forEach((comment, index) => { %>
+                <div class="comment <%= (index === comments.length - 1) ? 'last-comment' : '' %>">
                     <h4>
                         <a href="/<%= comment.boardType %>-content/<%= comment.postId %>">
                             내용: <%= comment.content %>
@@ -24,8 +23,16 @@
                 </div>
             <% }) %> 
         <% } else { %>
-            <style>.board-list {border-bottom: 1px solid rgb(11, 154, 167);};</style>
+            <style>.comment-list {border-bottom: 3px solid rgb(11, 154, 167);};</style>
             <p>작성한 댓글이 없습니다.</p>
+        <% } %>
+    </div>
+
+    <div class="pagination">
+        <% if (totalPages > 1) { %>
+            <% for (let i = 1; i <= totalPages; i++) { %>
+                <a href="/my-comment?page=<%= i %>" class="numbering <%= currentPage === i ? 'current-page' : '' %>"><%= i %></a>
+            <% } %>
         <% } %>
     </div>
 </body>

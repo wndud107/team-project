@@ -105,7 +105,14 @@
           <div class="D-DAY">
             <h3>목표 몸무게 <br /><%= user.goal_weight_join %> Kg</h3>
             <h2>D-<%= dDay %></h2>
-            <a href="#">D-DAY 설정</a>
+            <a href="#" id="ddayLink" onclick="showDdayInput()">D-DAY 설정</a>
+            <input
+              type="date"
+              id="ddayInput"
+              class="dday-input"
+              style="display: none"
+              onchange="updateDday()"
+            />
           </div>
         </div>
       </div>
@@ -318,7 +325,7 @@
         <div class="info-row" id="inbody_bmi">
           <label>BMI 지수</label>
           <span id="currentBMI" class="inbody-element"
-            ><%= inbody && inbody.BMI ? inbody.BMI  : '-' %></span
+            ><%= inbody && inbody.BMI ? inbody.BMI : '-' %></span
           >
           <input
             type="number"
@@ -348,10 +355,19 @@
         </div>
 
         <div>
-          <button id="editInbody" onclick="showInbodyInput()" class="inbody-btn">
+          <button
+            id="editInbody"
+            onclick="showInbodyInput()"
+            class="inbody-btn"
+          >
             새 인바디 입력하기
           </button>
-          <button id="saveInbody" onclick="saveInbody()" style="display: none" class="inbody-btn inbody-save">
+          <button
+            id="saveInbody"
+            onclick="saveInbody()"
+            style="display: none"
+            class="inbody-btn inbody-save"
+          >
             저장
           </button>
           <button
@@ -385,10 +401,14 @@
         if (file) {
           const reader = new FileReader();
           reader.onload = function (e) {
-            document.getElementById("photo-placeholder").style.backgroundImage = `url(${e.target.result})`;
+            document.getElementById(
+              "photo-placeholder"
+            ).style.backgroundImage = `url(${e.target.result})`;
             document.getElementById("change-button").style.display = "none";
-            document.getElementById("save-button").style.display = "inline-block";
-            document.getElementById("cancel-button").style.display = "inline-block";
+            document.getElementById("save-button").style.display =
+              "inline-block";
+            document.getElementById("cancel-button").style.display =
+              "inline-block";
             document.getElementById("delete-button").style.display = "none";
           };
           reader.readAsDataURL(file);
@@ -396,8 +416,11 @@
       }
 
       function resetPhoto() {
-        const profilePhoto = '<%= user.profilePhoto ? user.profilePhoto : "기본프로필.png" %>';
-        document.getElementById("photo-placeholder").style.backgroundImage = `url('${profilePhoto}')`;
+        const profilePhoto =
+          '<%= user.profilePhoto ? user.profilePhoto : "기본프로필.png" %>';
+        document.getElementById(
+          "photo-placeholder"
+        ).style.backgroundImage = `url('${profilePhoto}')`;
         document.getElementById("change-button").style.display = "inline-block";
         document.getElementById("save-button").style.display = "none";
         document.getElementById("cancel-button").style.display = "none";
@@ -406,22 +429,64 @@
       }
 
       async function deletePhoto() {
-        const response = await fetch('/delete-profile-photo', {
-          method: 'POST',
+        const response = await fetch("/delete-profile-photo", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify({ userId: '<%= user.id_join %>' }),
+          body: JSON.stringify({ userId: "<%= user.id_join %>" }),
         });
 
         if (response.ok) {
-          document.getElementById("photo-placeholder").style.backgroundImage = `url('기본프로필.png')`;
-          document.getElementById("change-button").style.display = "inline-block";
+          document.getElementById(
+            "photo-placeholder"
+          ).style.backgroundImage = `url('기본프로필.png')`;
+          document.getElementById("change-button").style.display =
+            "inline-block";
           document.getElementById("save-button").style.display = "none";
           document.getElementById("cancel-button").style.display = "none";
-          document.getElementById("delete-button").style.display = "inline-block";
+          document.getElementById("delete-button").style.display =
+            "inline-block";
         } else {
           console.error("Failed to delete profile photo");
+        }
+      }
+
+      function showDdayInput() {
+        document.getElementById("ddayLink").style.display = "none";
+        document.getElementById("ddayInput").style.display = "inline-block";
+      }
+
+      async function updateDday() {
+        const newDday = document.getElementById("ddayInput").value;
+
+        if (!newDday) {
+          alert("변경할 날짜를 선택해 주세요.");
+          return;
+        }
+
+        try {
+          const response = await fetch("/change-dday", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ newDday: newDday }),
+          });
+
+          const result = await response.json();
+          if (result.success) {
+            alert("D-DAY가 성공적으로 변경되었습니다.");
+            location.reload();
+          } else {
+            alert("D-DAY 변경에 실패했습니다: " + result.message);
+          }
+        } catch (error) {
+          console.error("Error changing D-DAY:", error);
+          alert("D-DAY 변경 중 오류가 발생했습니다.");
+        } finally {
+          document.getElementById("ddayLink").style.display = "inline-block";
+          document.getElementById("ddayInput").style.display = "none";
         }
       }
     </script>

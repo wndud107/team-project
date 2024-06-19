@@ -386,3 +386,44 @@ window.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById('currentBFP').innerText = inbody.BFP + ' %';
   }
 });
+
+function changePhoto() {
+  document.getElementById('fileInput').click();
+}
+
+function previewPhoto() {
+  const file = document.getElementById("fileInput").files[0];
+  if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+          document.getElementById("photo-placeholder").style.backgroundImage = `url(${e.target.result})`;
+          document.getElementById("change-button").style.display = "none";
+          document.getElementById("save-button").style.display = "inline-block";
+          document.getElementById("cancel-button").style.display = "inline-block";
+          document.getElementById("delete-button").style.display = "none";
+      };
+      reader.readAsDataURL(file);
+  }
+}
+
+async function deletePhoto() {
+  const response = await fetch('/delete-profile-photo', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId: '<%= user.id_join %>' }),
+  });
+
+  if (response.ok) {
+      document.getElementById("photo-placeholder").style.backgroundImage = `url('기본프로필.png')`;
+      document.getElementById("change-button").style.display = "inline-block";
+      document.getElementById("save-button").style.display = "none";
+      document.getElementById("cancel-button").style.display = "none";
+      document.getElementById("delete-button").style.display = "inline-block";
+      alert("프로필 사진이 삭제되었습니다.");
+
+  } else {
+      console.error("Failed to delete profile photo");
+  }
+}

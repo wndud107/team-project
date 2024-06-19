@@ -30,7 +30,7 @@
                 class="photo-placeholder"
                 id="photo-placeholder"
                 style="
-                  background-image: url('/image/default-placeholder.png');
+                  background-image: url('기본프로필.png');
                   width: 150px;
                   height: 150px;
                   background-size: cover;
@@ -65,6 +65,7 @@
                   >
                     사진 변경
                   </button>
+
                   <button
                     type="submit"
                     class="profile-photo-btn"
@@ -73,6 +74,7 @@
                   >
                     저장
                   </button>
+
                   <button
                     type="button"
                     onclick="resetPhoto()"
@@ -81,6 +83,15 @@
                     style="display: none"
                   >
                     취소
+                  </button>
+
+                  <button
+                    type="button"
+                    onclick="deletePhoto()"
+                    class="profile-photo-btn"
+                    id="delete-button"
+                  >
+                    삭제
                   </button>
                 </div>
               </form>
@@ -258,47 +269,101 @@
         <h2>최근 인바디</h2>
         <div class="info-row" id="inbody_weight">
           <label>체중</label>
-          <span id="currentWeight" class="inbody-element"><%= user.weight_join %>kg</span>
-          <input type="number" id="newWeight" class="new-input" style="display: none;" placeholder="체중 입력" required/>
+          <span id="currentWeight" class="inbody-element"
+            ><%= user.weight_join %>kg</span
+          >
+          <input
+            type="number"
+            id="newWeight"
+            class="new-input"
+            style="display: none"
+            placeholder="체중 입력"
+            required
+          />
           <p class="use-flex"></p>
         </div>
 
         <div class="info-row" id="inbody_SMM">
           <label>골격근량</label>
-          <span id="currentSMM" class="inbody-element"><%= inbody && inbody.SMM ? inbody.SMM + 'kg': '-' %></span>
-          <input type="number" id="newSMM" class="new-input" style="display: none;" placeholder="골격근량 입력" required/>
+          <span id="currentSMM" class="inbody-element"
+            ><%= inbody && inbody.SMM ? inbody.SMM + 'kg': '-' %></span
+          >
+          <input
+            type="number"
+            id="newSMM"
+            class="new-input"
+            style="display: none"
+            placeholder="골격근량 입력"
+            required
+          />
           <p class="use-flex"></p>
         </div>
-        
 
         <div class="info-row" id="inbody_bfm">
           <label>체지방량</label>
-          <span id="currentBFM" class="inbody-element"><%= inbody && inbody.BFM + 'kg' ? inbody.BFM : '-' %></span>
-          <input type="number" id="newBFM" class="new-input" style="display: none;" placeholder="체지방량 입력" required/>
+          <span id="currentBFM" class="inbody-element"
+            ><%= inbody && inbody.BFM ? inbody.BFM + 'kg': '-' %></span
+          >
+          <input
+            type="number"
+            id="newBFM"
+            class="new-input"
+            style="display: none"
+            placeholder="체지방량 입력"
+            required
+          />
           <p class="use-flex"></p>
         </div>
 
         <div class="info-row" id="inbody_bmi">
-          <label>BMI</label>
-          <span id="currentBMI" class="inbody-element"><%= inbody && inbody.BMI ? inbody.BMI + 'kg/m^2': '-' %></span>
-          <input type="number" id="newBMI" class="new-input" style="display: none;" placeholder="BMI 입력" required/>
+          <label>BMI 지수</label>
+          <span id="currentBMI" class="inbody-element"
+            ><%= inbody && inbody.BMI ? inbody.BMI  : '-' %></span
+          >
+          <input
+            type="number"
+            id="newBMI"
+            class="new-input"
+            style="display: none"
+            placeholder="BMI 입력"
+            required
+          />
           <p class="use-flex"></p>
         </div>
 
         <div class="info-row" id="inbody_bfp">
           <label>체지방률</label>
-          <span id="currentBFP" class="inbody-element"><%= inbody && inbody.BFP ? inbody.BFP +'%': '-' %></span>
-          <input type="number" id="newBFP" class="new-input" style="display: none;" placeholder="체지방률 입력" required/>
+          <span id="currentBFP" class="inbody-element"
+            ><%= inbody && inbody.BFP ? inbody.BFP +'%': '-' %></span
+          >
+          <input
+            type="number"
+            id="newBFP"
+            class="new-input"
+            style="display: none"
+            placeholder="체지방률 입력"
+            required
+          />
           <p class="use-flex"></p>
         </div>
 
         <div>
-          <button id="editInbody" onclick="showInbodyInput()">새 인바디 입력하기</button>
-          <button id="saveInbody" onclick="saveInbody()" style="display: none;">저장</button>
-          <button id="cancelInbody" onclick="cancelInbody()" style="display: none;">취소</button>
+          <button id="editInbody" onclick="showInbodyInput()">
+            새 인바디 입력하기
+          </button>
+          <button id="saveInbody" onclick="saveInbody()" style="display: none">
+            저장
+          </button>
+          <button
+            id="cancelInbody"
+            onclick="cancelInbody()"
+            style="display: none"
+          >
+            취소
+          </button>
         </div>
       </div>
-      
+
       <div class="User_info board_and_comment">
         <h2>게시판 이용 내역</h2>
         <div class="my-board">
@@ -313,34 +378,50 @@
         </div>
       </div>
     </main>
-
     <script>
       function previewPhoto() {
         const file = document.getElementById("fileInput").files[0];
         if (file) {
           const reader = new FileReader();
           reader.onload = function (e) {
-            document.getElementById(
-              "photo-placeholder"
-            ).style.backgroundImage = `url(${e.target.result})`;
+            document.getElementById("photo-placeholder").style.backgroundImage = `url(${e.target.result})`;
             document.getElementById("change-button").style.display = "none";
-            document.getElementById("save-button").style.display =
-              "inline-block";
-            document.getElementById("cancel-button").style.display =
-              "inline-block";
+            document.getElementById("save-button").style.display = "inline-block";
+            document.getElementById("cancel-button").style.display = "inline-block";
+            document.getElementById("delete-button").style.display = "none";
           };
           reader.readAsDataURL(file);
         }
       }
 
       function resetPhoto() {
-        document.getElementById(
-          "photo-placeholder"
-        ).style.backgroundImage = `url('<%= user.profilePhoto %>')`;
+        const profilePhoto = '<%= user.profilePhoto ? user.profilePhoto : "기본프로필.png" %>';
+        document.getElementById("photo-placeholder").style.backgroundImage = `url('${profilePhoto}')`;
         document.getElementById("change-button").style.display = "inline-block";
         document.getElementById("save-button").style.display = "none";
         document.getElementById("cancel-button").style.display = "none";
+        document.getElementById("delete-button").style.display = "inline-block";
         document.getElementById("fileInput").value = ""; // 파일 선택 초기화
+      }
+
+      async function deletePhoto() {
+        const response = await fetch('/delete-profile-photo', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userId: '<%= user.id_join %>' }),
+        });
+
+        if (response.ok) {
+          document.getElementById("photo-placeholder").style.backgroundImage = `url('기본프로필.png')`;
+          document.getElementById("change-button").style.display = "inline-block";
+          document.getElementById("save-button").style.display = "none";
+          document.getElementById("cancel-button").style.display = "none";
+          document.getElementById("delete-button").style.display = "inline-block";
+        } else {
+          console.error("Failed to delete profile photo");
+        }
       }
     </script>
   </body>

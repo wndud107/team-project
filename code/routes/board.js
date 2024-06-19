@@ -1360,5 +1360,10 @@ router.post("/photo", upload.single("picture"), function (req, res) {
   }
 });
 
+router.post('/go-my-page',function(req,res){
+  redirect('/my-page');
+})
+
+
 module.exports = router;
 

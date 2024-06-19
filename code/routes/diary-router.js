@@ -112,6 +112,7 @@ router.get("/diary", async function (req, res) {
       // 인바디 사진 기록 불러오기
       const nunbodyPhoto = await db.getDb().collection("User_diary_nunbody").findOne({ author: user.id, date });
 
+      
       res.render("diary", { 
         user: userData, 
         dDay: dDay, 
@@ -134,6 +135,7 @@ router.get("/diary", async function (req, res) {
     res.status(500).send("Internal Server Error");
   }
 });
+
 
 
 //////////////// 운동 ////////////////////////
@@ -439,11 +441,10 @@ router.post("/save-weight", async (req, res) => {
   }
 
   try {
-    const result = await db.getDb().collection("User_inbody").insertOne(
-      { author: user.id, date: date },
-      { $set: { weight: weight } },
-      { upsert: true }
-    );
+    const result = await db.getDb().collection("User_inbody").insertOne({ 
+      author: user.id, 
+      date: date, 
+      weight: weight });
 
     res.json({ message: "Weight saved successfully", _id: result.insertedId }); // _id 반환
   } catch (error) {
@@ -452,6 +453,7 @@ router.post("/save-weight", async (req, res) => {
   }
   console.log(`Date: ${date}, Weight: ${weight}`);
 });
+
 
 // 체중 및 사진 저장 라우트
 router.post('/save-inbody', upload.single('photo'), async (req, res) => {
@@ -471,117 +473,10 @@ router.post('/save-inbody', upload.single('photo'), async (req, res) => {
   }
 });
 
-// 체중 목록 가져오기 라우트
-router.get("/weight", async (req, res) => {
-  const { date } = req.query;
+
+// 인바디 데이터 가져오기 라우트
+router.get('/inbody', async (req, res) => {
   const user = req.session.user;
-  try {
-    const weight = await db
-      .getDb()
-      .collection("User_inbody")
-      .find({ date, author: user.id })
-      .toArray();
-    res.json(weight);
-  } catch (error) {
-    console.error("Error fetching weight:", error);
-    res.status(500).send("Error fetching weight");
-  }
-});
-
-// 날짜별 체중 데이터 가져오기 라우트
-router.get('/weights', async (req, res) => {
-  const user = req.session.user;
-
-  try {
-    const weights = await db
-      .getDb()
-      .collection('User_inbody')
-      .find({ author: user.id })
-      .sort({ date: 1 }) // 날짜 순으로 정렬
-      .toArray();
-    res.json(weights);
-  } catch (error) {
-    console.error("Error fetching weights:", error);
-    res.status(500).send("Error fetching weights");
-  }
-});
-
-// // 골격근량 데이터 가져오기 라우트
-// router.get('/muscle-weights', async (req, res) => {
-//   const user = req.session.user;
-//   try {
-//     const muscleWeights = await db.collection('User_inbody')
-//       .find({ author: user.id })
-//       .project({ date: 1, muscle: 1 }) // 골격근량 데이터만 선택
-//       .sort({ date: 1 }) // 날짜 순으로 정렬
-//       .toArray();
-//     res.json(muscleWeights);
-//   } catch (error) {
-//     console.error("Error fetching muscle weights:", error);
-//     res.status(500).send("Error fetching muscle weights");
-//   }
-// });
-
-// 프로필 페이지 렌더링 라우트
-router.get("/my-page", async function (req, res) {
-  const user = req.session.user;
-
-  if (!user) {
-    return res.send(
-      '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
-    );
-  }
-
-  try {
-    const userData = await db.getDb().collection("User_info").findOne({ id_join: user.id });
-
-    // 최근 인바디 데이터를 가져오기 위해 date로 내림차순 정렬하고 첫 번째 문서를 가져옵니다.
-    const inbodyData = await db.getDb().collection("User_inbody")
-      .find({ id_join: user.id })
-      .sort({ date: -1 })
-      .limit(1)
-      .toArray();
-
-    const latestInbody = inbodyData.length ? inbodyData[0] : { SMM: 0, weight: 0, BFM: 0, BMI: 0, BFP: 0 };
-
-    if (userData) {
-      // 목표 날짜와 현재 날짜의 차이를 계산하여 D-Day 구하기
-      const currentDate = new Date();
-      // const goalDate = new Date(userData.goal_date_join);
-      // const dDay = Math.ceil((goalDate - currentDate) / (1000 * 60 * 60 * 24));
-
-      res.render("my-page", { user: userData, dDay: dDay, inbody: latestInbody });
-    } else {
-      res.send(
-        '<script>alert("사용자 정보를 불러오는 데 실패했습니다."); window.location.href = "/";</script>'
-      );
-    }
-  } catch (error) {
-    console.error("Error fetching user data:", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-// // 인바디 데이터 가져오기 라우트
-// router.get('/inbody', async (req, res) => {
-//   const user = req.session.user;
-//   const { weight, SMM, BFM, BMI, BFP } = req.body;
-//   try {
-//     const muscleWeights = await db.collection('User_inbody')
-//       .find({ author: user.id, date  })
-//       .project({ date: 1, muscle: 1 }) // 골격근량 데이터만 선택
-//       .sort({ date: 1 }) // 날짜 순으로 정렬
-//       .toArray();
-//     res.json(muscleWeights);
-//   } catch (error) {
-//     console.error("Error fetching muscle weights:", error);
-//     res.status(500).send("Error fetching muscle weights");
-//   }
-// });
-
-router.get('/inbody-data', async (req, res) => {
-  const user = req.session.user;
-  const dataType = req.query.type; // 요청된 데이터 타입
 
   if (!user) {
     return res.status(401).json({ success: false, message: '로그인이 필요합니다.' });
@@ -593,16 +488,35 @@ router.get('/inbody-data', async (req, res) => {
       .sort({ date: 1 }) // 날짜 순으로 정렬
       .toArray();
 
-    res.json(inbodyData.map(entry => ({
-      date: entry.date,
-      [dataType]: entry[dataType]
-    })));
+    res.json({ success: true, data: inbodyData });
   } catch (error) {
-    console.error("Error fetching inbody data:", error);
-    res.status(500).send("Error fetching inbody data");
+    console.error('Error fetching inbody data:', error);
+    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
   }
 });
 
+
+// 체중 데이터만 가져오기 라우트
+router.get('/weights', async (req, res) => {
+  const user = req.session.user;
+
+  if (!user) {
+    return res.status(401).json({ message: '로그인이 필요합니다.' });
+  }
+
+  try {
+    const weights = await db.getDb().collection('User_inbody')
+      .find({ author: user.id })
+      .project({ date: 1, weight: 1 })
+      .sort({ date: 1 }) // 날짜 순으로 정렬
+      .toArray();
+
+    res.json(weights);
+  } catch (error) {
+    console.error("Error fetching weight data:", error);
+    res.status(500).send("Error fetching weight data");
+  }
+});
 
 
 // 체중 목록 삭제 

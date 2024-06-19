@@ -10,7 +10,7 @@ const router = express.Router();
 // Multer 저장소 설정
 let storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./public/image"); // 경로를 './public/images'로 설정
+    cb(null, "./public/image");
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + path.extname(file.originalname));
@@ -92,7 +92,7 @@ router.post("/delete-profile-photo", async function (req, res) {
 
     await db.getDb().collection("User_info").updateOne(
       { id_join: user.id },
-      { $set: { profilePhoto: null } } // profilePhoto 값을 null로 설정
+      { $set: { profilePhoto: null } }
     );
 
     // 이전 사진 삭제
@@ -111,7 +111,6 @@ router.post("/delete-profile-photo", async function (req, res) {
   }
 });
 
-
 // 프로필 페이지 렌더링 라우트
 router.get("/my-page", async function (req, res) {
   const user = req.session.user;
@@ -124,9 +123,8 @@ router.get("/my-page", async function (req, res) {
 
   try {
     const userData = await db.getDb().collection("User_info").findOne({ id_join: user.id });
-
     const inbodyData = await db.getDb().collection("User_inbody").find({ id_join: user.id }).sort({ date: -1 }).limit(1).toArray();
-    const latestInbody = inbodyData.length ? inbodyData[0] : { SMM: 0, weight: 0, BFM: 0, BMI: 0, BFP: 0 };  // 기본값 설정
+    const latestInbody = inbodyData.length ? inbodyData[0] : { SMM: 0, weight: 0, BFM: 0, BMI: 0, BFP: 0 };
 
     if (userData) {
       // 목표 날짜와 현재 날짜의 차이를 계산하여 D-Day 구하기
@@ -146,76 +144,33 @@ router.get("/my-page", async function (req, res) {
   }
 });
 
+// D-DAY 업데이트
+router.post('/change-dday', async (req, res) => {
+  const userId = req.session.user.id;
+  const newDday = req.body.newDday;
 
-// 인바디 데이터 저장 라우트
-router.post('/save-inbody', async function (req, res) {
-  const user = req.session.user;
-  const { weight, SMM, BFM, BMI, BFP } = req.body;
-
-  if (!user) {
-    return res.json({ success: false, message: '로그인이 필요합니다.' });
+  if (!userId || !newDday) {
+    return res.status(400).json({ success: false, message: '잘못된 요청입니다.' });
   }
 
-  const currentDate = new Date();
-  const inbodyData = {
-    id_join: user.id,
-    date: currentDate,
-    weight: weight,
-    SMM: SMM,
-    BFM: BFM,
-    BMI: BMI,
-    BFP: BFP
-  };
-
   try {
-    await db.getDb().collection('User_inbody').insertOne(inbodyData);
-    res.json({ success: true });
+    const result = await db.getDb().collection('User_info').updateOne(
+      { id_join: userId },
+      { $set: { goal_date_join: newDday } }
+    );
+
+    if (result.modifiedCount === 1) {
+      res.json({ success: true });
+    } else {
+      res.json({ success: false, message: 'D-DAY 업데이트에 실패했습니다.' });
+    }
   } catch (error) {
-    console.error('Error saving inbody data:', error);
+    console.error("Error updating D-DAY:", error);
     res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
   }
 });
 
 // 나머지 라우트
-router.post("/my-page", async function (req, res) {
-  const user = req.session.user;
-
-  if (!user) {
-    return res.send(
-      '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
-    );
-  }
-
-  try {
-    const userData = await db.getDb().collection("User_info").findOne({ id_join: user.id });
-
-    const freeBoardPosts = await db.getDb().collection("free_board").find({ author: user.id }).toArray();
-    const endBoardPosts = await db.getDb().collection("end_board").find({ author: user.id }).toArray();
-    const ghwmBoardPosts = await db.getDb().collection("ghwm_board").find({ author: user.id }).toArray();
-    const infoBoardPosts = await db.getDb().collection("info_board").find({ author: user.id }).toArray();
-    const childBoardPosts = await db.getDb().collection("child_board").find({ author: user.id }).toArray();
-
-    const userPosts = [
-      ...freeBoardPosts.map((post) => ({ ...post, board: "자유게시판" })),
-      ...endBoardPosts.map((post) => ({ ...post, board: "오운완게시판" })),
-      ...infoBoardPosts.map((post) => ({ ...post, board: "정보게시판" })),
-      ...ghwmBoardPosts.map((post) => ({ ...post, board: "헬린이게시판" })),
-      ...childBoardPosts.map((post) => ({ ...post, board: "G.H.W.M 게시판" })),
-    ];
-
-    if (userData) {
-      res.render("my-page", { user: userData, posts: userPosts });
-    } else {
-      res.send(
-        '<script>alert("사용자 정보를 불러오는 데 실패했습니다."); window.location.href = "/";</script>'
-      );
-    }
-  } catch (error) {
-    console.error("Error fetching user data:", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
 router.post('/change-id', async function(req, res) {
   const user = req.session.user;
   const { newId } = req.body;
@@ -398,6 +353,35 @@ router.post('/change-weight', async function(req, res) {
   }
 });
 
+// 인바디 데이터 저장 라우트
+router.post('/save-inbody', async function (req, res) {
+  const user = req.session.user;
+  const { weight, SMM, BFM, BMI, BFP } = req.body;
+
+  if (!user) {
+    return res.json({ success: false, message: '로그인이 필요합니다.' });
+  }
+
+  const currentDate = new Date();
+  const inbodyData = {
+    id_join: user.id,
+    date: currentDate,
+    weight: weight,
+    SMM: SMM,
+    BFM: BFM,
+    BMI: BMI,
+    BFP: BFP
+  };
+
+  try {
+    await db.getDb().collection('User_inbody').insertOne(inbodyData);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error saving inbody data:', error);
+    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
+  }
+});
+
 router.get("/my-board", async function (req, res) {
   const user = req.session.user;
 
@@ -450,7 +434,6 @@ router.get("/my-board", async function (req, res) {
   }
 });
 
-
 router.get("/my-comment", async function (req, res) {
   const user = req.session.user;
 
@@ -494,108 +477,6 @@ router.get("/my-comment", async function (req, res) {
   } catch (error) {
     console.error("Error fetching user comments:", error);
     res.status(500).send("Internal Server Error");
-  }
-});
-
-
-// 체중 업데이트
-router.post('/change-weight', async function(req, res) {
-  const user = req.session.user;
-  const { newWeight } = req.body;
-
-  if (!user) {
-    return res.json({ success: false, message: '로그인이 필요합니다.' });
-  }
-
-  try {
-    const updateResult = await db.getDb().collection('User_info').updateOne(
-      { id_join: user.id },
-      { $set: { weight_join: newWeight } }
-    );
-
-    if (updateResult.modifiedCount === 1) {
-      return res.json({ success: true });
-    } else {
-      return res.json({ success: false, message: '몸무게 변경에 실패했습니다.' });
-    }
-  } catch (error) {
-    console.error('Error changing weight:', error);
-    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
-  }
-});
-
-// 인바디 데이터 저장
-router.post('/save-inbody', async function (req, res) {
-  const user = req.session.user;
-  const { weight, SMM, BFM, BMI, BFP } = req.body;
-
-  if (!user) {
-    return res.json({ success: false, message: '로그인이 필요합니다.' });
-  }
-
-  const currentDate = new Date();
-  const inbodyData = {
-    id_join: user.id,
-    date: currentDate,
-    weight: weight,
-    SMM: SMM,
-    BFM: BFM,
-    BMI: BMI,
-    BFP: BFP
-  };
-
-  try {
-    await db.getDb().collection('User_inbody').insertOne(inbodyData);
-    res.json({ success: true });
-  } catch (error) {
-    console.error('Error saving inbody data:', error);
-    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
-  }
-});
-
-router.post('/update-dday', async (req, res) => {
-  const userId = req.session.user.id;
-  const newDday = req.body.newDday;
-
-  if (!userId || !newDday) {
-    return res.status(400).json({ success: false, message: '잘못된 요청입니다.' });
-  }
-
-  try {
-    const result = await db.getDb().collection('User_info').updateOne(
-      { id_join: userId },
-      { $set: { goal_date_join: newDday } }
-    );
-
-    if (result.modifiedCount === 1) {
-      res.json({ success: true });
-    } else {
-      res.json({ success: false, message: 'D-DAY 업데이트에 실패했습니다.' });
-    }
-  } catch (error) {
-    console.error("Error updating D-DAY:", error);
-    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
-  }
-});
-
-router.post('/change-dday', async (req, res) => {
-  const userId = req.session.user.id;
-  const newDday = req.body.newDday;
-
-  try {
-    const result = await db.getDb().collection('User_info').updateOne(
-      { id_join: userId },
-      { $set: { dDay: newDday } }
-    );
-
-    if (result.modifiedCount === 1) {
-      res.json({ success: true });
-    } else {
-      res.json({ success: false, message: 'D-DAY 변경에 실패했습니다.' });
-    }
-  } catch (error) {
-    console.error('Error updating D-DAY:', error);
-    res.status(500).json({ success: false, message: '서버 내부 오류' });
   }
 });
 

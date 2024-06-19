@@ -353,6 +353,15 @@ router.post('/change-weight', async function(req, res) {
   }
 });
 
+function formatDate(isoString) {
+  const date = new Date(isoString);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
 // 인바디 데이터 저장 라우트
 router.post('/save-inbody', async function (req, res) {
   const user = req.session.user;
@@ -365,7 +374,7 @@ router.post('/save-inbody', async function (req, res) {
   const currentDate = new Date();
   const inbodyData = {
     id_join: user.id,
-    date: currentDate,
+    date: formatDate(currentDate),
     weight: weight,
     SMM: SMM,
     BFM: BFM,

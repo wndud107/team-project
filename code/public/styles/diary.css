@@ -5,14 +5,26 @@ body{
   box-sizing: border-box;
 }
 
-.container { 
-  width: 100%;
+.container {
+  margin: 0 auto; 
+  /* width: 100%; */
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 7vh;
+  margin-top: 5vh;
   background-color: #ffffff;
-  gap: 30px;
+  gap:10px;
+}
+
+.calendar-right{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0b99a943;
+  /* border: #0b99a9 solid 2px; */
+  border-radius: 5px;
+  width: 800px;
+  height: 630px;
 }
 
 .year-month{
@@ -136,8 +148,8 @@ body{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     border: 2px solid #9AE1D4;
     background-color: transparent; /* 배경 투명 설정 */
     border-radius: 50%;
@@ -146,21 +158,20 @@ body{
     line-height: 32px;
     text-align: center;
 }
-
 .days li.all-checked::after{
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 40px;
-    height: 40px;
-    background-color: #9AE1D4; /* 배경 투명 설정 */
-    border-radius: 50%;
-    z-index: -3; 
-    display: inline-block;
-    line-height: 32px;
-    text-align: center;
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  background-color: #9AE1D4; /* 배경 투명 설정 */
+  border-radius: 50%;
+  z-index: -3; 
+  display: inline-block;
+  line-height: 32px;
+  text-align: center;
 }
 
 .days li.selected {
@@ -249,22 +260,23 @@ input[type="month"]:focus {
 
 .popup {
   border: 3px;
-  background-color: rgb(190, 223, 228);
+  /* background-color: rgb(190, 223, 228); */
   border-radius: 5px;
   width: 400px;
-  height: 630px;
-  padding: 10px;
-  margin-left: 10px;
-  margin-right: 10px;
+  height: 610px;
+  padding: 0 10px;
+  /* padding-top: 10px; */
+  /* margin-left: 10px; */
   position: relative;
-  display: inline-block;
+  display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 #popup-date {
   float: right;
-  margin-right: 3px;
+  margin: 0 ;
+  padding: 5px;
   font-size: 20px;
   font-weight: 700;
   letter-spacing: 1px;
@@ -274,16 +286,16 @@ input[type="month"]:focus {
 
 .popup-content-2 {
   position: relative;
-  margin-top: 165px;
+  /* margin-top: 155px; */
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 11px;
+  margin-left: 8px;
 }
 
 .popup-diet {
   text-align: left;
-  height: 450px;
 }
 
 .diet-image input[type="file"] {
@@ -306,20 +318,7 @@ input[type="month"]:focus {
   margin-top: 2px;
 }
 
-.image-upload-box {
-  width: 180px;
-  height: 125px;
-  border: 2px #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  position: relative;
-  border-radius: 5px;
-  background-color: #ffffff;
-  margin-top: 8px;
-  text-align: center;
-}
+
 
 .image-upload-box:last-child {
   margin-bottom: 10px;
@@ -327,34 +326,34 @@ input[type="month"]:focus {
 
 .image-upload-box img {
   width: 180px;
-  height: 125px;
+  height: 130px;
   object-fit: cover;
   border-radius: 5px;
+  margin-top: 5px;
+  z-index: 1; /* 버튼 아래에 표시되도록 설정 */
 }
 
 .image-upload-box input[type="file"] {
   display: none;
 }
 
-.image-upload-box .placeholder {
-  text-align: center;
-  color: #646464;
-}
-
 .p-popup-diet {
   font-weight: 600;
   font-size: 18px;
-  margin-left: 4px;
+  margin-left: 8px;
+  margin: 0;
 }
 
 .popup-inbody {
   width: 200px;
-  height: 454px;
+  height: 470px;
   text-align: left;
 }
 
 .p-popup-inbody {
-  margin-left: 4px;
+  margin: 0 4px;
+  position: absolute;
+  top: 10px;
   font-weight: 600;
   font-size: 18px;
 }
@@ -369,9 +368,9 @@ input[type="month"]:focus {
 .popup-inbody-input {
   position: absolute;
   background-color: hwb(0 100% 0%);
-  margin-top: 10px;
+  top: 36px;
   width: 190px;
-  height: 398px;
+  height: 412px;
   padding: 1px;
   margin-left: 1px;
   border-radius: 5px;
@@ -392,13 +391,13 @@ input[type="month"]:focus {
 }
 
 .popup-weight p {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   margin: 6px 2px;
 }
 
 .popup-inbody-input input {
-  width: 96px;
+  width: 100px;
   height: 24px;
   font-size: 15px;
   border: 0;
@@ -406,6 +405,7 @@ input[type="month"]:focus {
   outline: none;
   padding-left: 10px;
   background-color: rgb(190, 223, 228);
+  margin: 10px 0;
 }
 
 .p-popup-exercise {
@@ -414,12 +414,18 @@ input[type="month"]:focus {
   font-weight: 600;
   font-size: 18px;
   color: black;
-  margin-left: 3px;
+  margin: 0 ;
+  padding: 5px;
 }
 
 .popup-content-1 {
   position: relative;
-  margin: 5px auto;
+  /* top: 10px; */
+  margin: 0 auto;
+  /* border: #0b99a9 solid 2px; */
+  width: 400px;
+  height: 150px;
+  border-radius: 5px;
 }
 
 .bi-plus-circle {
@@ -434,13 +440,12 @@ input[type="month"]:focus {
 }
 
 .popup-exercise {
-  position: absolute;
-  margin-top: 40px;
-  width: 100%;
-  height: 104px;
+  width: 385px;
+  height: 110px;
   background-color: #ffffff;
   border-radius: 5px;
   overflow: auto;
+  margin-left: 8px;
 }
 
 .btn-add-exercise {
@@ -626,8 +631,9 @@ select optgroup {
 }
 
 .p-weight-goal {
-  width: 350px;
+  width: 320px;
   height: 50px;
+  margin-left: 30px;
   margin-bottom: 10px;
   background-color: rgb(255, 255, 255);
   border-radius: 5px;
@@ -638,23 +644,18 @@ select optgroup {
   align-items: center;
 }
 
-.d-day-graph{
-  width: 400px;
-  height: 600px;
-  margin: 10px;
-}
-
 .d-day {
   font-size: 64px; 
   font-weight: 600;
-  margin: 20px auto;
+  margin: 40px auto;
 }
 
 .graph {
-  width: 350px;
-  height: 280px;
-  margin-top: 80px;
-  background-color: rgb(255, 255, 255);
+  width: 320px;
+  height: 300px;
+  /* margin-top: 20px; */
+  margin-left: 30px;
+  /* background-color: rgb(255, 255, 255); */
 }
 
 .inbody-graph {
@@ -662,27 +663,10 @@ select optgroup {
   outline: auto;
   outline-color: #e1e1e1;
   background-color: rgb(255, 255, 255);
+  width: 320px;
+  height: 270px;
 }
 
-.nunbody-image-box {
-  background-color: #fdfdfd;
-  border: #0da6b749 solid 2px;
-  width: 182px;
-  height: 250px; 
-  margin: 3px auto;
-  border-radius: 5px;
-  cursor: pointer;
-  text-align: center;
-}
-
-.image-nunbody input[type="file"] {
-  position: absolute;
-  width: 0;
-  height: 0;
-  padding: 0;
-  overflow: hidden;
-  border: 0;
-}
 
 .bi-person-bounding-box {
   width: 32px;
@@ -692,16 +676,6 @@ select optgroup {
   margin-bottom: 10px;
 }
 
-.nunbody-image-box img {
-  width: 182px;
-  height: 250px; 
-  border-radius: 5px;
-}
-
-.nunbody-image-box p {
-  font-size: 13px;
-  color: #a6a6a6;
-}
 
 .exercise-checkbox {
   display: none;
@@ -736,6 +710,7 @@ select optgroup {
   border-color: #0b99a9;
 }
 
+
 .exercise-checkbox:checked + .exercise-label::after {
   content: '';
   display: block;
@@ -759,28 +734,141 @@ select optgroup {
   align-items: center;
 }
 
-.btn-save-meals {
-  /* display: none; */
+
+.image-upload-box {
+  text-align: center;
+  color: #646464;
   width: 180px;
   height: 125px;
+  border: 2px #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: #ffffff;
+  /* margin-top: 8px; */
+  position: relative; /* 상대 위치 */
+  z-index: 1;
+}
+
+.morning-box, .lunch-box, .dinner-box{
+  position: relative;
+  text-align: center;
+}
+
+
+.saveButton1, .saveButton2, .saveButton3  {
+  /* display: block; */
+  font-size: 18px;
+  font-weight: 600;
+  background-color: #ffffffba;
+  width: 180px;
+  height: 132px;
   border-radius: 5px;
   border: #0da6b749 solid 2px;
-
-  font-size: 18px;
-  font-weight: 500;
-  /* text-shadow: -1px 0 rgb(255, 255, 255), 0 1px rgb(255, 255, 255), 1px 0 rgb(255, 255, 255), 0 -1px rgb(255, 255, 255); */
-  background-color: #ffffff93;
-
+  /* margin-top: 10px; */
   display: flex;
   justify-content: center;
   align-items: center;
   object-fit: cover;
-  position: absolute;
-  margin-top: -125px;
 } 
 
-.save-button {
-  /* display: block; */
-  margin-top: 10px;
-  z-index: 1000;
-} 
+.saveButton1{
+  position: absolute; /* 절대 위치 */
+  top: 35px; /* 상단에 위치 */
+  left: 0; /* 왼쪽에 위치 */
+  z-index: 2; /* 이미지 위에 위치하도록 설정 */
+}
+
+.saveButton2{
+  position: absolute; /* 절대 위치 */
+  top: 187px; /* 상단에 위치 */
+  left: 0; /* 왼쪽에 위치 */
+  z-index: 2; /* 이미지 위에 위치하도록 설정 */
+}
+.saveButton3{
+  position: absolute; /* 절대 위치 */
+  top: 337px; /* 상단에 위치 */
+  left: 0; /* 왼쪽에 위치 */
+  z-index: 2; /* 이미지 위에 위치하도록 설정 */
+}
+
+.morning-box{
+  position: relative;
+}
+
+.img-morning, .img-lunch, .img-dinner{
+  position: absolute;
+  /* top: 0; */
+  width: 180px;
+  height: 125px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-top: 5px;
+  top: 42px;
+  left: 0;
+  z-index: 1;
+}
+
+.nunbody-image-box {
+  background-color: #fdfdfd;
+  border: #0da6b749 solid 2px;
+  width: 182px;
+  height: 300px; 
+  margin: 3px auto;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  position: relative;
+}
+
+.image-nunbody input[type="file"] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+}
+
+.nunbody-image-box p {
+  font-size: 13px;
+  color: #a6a6a6;
+}
+
+
+.nunbody-image-box img {
+  width: 182px;
+  height: 300px; 
+  border-radius: 5px;
+}
+
+.img-nunbody {
+  width: 182px;
+  height: 300px; 
+  max-height: 300px; /* 최대 높이를 설정하여 비율 유지 */
+  object-fit: cover; /* 이미지가 컨테이너를 덮도록 설정하면서 비율 유지 */
+  border-radius: 5px; /* 모서리 둥글게 */
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
+.saveNunbody{
+  font-size: 18px;
+  font-weight: 600;
+  background-color: #ffffffba;
+  width: 182px;
+  height: 300px; 
+  border-radius: 5px;
+  border: #0da6b749 solid 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 6px;
+  left: 5px;
+  color: black;
+}
+

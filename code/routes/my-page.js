@@ -398,7 +398,6 @@ router.post('/change-weight', async function(req, res) {
   }
 });
 
-
 router.get("/my-board", async function (req, res) {
   const user = req.session.user;
 
@@ -407,6 +406,10 @@ router.get("/my-board", async function (req, res) {
       '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
     );
   }
+
+  const page = parseInt(req.query.page) || 1;
+  const limit = 10;
+  const skip = (page - 1) * limit;
 
   try {
     const freeBoardPosts = await db.getDb().collection("free_board").find({ author: user.id }).toArray();
@@ -432,12 +435,21 @@ router.get("/my-board", async function (req, res) {
       return { ...post, commentCount };
     }));
 
-    res.render("my-board", { posts: userPostsWithComments });
+    const totalPosts = userPostsWithComments.length;
+    const totalPages = Math.ceil(totalPosts / limit);
+    const paginatedPosts = userPostsWithComments.slice(skip, skip + limit);
+
+    res.render("my-board", { 
+      posts: paginatedPosts, 
+      currentPage: page, 
+      totalPages 
+    });
   } catch (error) {
     console.error("Error fetching user posts:", error);
     res.status(500).send("Internal Server Error");
   }
 });
+
 
 router.get("/my-comment", async function (req, res) {
   const user = req.session.user;
@@ -447,6 +459,10 @@ router.get("/my-comment", async function (req, res) {
       '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
     );
   }
+
+  const page = parseInt(req.query.page) || 1;
+  const limit = 10;
+  const skip = (page - 1) * limit;
 
   try {
     const freeBoardComments = await db.getDb().collection("free_comment").find({ author: user.id }).toArray();
@@ -466,12 +482,21 @@ router.get("/my-comment", async function (req, res) {
     // Sort comments by date in descending order
     const userCommentsSorted = userComments.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    res.render("my-comment", { comments: userCommentsSorted });
+    const totalComments = userCommentsSorted.length;
+    const totalPages = Math.ceil(totalComments / limit);
+    const paginatedComments = userCommentsSorted.slice(skip, skip + limit);
+
+    res.render("my-comment", { 
+      comments: paginatedComments, 
+      currentPage: page, 
+      totalPages 
+    });
   } catch (error) {
     console.error("Error fetching user comments:", error);
     res.status(500).send("Internal Server Error");
   }
 });
+
 
 // 체중 업데이트
 router.post('/change-weight', async function(req, res) {

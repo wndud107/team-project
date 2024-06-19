@@ -143,9 +143,6 @@
                       <div id="uploadBox3" class="dinner-box image-upload-box " onclick="document.getElementById('uploadInput3').click();">
                           <p class="p-meals"> + <br> 저녁 식단</p>
                       </div>
-                      <!-- <button type="submit" id="dinner-meal" class="saveButton saveButton3 btn-save-meals" style="display:none;">저장</button>
-                      <button type="button" class="deleteButton3 btn-delete-meals" style="display:none;">삭제</button>
-                      <button type="button" class="changeButton3 btn-change-meals" style="display:none;">변경</button> -->
                   </form>
                   <div class="dinner">
                     <% if (dinnerMeals.length > 0) { %>
@@ -165,7 +162,7 @@
             <div class="popup-inbody">
               <p class="p-popup-inbody">오늘의 눈바디</p>
               <div class="popup-inbody-input">
-                <form id="save-inbody" name="weight" method="post" enctype="multipart/form-data">
+                <form id="save-inbody" name="weight" method="post" enctype="multipart/form-data" >
                   <div class="save-inbody inbody-part">
                     <input type="file" id="fileInput" name="nunbodyPhoto"  style="display:none;" accept="image/*" onchange="previewInbodyImage(event,'uploadBox4','saveNunbody')" >
                     <div class="nunbody-image-box" id="uploadBox4" onclick="document.getElementById('fileInput').click();">
@@ -177,7 +174,6 @@
                     </div>
                     <button type="submit" class="saveNunbody btn-save-nunbody" style="display:none;">저장</button>
                     <div class="popup-input popup-weight">
-                        <!-- <label for="weight" class="weight">체중</label> -->
                         <p class="p-weight">체중</p>
                         <input type="hidden" id="hiddenDate4" name="date"/>
                         <input type="text" id="weight" name="weight" class="inbody-input input-weight" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');" />
@@ -186,7 +182,6 @@
                     </div>
                   </div>
                   <button class="btn-save-inbody">저장</button>
-                  <!-- <button class="btn-delete-inbody" style="display:none;">삭제</button> -->
                 </form>
                 <div class="nunbody">
                   <% if (nunbodyPhoto) { %>
@@ -221,7 +216,8 @@
         </div>
       </div>
     </main>
-<%- include('includes/footer') %>  </body>
+    <%- include('includes/footer') %>
+  </body>
 </html>
 
 

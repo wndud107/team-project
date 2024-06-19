@@ -337,6 +337,7 @@ const updateExercisesPopupContent = (data) => {
             .then(data => {
                 console.log('Exercise deleted successfully:', data);
                 exerciseList.removeChild(listItem);
+                fetchExerciseLogs();
             })
             .catch(error => {
                 console.error('Error deleting exercise:', error);

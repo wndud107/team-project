@@ -427,3 +427,4 @@ async function deletePhoto() {
       console.error("Failed to delete profile photo");
   }
 }
+  

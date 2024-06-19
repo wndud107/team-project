@@ -660,8 +660,8 @@ router.get("/edit-free-board/:id", async function (req, res) {
 
 router.post("/update-free-board/:id", async function (req, res) {
   const id = req.params.id;
-  const { title, content } = req.body;
-  let imagepath = req.session.imagepath || ""; // 세션에 저장된 imagepath 사용
+  const { title, content, existingImagePath } = req.body;
+  let imagepath = req.session.imagepath || existingImagePath || ""; // 세션에 저장된 imagepath 또는 기존 이미지 경로 사용
 
   if (!ObjectId.isValid(id)) {
     return res.status(400).send("Invalid ID format");
@@ -824,8 +824,8 @@ router.get("/edit-end-board/:id", async function (req, res) {
 
 router.post("/update-end-board/:id", async function (req, res) {
   const id = req.params.id;
-  const { title, content } = req.body;
-  let imagepath = req.session.imagepath || ""; // 세션에 저장된 imagepath 사용
+  const { title, content, existingImagePath } = req.body;
+  let imagepath = req.session.imagepath || existingImagePath || ""; // 세션에 저장된 imagepath 또는 기존 이미지 경로 사용
 
   if (!ObjectId.isValid(id)) {
     return res.status(400).send("Invalid ID format");
@@ -988,8 +988,8 @@ router.get("/edit-child-board/:id", async function (req, res) {
 
 router.post("/update-child-board/:id", async function (req, res) {
   const id = req.params.id;
-  const { title, content } = req.body;
-  let imagepath = req.session.imagepath || ""; // 세션에 저장된 imagepath 사용
+  const { title, content, existingImagePath } = req.body;
+  let imagepath = req.session.imagepath || existingImagePath || ""; // 세션에 저장된 imagepath 또는 기존 이미지 경로 사용
 
   if (!ObjectId.isValid(id)) {
     return res.status(400).send("Invalid ID format");
@@ -1152,8 +1152,8 @@ router.get("/edit-info-board/:id", async function (req, res) {
 
 router.post("/update-info-board/:id", async function (req, res) {
   const id = req.params.id;
-  const { title, content } = req.body;
-  let imagepath = req.session.imagepath || ""; // 세션에 저장된 imagepath 사용
+  const { title, content, existingImagePath } = req.body;
+  let imagepath = req.session.imagepath || existingImagePath || ""; // 세션에 저장된 imagepath 또는 기존 이미지 경로 사용
 
   if (!ObjectId.isValid(id)) {
     return res.status(400).send("Invalid ID format");
@@ -1316,8 +1316,8 @@ router.get("/edit-ghwm-board/:id", async function (req, res) {
 
 router.post("/update-ghwm-board/:id", async function (req, res) {
   const id = req.params.id;
-  const { title, content } = req.body;
-  let imagepath = req.session.imagepath || ""; // 세션에 저장된 imagepath 사용
+  const { title, content, existingImagePath } = req.body;
+  let imagepath = req.session.imagepath || existingImagePath || ""; // 세션에 저장된 imagepath 또는 기존 이미지 경로 사용
 
   if (!ObjectId.isValid(id)) {
     return res.status(400).send("Invalid ID format");

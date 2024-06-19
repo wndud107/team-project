@@ -23,6 +23,8 @@ let upload = multer({ storage: storage });
 
 router.get("/main-board", async (req, res) => {
   try {
+    const user = req.session.user;
+
     const boards = [
       "free_board",
       "end_board",
@@ -43,7 +45,7 @@ router.get("/main-board", async (req, res) => {
         .find({ date: { $gte: startOfDay, $lte: endOfDay } })
         .sort({ view: -1 })
         .toArray()
-        .then((posts) => posts.map((post) => ({ ...post, board: board }))) // 여기에 board 필드 설정
+        .then((posts) => posts.map((post) => ({ ...post, board: board })))
     );
 
     const popularPostsData = await Promise.all(popularPostsPromises);
@@ -89,6 +91,7 @@ router.get("/main-board", async (req, res) => {
       .toArray();
 
     res.render("main-board", {
+      user, // 사용자 정보 전달
       freeBoardPosts,
       endBoardPosts,
       infoBoardPosts,
@@ -101,6 +104,7 @@ router.get("/main-board", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
 
 router.get("/update-board", function (req, res) {
   res.render("update-free-board");

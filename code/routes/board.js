@@ -1189,6 +1189,7 @@ router.post("/update-info-board/:id", async function (req, res) {
 // G.H.W.M. 게시판
 router.get("/ghwm-content/:id", async function (req, res) {
   const id = req.params.id;
+
   try {
     const post = await db
       .getDb()
@@ -1206,7 +1207,7 @@ router.get("/ghwm-content/:id", async function (req, res) {
       .findOne({ id_join: post.author });
 
     const authorProfilePhoto =
-      author && author.profilePhoto ? author.profilePhoto : "기본프로필.png";
+      author && author.profilePhoto ? author.profilePhoto : "/기본프로필.png";
 
     await db
       .getDb()
@@ -1230,7 +1231,7 @@ router.get("/ghwm-content/:id", async function (req, res) {
         const commentAuthorProfilePhoto =
           commentAuthor && commentAuthor.profilePhoto
             ? commentAuthor.profilePhoto
-            : "기본프로필.png";
+            : "/기본프로필.png";
 
         return { ...comment, authorProfilePhoto: commentAuthorProfilePhoto };
       })

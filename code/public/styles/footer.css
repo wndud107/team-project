@@ -1,18 +1,23 @@
-html,
-body {
+html, body {
   margin: 0;
   padding: 0;
+  height: 100%;
 }
 
-footer {
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer {
   background-color: #f2f2f2;
   width: 100%;
-  height: 120px;
-  bottom: 0px;
   border-top: 1px solid #c4c4c4;
   padding-top: 15px;
+  padding-bottom: 15px; 
   color: #808080;
   font-size: 11px;
+  flex-shrink: 0;
 }
 
 footer a {
@@ -33,4 +38,9 @@ footer p {
 
 footer p span {
   display: inline-block;
+}
+
+main {
+  flex-grow: 1;
+  margin-bottom: 100px; 
 }

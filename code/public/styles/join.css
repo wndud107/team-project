@@ -49,7 +49,7 @@ form input[text] {
     font-family: 'Noto Sans Kr';
 }
 
-#id {
+#id, #name, #nickname {
     background-image: url("/images/person.svg");
     background-repeat: no-repeat;
     background-position: 10px center;
@@ -57,6 +57,42 @@ form input[text] {
 
 #pw {
     background-image: url("/images/lock.svg");
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
+#birth {
+    background-image: url("/images/birth.svg");
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
+#telnumber {
+    background-image: url("/images/phone.svg");
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
+#weight {
+    background-image: url("/images/현재몸무게.svg");
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
+#goal_weight {
+    background-image: url("/images/목표몸무게.svg");
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
+#height {
+    background-image: url("/images/키.svg");
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
+#goal_date {
+    background-image: url("/images/목표날짜.svg");
     background-repeat: no-repeat;
     background-position: 10px center;
 }

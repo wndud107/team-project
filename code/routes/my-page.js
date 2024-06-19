@@ -553,5 +553,50 @@ router.post('/save-inbody', async function (req, res) {
   }
 });
 
+router.post('/update-dday', async (req, res) => {
+  const userId = req.session.user.id;
+  const newDday = req.body.newDday;
+
+  if (!userId || !newDday) {
+    return res.status(400).json({ success: false, message: '잘못된 요청입니다.' });
+  }
+
+  try {
+    const result = await db.getDb().collection('User_info').updateOne(
+      { id_join: userId },
+      { $set: { goal_date_join: newDday } }
+    );
+
+    if (result.modifiedCount === 1) {
+      res.json({ success: true });
+    } else {
+      res.json({ success: false, message: 'D-DAY 업데이트에 실패했습니다.' });
+    }
+  } catch (error) {
+    console.error("Error updating D-DAY:", error);
+    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+router.post('/change-dday', async (req, res) => {
+  const userId = req.session.user.id;
+  const newDday = req.body.newDday;
+
+  try {
+    const result = await db.getDb().collection('User_info').updateOne(
+      { id_join: userId },
+      { $set: { dDay: newDday } }
+    );
+
+    if (result.modifiedCount === 1) {
+      res.json({ success: true });
+    } else {
+      res.json({ success: false, message: 'D-DAY 변경에 실패했습니다.' });
+    }
+  } catch (error) {
+    console.error('Error updating D-DAY:', error);
+    res.status(500).json({ success: false, message: '서버 내부 오류' });
+  }
+});
 
 module.exports = router;

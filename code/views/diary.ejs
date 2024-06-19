@@ -46,7 +46,7 @@
           <ul class="days"></ul>
         </div>
       </div>
-      <!-- <div class="calendar-right"> -->
+      <div class="calendar-right">
         <div id="popup" class="popup">
           <div class="popup-content-1">
             <p class="p-popup-exercise">오늘의 운동</p>
@@ -92,78 +92,92 @@
             <div class="popup-diet">
               <p class="p-popup-diet">오늘의 식단</p>
               <div class="image-upload-container" id="meal-section meals-container">
-                  <form id="form1" action="/save-meals" method="post" enctype="multipart/form-data" onsubmit="saveMeal(event, 'uploadInput1', 'uploadBox1')">
+                  <form id="form1" action="/save-meals" method="post" enctype="multipart/form-data">
                       <input type="hidden" id="hiddenDate1" name="date"/>
-                      <input type="file" name="morningMeal" id="uploadInput1" accept="image/*" style="display:none;" onchange="previewImage(event, 'uploadBox1', 'saveButton1')" onchange= "saveMeal('아침', 'fileInput1')" required />
-                      <div id="uploadBox1" class="placeholder image-upload-box" onclick="document.getElementById('uploadInput1').click();">
+                      <input type="file" name="morningMeal" id="uploadInput1" accept="image/*" style="display:none;" onchange="previewImage(event, 'uploadBox1', 'saveButton1')" required />
+                      <div id="uploadBox1" class="morning-box image-upload-box" onclick="document.getElementById('uploadInput1').click();">
                           <p class="p-meals"> + <br> 아침 식단</p>
                       </div>
-                      <button type="submit" class="saveButton1 btn-save-meals" style="display:none;">저장</button>
-                      <button type="button" class="deleteButton1 btn-save-meals" onclick="cancelFunction()" style="display:none;">삭제</button>
-                      <button type="button" class="changeButton1 btn-save-meals" onclick="updateFunction()" style="display:none;">변경</button>
+                      <!-- <button type="submit" id="morning-meal"  class="saveButton saveButton1 btn-save-meals" style="display:none;">저장</button>
+                      <button type="button" class="deleteButton1 btn-save-meals" style="display:none;">삭제</button>
+                      <button type="button" class="changeButton1 btn-save-meals" style="display:none;">변경</button> -->
                   </form>
                   <div class="morning">
-                    <% meals.filter(meal => meal.mealType === '아침').forEach(meal => { %>
-                        <div>
+                    <% if (morningMeals.length > 0) { %>
+                      <% morningMeals.forEach(meal => { %>
+                        <% if (meal.date == selectedDate && meal.author == user.id) { %>
+                          <div>
                             <img class="img-meal img-morning" src="/meal_images/<%= meal.filename %>" alt="<%= meal.mealType %> 이미지">
-                        </div>
-                    <% }) %>
+                          </div>
+                        <% } %>
+                      <% }) %>
+                    <% } %>
                   </div>
-
-                  <form id="form2" action="/save-meals" method="post" enctype="multipart/form-data" onsubmit="saveMeal(event, 'uploadInput2', 'uploadBox2')">
+          
+                  <form id="form2" action="/save-meals" method="post" enctype="multipart/form-data">
                       <input type="hidden" id="hiddenDate2" name="date"/>
-                      <input type="file" name="lunchMeal" id="uploadInput2" accept="image/*" style="display:none;" onchange="previewImage(event, 'uploadBox2', 'saveButton2')" onchange="saveMeal('점심', 'fileInput2')" required />
-                      <div id="uploadBox2" class="placeholder image-upload-box" onclick="document.getElementById('uploadInput2').click();">
+                      <input type="file" name="lunchMeal" id="uploadInput2" accept="image/*" style="display:none;" onchange="previewImage(event, 'uploadBox2', 'saveButton2')" required />
+                      <div id="uploadBox2" class="lunch-box image-upload-box" onclick="document.getElementById('uploadInput2').click();">
                           <p class="p-meals"> + <br> 점심 식단</p>
                       </div>
-                      <button type="submit" class="saveButton2 btn-save-meals" style="display:none;">저장</button>
-                      <button type="button" class="deleteButton2 btn-save-meals" onclick="cancelFunction()" style="display:none;">삭제</button>
-                      <button type="button" class="changeButton2 btn-save-meals" onclick="updateFunction()" style="display:none;">변경</button>
+                      <!-- <button type="submit" id="lunch-meal" class="saveButton saveButton2 btn-save-meals" style="display:none;">저장</button>
+                      <button type="button" class="deleteButton2 btn-delete-meals" style="display:none;">삭제</button>
+                      <button type="button" class="changeButton2 btn-change-meals" style="display:none;">변경</button> -->
                   </form>
                   <div class="lunch">
-                    <% meals.filter(meal => meal.mealType === '점심').forEach(meal => { %>
-                        <div>
+                    <% if (lunchMeals.length > 0) { %>
+                      <% lunchMeals.forEach(meal => { %>
+                        <% if (meal.date == selectedDate && meal.author == user.id) { %>
+                          <div>
                             <img class="img-meal img-lunch" src="/meal_images/<%= meal.filename %>" alt="<%= meal.mealType %> 이미지">
-                        </div>
-                    <% }) %>
+                          </div>
+                        <% } %>
+                      <% }) %>
+                    <% } %>
                   </div>
-
-                  <form id="form3" action="/save-meals" method="post" enctype="multipart/form-data" onsubmit="saveMeal(event, 'uploadInput3', 'uploadBox3')">
+          
+                  <form id="form3" action="/save-meals" method="post" enctype="multipart/form-data">
                       <input type="hidden" id="hiddenDate3" name="date"/>
-                      <input type="file" name="dinnerMeal" id="uploadInput3" accept="image/*" style="display:none;" onchange="previewImage(event, 'uploadBox3', 'saveButton3')" onchange="saveMeal('저녁', 'fileInput3')" required />
-                      <div id="uploadBox3" class="placeholder image-upload-box " onclick="document.getElementById('uploadInput3').click();">
+                      <input type="file" name="dinnerMeal" id="uploadInput3" accept="image/*" style="display:none;" onchange="previewImage(event, 'uploadBox3', 'saveButton3')" required />
+                      <div id="uploadBox3" class="dinner-box image-upload-box " onclick="document.getElementById('uploadInput3').click();">
                           <p class="p-meals"> + <br> 저녁 식단</p>
                       </div>
-                      <button type="submit" class="saveButton3 btn-save-meals" style="display:none;">저장</button>
-                      <button type="button" class="deleteButton3 btn-save-meals" onclick="cancelFunction()" style="display:none;">삭제</button>
-                      <button type="button" class="changeButton3 btn-save-meals" onclick="updateFunction()" style="display:none;">변경</button>
+                      <!-- <button type="submit" id="dinner-meal" class="saveButton saveButton3 btn-save-meals" style="display:none;">저장</button>
+                      <button type="button" class="deleteButton3 btn-delete-meals" style="display:none;">삭제</button>
+                      <button type="button" class="changeButton3 btn-change-meals" style="display:none;">변경</button> -->
                   </form>
                   <div class="dinner">
-                    <% meals.filter(meal => meal.mealType === '저녁').forEach(meal => { %>
-                        <div>
+                    <% if (dinnerMeals.length > 0) { %>
+                      <% dinnerMeals.forEach(meal => { %>
+                        <% if (meal.date == selectedDate && meal.author == user.id) { %>
+                          <div>
                             <img class="img-meal img-dinner" src="/meal_images/<%= meal.filename %>" alt="<%= meal.mealType %> 이미지">
-                        </div>
-                    <% }) %>
+                          </div>
+                        <% } %>
+                      <% }) %>
+                    <% } %>
                   </div>
-                </div>
+              </div>
             </div>
+          
             <!--인바디-->            
             <div class="popup-inbody">
               <p class="p-popup-inbody">오늘의 눈바디</p>
               <div class="popup-inbody-input">
                 <form id="save-inbody" name="weight" method="post" enctype="multipart/form-data">
                   <div class="save-inbody inbody-part">
-                    <div class="nunbody-image-box" id="photo-placeholder" onclick="document.getElementById('fileInput').click();">
+                    <input type="file" id="fileInput" name="nunbodyPhoto"  style="display:none;" accept="image/*" onchange="previewInbodyImage(event,'uploadBox4','saveNunbody')" >
+                    <div class="nunbody-image-box" id="uploadBox4" onclick="document.getElementById('fileInput').click();">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-bounding-box" viewBox="0 0 16 16">
                         <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5"/>
                         <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
                       </svg>
                       <p>오늘의 눈바디 사진을 <br/> 등록해주세요.</p>
                     </div>
-                    <input type="file" id="fileInput" style="display:none;" accept="image/*" onchange="previewInbodyImage(event)" >
-                    <!-- <button type="submit" class="btn-save-nunbody" style="display:none;">저장</button> -->
+                    <button type="submit" class="saveNunbody btn-save-nunbody" style="display:none;">저장</button>
                     <div class="popup-input popup-weight">
                         <label for="weight" class="weight">체중</label>
+                        <input type="hidden" id="hiddenDate4" name="date"/>
                         <input type="text" id="weight" name="weight" class="inbody-input input-weight" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');" />
                         <div id="today-weight"></div>
                         <p>kg</p>
@@ -171,6 +185,17 @@
                   </div>
                   <button class="btn-save-inbody">저장</button>
                 </form>
+                <div class="nunbody">
+                  <% if (nunbodyPhoto) { %>
+                    <!-- <% dinnerMeals.forEach(meal => { %> -->
+                      <% if (nunbodyPhoto.date == selectedDate && nunbodyPhoto.author == user.id) { %>
+                        <div>
+                          <img class="img-nunbody" src="<%= nunbodyPhoto.imagePath%>" alt="눈바디 이미지">
+                        </div>
+                      <% } %>
+                    <!-- <% }) %> -->
+                  <% } %>
+                </div>
               </div>
             </div>
           </div>
@@ -184,9 +209,11 @@
             <div class="choice-inbody-graph">
               <form action="">
                 <select name="" id="dataSelector">
-                  <option value="weight">체중</option>
-                  <option value="muscle">골격근량</option>
-                  <option value=""></option>
+                  <option value="weight" class="weight">체중</option>
+                  <option value="BMI" class="BMI">BMI</option>
+                  <option value="SMM" class="SMM">골격근량</option>
+                  <option value="BFM" class="BFM">체지방량</option>
+                  <option value="BFP" class="BFP">체지방률</option>
                 </select>    
               </form>
             </div>
@@ -195,7 +222,9 @@
             </div>
           </div>
         </div>
+      </div>
     </main>
+    <!-- <%- include('includes/footer') %> -->
   </body>
 </html>
 

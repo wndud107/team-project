@@ -9,7 +9,9 @@
     <div class="container">
         <aside class="sidebar">
             <div class="profile">
-                <div class="profile-image"><img src="" alt="..."></div>
+                <div class="profile-image">
+                    <img src="<%= user && user.profileImage ? user.profileImage : '기본프로필.png' %>" alt="프로필 사진">
+                </div>
                 <div class="profile-name"><%= user ? user.name : '' %></div>
                 <form method="GET" action="/my-page">
                     <button type="submit" class="profile-button">내 정보</button>

@@ -61,7 +61,7 @@ router.post("/upload-profile-photo", upload.single('profilePhoto'), async functi
     );
 
     // 이전 사진 삭제
-    if (oldProfilePhoto && oldProfilePhoto !== "/image/default-placeholder.png") {
+    if (oldProfilePhoto && oldProfilePhoto !== "기본프로필.png") {
       fs.unlink(path.join(__dirname, "..", "public", oldProfilePhoto), (err) => {
         if (err) {
           console.error("Error deleting old profile photo:", err);
@@ -73,6 +73,41 @@ router.post("/upload-profile-photo", upload.single('profilePhoto'), async functi
   } catch (error) {
     console.error("Error updating profile photo:", error);
     res.status(500).send("Internal Server Error");
+  }
+});
+
+// 프로필 사진 삭제
+router.post("/delete-profile-photo", async function (req, res) {
+  const user = req.session.user;
+
+  if (!user) {
+    return res.send(
+      '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
+    );
+  }
+
+  try {
+    const userInfo = await db.getDb().collection("User_info").findOne({ id_join: user.id });
+    const oldProfilePhoto = userInfo.profilePhoto;
+
+    await db.getDb().collection("User_info").updateOne(
+      { id_join: user.id },
+      { $set: { profilePhoto: null } } // profilePhoto 값을 null로 설정
+    );
+
+    // 이전 사진 삭제
+    if (oldProfilePhoto && oldProfilePhoto !== "기본프로필.png") {
+      fs.unlink(path.join(__dirname, "..", "public", oldProfilePhoto), (err) => {
+        if (err) {
+          console.error("Error deleting old profile photo:", err);
+        }
+      });
+    }
+
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error("Error deleting profile photo:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
@@ -492,5 +527,6 @@ router.post('/save-inbody', async function (req, res) {
     res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
   }
 });
+
 
 module.exports = router;

@@ -325,14 +325,14 @@ const updateExercisesPopupContent = (data) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ id: exercise._id, date: exercise.date })
+                body: JSON.stringify({ id: exercise._id, date: exercise.date, checked: checkExercise.checked }),
             })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
-
+                
             })
             .then(data => {
                 console.log('Exercise deleted successfully:', data);
@@ -552,23 +552,70 @@ fetch('/meals?date=${formattedDate}')
 // 체중 데이터 불러오기
 const fetchWeight = async () => {
     const formattedDate = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
+    console.log(`Fetching weight data for date: ${formattedDate}`); // 추가된 디버깅 로그
 
     try {
-        const response = await fetch(`/weight?date=${formattedDate}`);
+        const response = await fetch('/inbody');
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error('Network response was not ok');
         }
-        const data = await response.json();
+        const weightData = await response.json();
+        console.log('Fetched weight data:', weightData); // 서버에서 가져온 데이터 콘솔 출력
 
-        if (data.length > 0) {
-            todayWeight.innerText = data[0].weight;
+        // 오늘 날짜의 체중 데이터 표시
+        const todayWeightData = weightData.find(entry => {
+            const date = new Date(entry.date);
+            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}` === formattedDate;
+        });
+
+        todayWeight.innerHTML = ''; // 기존 내용을 초기화
+
+        if (todayWeightData) {
+            const weightP = document.createElement('p');
+            weightP.className = 'p-weight';
+            weightP.innerText = `${todayWeightData.weight}`;
+            todayWeight.appendChild(weightP);
+
+            // 삭제 버튼 생성 및 추가
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'btn-delete-weight';
+            deleteButton.innerText = '삭제';
+            deleteButton.addEventListener('click', async () => {
+                try {
+                    const deleteResponse = await fetch('/delete-weight', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ date: todayWeightData.date, weight: todayWeightData.weight })
+                    });
+
+                    if (!deleteResponse.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const deleteResult = await deleteResponse.json();
+                    console.log('Weight deleted successfully:', deleteResult);
+
+                    // 삭제 후 화면 갱신
+                    fetchWeight();
+                } catch (error) {
+                    console.error('Error deleting weight:', error);
+                }
+            });
+            todayWeight.appendChild(deleteButton);
         } else {
-            todayWeight.innerText = '';
+            const noDataP = document.createElement('p');
+            noDataP.innerText = '';
+            todayWeight.appendChild(noDataP);
         }
     } catch (error) {
-        console.error('Error fetching weight:', error);
+        console.error('Error fetching weight data:', error);
     }
 };
+
+
+
+// 초기 로드 시 체중 데이터를 가져옴
+fetchWeight();
 
 // 달력 렌더링
 renderCalendar();
@@ -617,101 +664,327 @@ monthPicker.value = `${currYear}-${String(currMonth + 1).padStart(2, '0')}`;
 
 
 
-
 ///////////// 그래프 ///////////////
+
+
+// document.addEventListener('DOMContentLoaded', () => {
+//     const weightDisplay = document.getElementById('today-weight');
+//     const ctx = document.getElementById('weightChart').getContext('2d');
+//     const weightContainer = document.getElementById('today-weight');
+
+//     // async function fetchWeights() {
+//     //     try {
+//     //         const response = await fetch('/inbody');
+//     //         if (!response.ok) {
+//     //             throw new Error('Network response was not ok');
+//     //         }
+//     //         const weightData = await response.json();
+//     //         console.log('Fetched weight data:', weightData);
+
+//     //         data.labels = weightData.map(entry => {
+//     //             const date = new Date(entry.date);
+//     //             return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+//     //         });
+//     //         data.datasets[0].data = weightData.map(entry => entry.weight);
+//     //         data.datasets[0].label = 'Weight';
+//     //         weightChart.update();
+//     //     } catch (error) {
+//     //         console.error('Error fetching weight data:', error);
+//     //     }
+//     // }
+
+//     // fetchWeights();
+
+//     let data = {
+//         labels: [],
+//         datasets: [{
+//             label: 'Weight',
+//             data: [],
+//             borderColor: 'rgba(75, 192, 192, 1)',
+//             borderWidth: 1,
+//             fill: false
+//         }]
+//     };
+//     const config = {
+//         type: 'line',
+//         data: data,
+//         options: {
+//             scales: {
+//                 x: {
+//                     type: 'time',
+//                     time: {
+//                         unit: 'day',
+//                         tooltipFormat: 'YYYY-MM-DD'
+//                     },
+//                     title: {
+//                         display: true,
+//                         text: '날짜'
+//                     }
+//                 },
+//                 y: {
+//                     beginAtZero: true,
+//                     title: {
+//                         display: true,
+//                         text: '체중 (kg)'
+//                     }
+//                 }
+//             },
+//             plugins: {
+//                 tooltip: {
+//                     enabled: true,
+//                     mode: 'index',
+//                     intersect: false,
+//                     callbacks: {
+//                         label: function(tooltipItem) {
+//                             return `${tooltipItem.dataset.label}: ${tooltipItem.raw} kg`;
+//                         }
+//                     }
+//                 }
+//             },
+//             elements: {
+//                 line: {
+//                     tension: 0.4
+//                 },
+//                 point: {
+//                     radius: 3.5,
+//                     backgroundColor: 'rgba(75, 192, 192, 1)',
+//                     hoverRadius: 7,
+//                     hoverBackgroundColor: 'rgba(75, 192, 192, 1)'
+//                 }
+//             }
+//         }
+//     };
+//     const weightChart = new Chart(ctx, config);
+
+//  // 인바디 데이터를 가져와서 그래프에 표시하는 함수
+//     async function fetchAndDisplayInbodyData(dataType) {
+//         try {
+//             const response = await fetch('/inbody', {
+//                 method: 'GET',
+//                 headers: {
+//                     'Content-Type': 'application/json'
+//                 }
+//             });
+//             if (!response.ok) {
+//                 throw new Error('Network response was not ok');
+//             }
+//             const dataResponse = await response.json();
+//             console.log('Fetched inbody data:', dataResponse);
+
+//             if (!dataResponse.length) {
+//                 console.error('No data found');
+//                 return;
+//             }
+//             data.labels = dataResponse.map(entry => entry.date);
+//             data.datasets[0].data = dataResponse.map(entry => entry[dataType]);
+//             data.datasets[0].label = getLabelForDataType(dataType);
+//             weightChart.update();
+//         } catch (error) {
+//             console.error('Error fetching data:', error);
+//         }
+//     }
+
+//     function getLabelForDataType(dataType) {
+//         switch (dataType) {
+//             case 'weight':
+//                 return '체중(kg)';
+//             case 'BMI':
+//                 return 'BMI';
+//             case 'SMM':
+//                 return '골격근량(kg)';
+//             case 'BFM':
+//                 return '체지방량(kg)';
+//             case 'BFP':
+//                 return '체지방률(%)';
+//             default:
+//                 return '값';
+//         }
+//     }
+
+//     fetchAndDisplayInbodyData('weight');
+    
+//    // 각 버튼에 클릭 이벤트 추가
+//     document.querySelectorAll('button').forEach(button => {
+//         button.addEventListener('click', () => {
+//             const dataType = button.getAttribute('class');
+//             fetchAndDisplayInbodyData(dataType);
+//         });
+//     });
+
+//     const weightInput = document.getElementById("weight");
+  
+
+//     if (addWeightButton) {
+//         addWeightButton.addEventListener("click", async function(event) {
+//             event.preventDefault();
+//             const weight = weightInput.value.trim();
+//             const formattedDate = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
+
+//             if (weight && formattedDate) {
+//                 const weightData = {
+//                     date: formattedDate,
+//                     weight: weight
+//                 };
+//                 console.log('Sending weight data:', weightData);
+
+//                 try {
+//                     const response = await fetch('/save-weight', {
+//                         method: 'POST',
+//                         headers: {
+//                             'Content-Type': 'application/json'
+//                         },
+//                         body: JSON.stringify(weightData)
+//                     });
+
+//                     if (!response.ok) {
+//                         throw new Error('Network response was not ok');
+//                     }
+
+//                     const data = await response.json();
+//                     console.log('Weight saved successfully:', data);
+
+//                     weightInput.value = "";
+
+//                     fetchAndDisplayInbodyData('weight');
+//                 } catch (error) {
+//                     console.error('Error saving weight:', error);
+//                 }
+//             } else {
+//                 alert("체중을 입력해주세요.");
+//             }
+//         });
+//     }
+
+// });
 
 document.addEventListener('DOMContentLoaded', () => {
     const ctx = document.getElementById('weightChart').getContext('2d');
-    let data = {
-      labels: [],
-      datasets: [{
-        label: 'Weight',
-        data: [],
-        borderColor: 'rgba(75, 192, 192, 1)', // 그래프 선 색상
-        borderWidth: 1,
-        fill: false
-      }]
-    };
-    const config = {
-      type: 'line',
-      data: data,
-      options: {
-        scales: {
-          x: {
-            type: 'date', // x축을 시간으로 설정
-            date: {
-              unit: 'day', // 시간 단위를 일 단위로 설정
-              tooltipFormat: 'YYYY-MM-DD' // 툴팁에 표시될 날짜 형식
-            },
-            title: {
-                display: true,
-                text: '날짜' // x축 레이블
-              }
-          },
-          y: {
-            beginAtZero: true, // y축을 0부터 시작
-            title: {
-                display: true,
-                text: '체중 (kg)' // y축 레이블
-              }
-          }
-        },
-        tooltip: {
-            enabled: true, // 툴팁 사용
-            mode: 'index', // 인덱스 모드로 툴팁 표시
-            intersect: false,
-            callbacks: {
-              label: function(tooltipItem) {
-                return `Weight: ${tooltipItem.formattedValue} kg`; // 툴팁 레이블 포맷
-              }
-            }
-        },
-        elements: {
-          line: {
-            tension: 0.4 // 선의 곡률
-          },
-          point: {
-            radius: 3.5, // 데이터 포인트 크기
-            backgroundColor: 'rgba(75, 192, 192, 1)', // 데이터 포인트 색상
-            hoverRadius: 7, // 호버 시 데이터 포인트 크기
-            hoverBackgroundColor: 'rgba(75, 192, 192, 1)' // 호버 시 데이터 포인트 색상
-          }
-        }
-      }
-    };
-    const weightChart = new Chart(ctx, config); // Chart.js를 사용하여 그래프 생성
-
-    // 서버에서 날짜별 체중 데이터를 가져와 그래프에 추가하는 함수
-    async function fetchAndDisplayWeights() {
-        const selectedType = dataSelector.value;
-        const url = selectedType === 'weight' ? '/weights' : '/muscle-weights';
-        try {
-          const response = await fetch(url);
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          const dataResponse = await response.json();
-          data.labels = dataResponse.map(entry => entry.date);
-          data.datasets[0].data = dataResponse.map(entry => entry[selectedType]);
-          data.datasets[0].label = selectedType === 'weight' ? '체중' : '골격근량';
-          weightChart.update();
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      }
-
-    // 페이지 로드 시 날짜별 체중 데이터 가져오기
-    fetchAndDisplayWeights();
-
-    // 체중을 저장하는 이벤트 리스너
+    const weightInput = document.getElementById("weight");
     const addWeightButton = document.querySelector(".btn-save-inbody");
 
-    // 체중을 저장하는 이벤트 리스너
-    if(addWeightButton) {
+// 인바디 데이터를 가져와서 그래프에 표시하는 함수
+async function fetchAndDisplayInbodyData(dataType) {
+    try {
+        const response = await fetch('/inbody', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const dataResponse = await response.json();
+        console.log('Fetched inbody data:', dataResponse);
+
+        if (!dataResponse.length) {
+            console.error('No data found');
+            return;
+        }
+
+        data.labels = dataResponse.map(entry => entry.date);
+        data.datasets[0].data = dataResponse.map(entry => entry[dataType]);
+        data.datasets[0].label = getLabelForDataType(dataType);
+        weightChart.update();
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
+function getLabelForDataType(dataType) {
+    switch (dataType) {
+        case 'weight':
+            return '체중(kg)';
+        case 'BMI':
+            return 'BMI';
+        case 'SMM':
+            return '골격근량(kg)';
+        case 'BFM':
+            return '체지방량(kg)';
+        case 'BFP':
+            return '체지방률(%)';
+        default:
+            return '값';
+    }
+}
+
+
+    // Chart.js 설정
+    let data = {
+        labels: [],
+        datasets: [{
+            label: 'Weight',
+            data: [],
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1,
+            fill: false
+        }]
+    };
+    const config = {
+        type: 'line',
+        data: data,
+        options: {
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'day',
+                        tooltipFormat: 'YYYY-MM-DD'
+                    },
+                    title: {
+                        display: true,
+                        text: '날짜'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: '체중 (kg)'
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    enabled: true,
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return `${tooltipItem.dataset.label}: ${tooltipItem.raw} kg`;
+                        }
+                    }
+                }
+            },
+            elements: {
+                line: {
+                    tension: 0.4
+                },
+                point: {
+                    radius: 3.5,
+                    backgroundColor: 'rgba(75, 192, 192, 1)',
+                    hoverRadius: 7,
+                    hoverBackgroundColor: 'rgba(75, 192, 192, 1)'
+                }
+            }
+        }
+    };
+    const weightChart = new Chart(ctx, config);
+
+    
+
+    // 각 버튼에 클릭 이벤트 추가
+    document.querySelectorAll('.data-type-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const dataType = button.getAttribute('data-type');
+            fetchAndDisplayInbodyData(dataType);
+        });
+    });
+
+    if (addWeightButton) {
         addWeightButton.addEventListener("click", async function(event) {
-            event.preventDefault();  // 폼 제출 기본 동작 방지
-            const weightInput = document.getElementById("weight");
-            const weight = weightInput.value.trim(); // 정돈된 데이터 보내기
+            event.preventDefault();
+            const weight = weightInput.value.trim();
             const formattedDate = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
 
             if (weight && formattedDate) {
@@ -737,10 +1010,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     const data = await response.json();
                     console.log('Weight saved successfully:', data);
 
-                    // 저장 후 todayWeight 요소에 체중 데이터 표시
-                    todayWeight.innerHTML = `<p class="p-weight">${weight}</p>`;
-                    weightInput.value = ""; // 입력 필드 초기화
+                    weightInput.value = "";
 
+                    fetchAndDisplayInbodyData('weight');
                 } catch (error) {
                     console.error('Error saving weight:', error);
                 }
@@ -750,51 +1022,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 체중 데이터 불러오기
-    async function loadWeights() {
-        try {
-            const response = await fetch('/weights');
-            const weights = await response.json();
-            const weightListDiv = document.getElementById('weightList');
-            weightListDiv.innerHTML = '';  // 기존 내용 삭제
-
-            weights.forEach(weight => {
-                const weightDiv = document.createElement('div');
-                weightDiv.innerHTML = `
-                    <p>날짜: ${weight.date}, 체중: ${weight.weight} kg</p>
-                    <img src="/weight_images/${weight.photo}" alt="체중 사진" width="200">
-                    <button onclick="deleteWeight('${weight.date}', ${weight.weight})">삭제</button>
-                `;
-                weightListDiv.appendChild(weightDiv);
-            });
-        } catch (error) {
-            console.error('체중 데이터 로드 실패', error);
-        }
-    }
-
-    // 체중 데이터 삭제 함수
-    async function deleteWeight(date, weight) {
-        try {
-            const response = await fetch('/delete-weight', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ date, weight })
-            });
-
-            if (response.ok) {
-                alert('체중 기록이 삭제되었습니다.');
-                loadWeights();  // 목록 갱신
-            } else {
-                alert('체중 기록 삭제 실패');
-            }
-        } catch (error) {
-            console.error('체중 기록 삭제 실패', error);
-        }
-    }
-
+    // 초기 로드 시 체중 데이터 가져오기
+    fetchAndDisplayInbodyData('weight');
 });
 
-/////////// 눈바디 /////////////
 
 function previewInbodyImage(event, uploadBoxId, saveButtonId) {
     const reader = new FileReader();

@@ -31,15 +31,19 @@
         .getDb()
         .collection("User_info")
         .findOne({ id_join: userid });
-
+  
       if (!user || !(await bcrypt.compare(userpw, user.pw_join))) {
         return res.render("login", {
           error: true,
           message: "아이디 또는 비밀번호를 잘못 입력했습니다.",
         });
       }
-
-      req.session.user = { id: user.id_join, name: user.name_join };
+  
+      req.session.user = {
+        id: user.id_join,
+        name: user.name_join,
+        profileImage: user.profilePhoto || '/images/기본프로필.png' // 프로필 이미지 추가
+      };
       res.redirect("/index");
     } catch (error) {
       console.error("Error finding user:", error);

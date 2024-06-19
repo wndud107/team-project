@@ -276,7 +276,7 @@ input[type="month"]:focus {
 
 #popup-date {
   float: right;
-  margin: 0 ;
+  margin-right: 10px; 
   padding: 5px;
   font-size: 20px;
   font-weight: 700;

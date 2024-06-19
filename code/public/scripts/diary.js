@@ -15,14 +15,60 @@ const daysTag = document.querySelector(".days"),
     addWeightButton = document.querySelector(".btn-save-inbody"),
     morningMeal = document.getElementById("uploadBox1"),
     lunchMeal = document.getElementById("uploadBox2"),
-    dinnerMeal = document.getElementById("uploadBox3") ;
+    dinnerMeal = document.getElementById("uploadBox3"),
+    nunbody = document.getElementById("uploadBox4"),
+    addNunbodyButton = document.querySelector(".saveNunbody");
 
 let date = new Date(),
     currYear = date.getFullYear(),
     currMonth = date.getMonth(),
-    selectedDate = date.getDate();
+    selectedDate = date.getDate(),
     exerciseLogs = [];
 
+
+document.addEventListener("DOMContentLoaded", async function() {
+    // 페이지가 로드된 후에 초기화 작업 수행
+    await initializePage();
+    });
+    
+    async function initializePage() {
+    await fetchExerciseLogs();
+    
+    // 로컬 스토리지에서 저장된 선택된 날짜 불러오기
+    let storedDate = localStorage.getItem('selectedDate');
+    if (storedDate) {
+        selectedDate = new Date(storedDate);
+    } else {
+        selectedDate = new Date();
+    }
+    
+    // 달력 렌더링 및 선택된 날짜에 대한 데이터 로드
+    renderCalendar();
+    fetchDataForDateAndExercise(selectedDate);
+    fetchWeight();
+    
+    // 선택된 날짜 강조 표시
+    highlightSelectedDate();
+    
+    }
+      
+
+function highlightSelectedDate() {
+    document.querySelectorAll('.days li').forEach(day => {
+      const dayDate = new Date(currYear, currMonth, parseInt(day.textContent));
+      if (dayDate.toDateString() === selectedDate.toDateString() && !day.classList.contains('inactive')) {
+        day.classList.add('selected');
+      }
+    });
+  
+    popupDate.innerText = ` ${months[selectedDate.getMonth()]} ${selectedDate.getDate()}일`;
+    popup.classList.add('show');
+  }
+  
+
+////////////////// 달력 ///////////////////
+
+// 달력 렌더링 함수
 const renderCalendar = () => {
     let firstDayofMonth = new Date(currYear, currMonth, 1).getDay(),
         lastDateofMonth = new Date(currYear, currMonth + 1, 0).getDate(),
@@ -43,8 +89,7 @@ const renderCalendar = () => {
         let hasExercise = log && log.count > 0 ? "has-exercise" : "";
         let allChecked = log && log.allChecked ? "all-checked" : "";
 
-        liTag += `<li class="${isToday} ${isSelected} ${hasExercise} ${allChecked}" data-date="${formattedDate} ">${i}</li>`;
-    }
+        liTag += `<li class="${isToday} ${isSelected} ${hasExercise} ${allChecked}" data-date="${formattedDate} ">${i}</li>`;    }
 
     for (let i = lastDayofMonth; i < 6; i++) {
         liTag += `<li class="inactive">${i - lastDayofMonth + 1}</li>`;
@@ -54,7 +99,7 @@ const renderCalendar = () => {
     daysTag.innerHTML = liTag;
 
     document.querySelectorAll('.days li').forEach(day => {
-        day.addEventListener('click', (event) => {
+        day.addEventListener('click', async (event) => {
             const target = event.target;
             if (!target.classList.contains('inactive')) {
                 selectedDate = new Date(currYear, currMonth, parseInt(target.textContent));
@@ -67,8 +112,161 @@ const renderCalendar = () => {
             }
         });
     });
-}
+};
 
+////////// 운동 //////////
+
+// DOMContentLoaded 이벤트 핸들러
+document.addEventListener("DOMContentLoaded", async function() {
+    await fetchExerciseLogs();
+    const closePopup = document.querySelector(".close2");
+    const addExerciseFormButton = document.getElementById("add-exercise-button");
+    // 페이지 로드 시 오늘 날짜 데이터를 가져오기
+    const today = new Date();
+    selectedDate = today;
+    fetchDataForDateAndExercise(today);  // 오늘 날짜의 데이터를 가져오는 함수 호출
+    fetchWeight();
+
+    document.querySelectorAll('.days li').forEach(day => {
+        if (parseInt(day.textContent) === today.getDate() && !day.classList.contains('inactive')) {
+            day.classList.add('selected');
+        }
+    });
+
+    // 선택된 날짜를 창 안에 표시
+    popupDate.innerText = ` ${months[today.getMonth()]} ${today.getDate()}일`;
+    popup.classList.add('show');
+
+
+    // 운동 추가 버튼 이벤트 핸들러 운동 추가 팝업창 띄우기
+    if (addExerciseButton) {
+        addExerciseButton.addEventListener('click', () => {
+            addExercisePopup.classList.add('show');
+        });
+    }
+
+    // 팝업 닫기 버튼 이벤트 핸들러
+    if (closePopup) {
+        closePopup.addEventListener('click', () => {
+            addExercisePopup.classList.remove('show');
+        });
+    }
+
+    // 운동 추가 폼 버튼 이벤트 핸들러
+    if (addExerciseFormButton) {
+        addExerciseFormButton.addEventListener('click', (event) => {
+            event.preventDefault(); // 폼 제출 기본 동작 방지
+            const exerciseSelect = document.getElementById("exercise-select");
+            const reps = document.getElementById("reps");
+            const sets = document.getElementById("sets");
+
+            if (exerciseSelect && reps && sets) {
+                if (exerciseSelect.value && reps.value && sets.value) {
+                    const formattedDate = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
+
+                    const exerciseData = {
+                        date: formattedDate,
+                        exercise: exerciseSelect.value,
+                        reps: reps.value,
+                        sets: sets.value
+                    };
+
+                    console.log('Sending exercise data:', exerciseData);
+
+                    fetch('/save-exercise', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(exerciseData)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Exercise saved successfully:', data);
+                        addExercisePopup.classList.remove('show');
+
+                        const listItem = document.createElement("li");
+                        const checkboxId = `exerciseCheckbox${data._id}`; // 서버에서 응답 받은 데이터의 _id를 사용
+
+                        listItem.innerHTML = `
+                            <span>
+                                <input type="checkbox" class="exercise-checkbox" id="${checkboxId}">
+                                <label for="${checkboxId}" class="exercise-label">
+                                ${exerciseSelect.value} [${reps.value}회 x ${sets.value}세트]
+                                <button class="delete-exercise">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square" viewBox="0 0 16 16">
+                                    <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                                    </svg>
+                                </button>
+                                </label>
+                            </span>
+                        `;
+                        exerciseList.appendChild(listItem);
+
+                        // 체크박스 상태 업데이트 함수
+                        const checkExercise = listItem.querySelector('.exercise-checkbox');
+                        checkExercise.addEventListener('click', () => {
+                            fetch('/update-exercise', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ id: checkboxId, checked: checkExercise.checked }),
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log('Update successful:', data);
+                            })
+                            .catch(error => console.error('Error updating status:', error));
+                        });
+
+                        // 삭제 버튼 클릭 이벤트 추가
+                        const deleteButton = listItem.querySelector('.delete-exercise');
+                        deleteButton.addEventListener('click', () => {
+                            fetch('/delete-exercise', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ id: checkboxId })
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                console.log('Exercise deleted successfully:', data);
+                                exerciseList.removeChild(listItem);
+                            })
+                            .catch(error => {
+                                console.error('Error deleting exercise:', error);
+                            });
+                        });
+
+                        exerciseSelect.value = "";
+                        reps.value = "";
+                        sets.value = "";
+                        fetchDataForDateAndExercise(selectedDate);
+
+                    })
+                    .catch(error => {
+                        console.error('Error saving exercise:', error);
+                    });
+                } else {
+                    alert("모든 항목을 입력해주세요.");
+                }
+            }
+        });
+    }
+});
 
 // 운동 데이터 가져오기
 const fetchExerciseData = (date) => {
@@ -78,7 +276,7 @@ const fetchExerciseData = (date) => {
         .then(response => response.json())
         .then(data => updateExercisesPopupContent(data))
         .catch(error => console.error('Error fetching exercise data:', error));
-}
+};
 
 // 운동 추가하기
 const updateExercisesPopupContent = (data) => {
@@ -127,7 +325,7 @@ const updateExercisesPopupContent = (data) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ id: exercise._id, date: exercise.date })
+                body: JSON.stringify({ id: exercise._id })
             })
             .then(response => {
                 if (!response.ok) {
@@ -139,14 +337,13 @@ const updateExercisesPopupContent = (data) => {
             .then(data => {
                 console.log('Exercise deleted successfully:', data);
                 exerciseList.removeChild(listItem);
-                fetchExerciseLogs(); // 운동 삭제 후 해당 날짜의 운동 기록 수를 다시 로드하여 갱신
             })
             .catch(error => {
                 console.error('Error deleting exercise:', error);
             });
         });
     });
-}
+};
 
 // 운동 한 날인지 확인 관련
 const fetchExerciseLogs = async () => {
@@ -168,45 +365,129 @@ function previewImage(event, uploadBoxId, saveButtonId) {
     const reader = new FileReader();
     reader.onload = function(e) {
         const box = document.getElementById(uploadBoxId);
-        box.innerHTML = `<img src="${e.target.result}" alt="식단 이미지" class="image-preview"/>`;
+     
+            const imgElement = box.querySelector('img');
+            if (imgElement) {
+                imgElement.src = e.target.result;
+            } else {
+                box.innerHTML = `<img src="${e.target.result}" alt="식단 이미지" class="image-preview"/>`;
+            }
 
-        let saveButton = document.getElementById(saveButtonId);
-        if (!saveButton) {
-            saveButton = document.createElement('button');
-            saveButton.id = saveButtonId;
-            saveButton.className = 'btn-save-meals';
-            saveButton.innerText = '저장';
-            saveButton.type = 'submit';
-            const form = box.closest('form');
-            form.appendChild(saveButton);
-        } else {
-            saveButton.style.display = 'block';
-        }
+            let saveButton = document.getElementById(saveButtonId);
+            if (!saveButton) {
+                saveButton = document.createElement('button');
+                saveButton.id = saveButtonId;
+                saveButton.className = `btn-save-meals ${saveButtonId}`;
+                saveButton.innerText = '저장';
+                saveButton.type = 'submit';
+                const form = box.closest('form');
+                if (form) {
+
+                    form.appendChild(saveButton);
+                } else {
+                    console.error('Form not found');
+                }
+            } else {
+                saveButton.style.display = 'block';     
+        } 
     }
     reader.readAsDataURL(event.target.files[0]);
 }
 
+function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더합니다.
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
 
-// // 현재 날짜를 hidden input에 설정
-// function setDateInputs() {
-//     const currentDate = new Date().toISOString().split('T')[0];
-//     document.getElementById('hiddenDate1').value = currentDate;
-//     document.getElementById('hiddenDate2').value = currentDate;
-//     document.getElementById('hiddenDate3').value = currentDate;
-// }
-//         // 이미지 미리보기 기능
-//         function previewImage(event, uploadBoxId, saveButtonId) {
-//             const reader = new FileReader();
-//             reader.onload = function(){
-//                 const uploadBox = document.getElementById(uploadBoxId);
-//                 uploadBox.innerHTML = '<img src="' + reader.result + '" />';
-//                 document.getElementById(saveButtonId).style.display = 'block';
-//             }
-//             reader.readAsDataURL(event.target.files[0]);
-//         }
-// window.onload = setDateInputs;
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault(); // 기본 폼 제출 동작 방지
+        const hiddenDate = form.querySelector('input[name="date"]');
+        if (hiddenDate) {
+            hiddenDate.value = formatDate(selectedDate); // 선택된 날짜를 hidden input에 설정
+        } else {
+            console.error('Hidden date input not found');
+        }
 
+        const formData = new FormData(form);
+        try {
+            const response = await fetch('/save-meals', {
+                method: 'POST',
+                body: formData
+            });
 
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            console.log(data.message);
+
+            if (data.message === "식단이 성공적으로 저장되었습니다.") {
+                alert(data.message);
+                // 성공적으로 저장된 후 추가적인 동작 수행 (예: 화면 갱신)
+                // 저장 버튼 숨기기
+                const saveButton = form.querySelector('.btn-save-meals');
+                if (saveButton) {
+                    saveButton.style.display = 'none';
+                }
+
+                fetchMealData(selectedDate); // 선택된 날짜의 식단 데이터를 다시 불러옴
+            }
+        } catch (error) {
+            console.error('Error saving meal:', error);
+        }
+    });
+});
+
+// 선택된 날짜에 대한 식단 데이터 불러오기
+const loadMealsForDate = async (year, month, day) => {
+    try {
+        const formattedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const response = await fetch(`/meals?date=${formattedDate}`);
+        const meals = await response.json();
+        displayMeals(meals);
+    } catch (error) {
+        console.error('Error loading meals:', error);
+    }
+};
+
+// 식단 데이터 표시
+const displayMeals = (meals) => {
+    meals.forEach(meal => {
+        const dateElement = document.querySelector(`.days li[data-date="${meal.date}"]`);
+        if (dateElement) {
+            const mealBox = document.createElement('div');
+            mealBox.innerHTML = `<img src="${meal.imagePath}" alt="${meal.mealType} 이미지" class="image-preview">`;
+            if (meal.mealType === '아침') {
+                document.getElementById('morning-meal').appendChild(mealBox);
+            } else if (meal.mealType === '점심') {
+                document.getElementById('lunch-meal').appendChild(mealBox);
+            } else if (meal.mealType === '저녁') {
+                document.getElementById('dinner-meal').appendChild(mealBox);
+            }
+        }
+    });
+};
+
+// 특정 날짜의 식단 데이터를 서버에서 가져오는 함수
+const fetchMealData = (date) => {
+    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
+    fetch(`/meals?date=${formattedDate}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => updateMealsPopupContent(data))
+        .catch(error => console.error('Error fetching meal data:', error));
+};
+
+// 팝업의 식단 내용 업데이트
 const updateMealsPopupContent = (data) => {
     const mealContainers = {
         아침: document.getElementById('uploadBox1'),
@@ -216,33 +497,19 @@ const updateMealsPopupContent = (data) => {
 
     // 각 식단 컨테이너를 초기화
     for (let key in mealContainers) {
-        mealContainers[key].innerHTML = `<p>+ <br> ${key} 식단</p>`;
+        if (mealContainers[key]) {
+            mealContainers[key].innerHTML = `<p>+ <br> ${key} 식단</p>`;
+        }
     }
 
     // 서버에서 받은 식단 데이터를 각 컨테이너에 표시
     data.forEach(meal => {
         if (mealContainers[meal.mealType]) {
             mealContainers[meal.mealType].innerHTML =
-             `<img src="/meal_images/${meal.filename}" alt="${meal.mealType} 식단" class="image-preview">`;
+                `<img src="${meal.imagePath}" alt="${meal.mealType} 식단" class="image-preview">`;
         }
     });
-}
-
-// 특정 날짜의 식단 데이터를 서버에서 가져오는 함수
-const fetchMealData = (date) => {
-    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-
-    fetch(`/meals?date=${formattedDate}`)
-        .then(response => response.json())
-        .then(data => updateMealsPopupContent(data))
-        .catch(error => console.error('Error fetching meal data:', error));
-}
-
-// 초기 로드 시 및 날짜가 변경될 때 식단 데이터 불러오기
-const fetchDataForDateAndExercise = (date) => {
-    fetchMealData(date);
-    fetchExerciseData(date);
-}
+};
 
 // 페이지가 로드될 때 초기화
 document.addEventListener("DOMContentLoaded", async function() {
@@ -253,7 +520,35 @@ document.addEventListener("DOMContentLoaded", async function() {
     fetchWeight();
 });
 
+// 초기 로드 시 및 날짜가 변경될 때 식단 데이터 불러오기
+const fetchDataForDateAndExercise = (date) => {
+    fetchMealData(date);
+    fetchExerciseData(date);
+    fetchNunbodyData(date);
+};
 
+fetch('/meals?date=${formattedDate}')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.indexOf('application/json') !== -1) {
+      return response.json(); // JSON 응답 처리
+    } else {
+      throw new Error('Response was not JSON');
+    }
+  })
+  .then(data => {
+    console.log(data);
+    // 데이터를 활용한 로직 추가
+  })
+  .catch(error => {
+    console.error('Error fetching data:', error);
+  });
+
+
+// 체중 데이터 불러오기
 const fetchWeight = async () => {
     const formattedDate = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
 
@@ -272,7 +567,7 @@ const fetchWeight = async () => {
     } catch (error) {
         console.error('Error fetching weight:', error);
     }
-}
+};
 
 // 달력 렌더링
 renderCalendar();
@@ -291,7 +586,7 @@ prevNextIcon.forEach(icon => {
         }
         monthPicker.value = `${currYear}-${String(currMonth + 1).padStart(2, '0')}`;
         renderCalendar();
-
+        loadMealsForMonth(currYear, currMonth);  // 선택된 월의 식단 데이터를 불러옴
     });
 });
 
@@ -313,168 +608,16 @@ monthPicker.addEventListener('change', (event) => {
     currYear = parseInt(year);
     currMonth = parseInt(month) - 1;
     renderCalendar();
+    loadMealsForMonth(currYear, currMonth);  // 선택된 월의 식단 데이터를 불러옴
 });
 
 monthPicker.value = `${currYear}-${String(currMonth + 1).padStart(2, '0')}`;
 
-document.querySelectorAll('form').forEach(form => {
-    form.addEventListener('submit', function(event) {
-        const hiddenDate = form.querySelector('input[name="date"]');
-        hiddenDate.value = popupDate.textContent.trim();
-    });
-});
 
-// DOMContentLoaded 이벤트 핸들러
-document.addEventListener("DOMContentLoaded", async function() {
-    await fetchExerciseLogs();
-    const closePopup = document.querySelector(".close2");
-    const addExerciseFormButton = document.getElementById("add-exercise-button");
-    // 페이지 로드 시 오늘 날짜 데이터를 가져오기
-    const today = new Date();
-    selectedDate = today;
-    fetchDataForDateAndExercise(today);  // 오늘 날짜의 데이터를 가져오는 함수 호출
-    fetchWeight();
 
-document.querySelectorAll('.days li').forEach(day => {
-    if (parseInt(day.textContent) === today.getDate() && !day.classList.contains('inactive')) {
-        day.classList.add('selected');
-    }
-});
 
-// 선택된 날짜를 창 안에 표시
-popupDate.innerText = ` ${months[today.getMonth()]} ${today.getDate()}일`;
-popup.classList.add('show');
 
-// 운동 추가 버튼 이벤트 핸들러 운동 추가 팝업창 띄우기
-if (addExerciseButton) {
-    addExerciseButton.addEventListener('click', () => {
-        addExercisePopup.classList.add('show');
-    });
-}
-
-// 팝업 닫기 버튼 이벤트 핸들러
-if (closePopup) {
-    closePopup.addEventListener('click', () => {
-        addExercisePopup.classList.remove('show');
-    });
-}
-
-// 운동 추가 폼 버튼 이벤트 핸들러
-if (addExerciseFormButton) {
-    addExerciseFormButton.addEventListener('click', (event) => {
-        event.preventDefault(); // 폼 제출 기본 동작 방지
-        const exerciseSelect = document.getElementById("exercise-select");
-        const reps = document.getElementById("reps");
-        const sets = document.getElementById("sets");
-
-        if (exerciseSelect && reps && sets) {
-            if (exerciseSelect.value && reps.value && sets.value) {
-                const formattedDate = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
-
-                const exerciseData = {
-                    date: formattedDate,
-                    exercise: exerciseSelect.value,
-                    reps: reps.value,
-                    sets: sets.value
-                };
-
-                console.log('Sending exercise data:', exerciseData);
-
-                fetch('/save-exercise', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(exerciseData)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Exercise saved successfully:', data);
-                    addExercisePopup.classList.remove('show');
-
-                    const listItem = document.createElement("li");
-                    const checkboxId = `exerciseCheckbox${data._id}`; // 서버에서 응답 받은 데이터의 _id를 사용
-
-                    listItem.innerHTML = `
-                        <span>
-                            <input type="checkbox" class="exercise-checkbox" id="${checkboxId}">
-                            <label for="${checkboxId}" class="exercise-label">
-                            ${exerciseSelect.value} [${reps.value}회 x ${sets.value}세트]
-                            <button class="delete-exercise">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square" viewBox="0 0 16 16">
-                                <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
-                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-                                </svg>
-                            </button>
-                            </label>
-                        </span>
-                    `;
-                    exerciseList.appendChild(listItem);
-
-                    // 체크박스 상태 업데이트 함수
-                    const checkExercise = listItem.querySelector('.exercise-checkbox');
-                    checkExercise.addEventListener('click', () => {
-                        fetch('/update-exercise', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ id: checkboxId, checked: checkExercise.checked }),
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log('Update successful:', data);
-                        })
-                        .catch(error => console.error('Error updating status:', error));
-                    });
-
-                    // 삭제 버튼 클릭 이벤트 추가
-                    const deleteButton = listItem.querySelector('.delete-exercise');
-                    deleteButton.addEventListener('click', () => {
-                        fetch('/delete-exercise', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ id: checkboxId, date: exercise.date })
-                        })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            console.log('Exercise deleted successfully:', data);
-                            exerciseList.removeChild(listItem);
-                            fetchExerciseLogs(); // 운동 삭제 후 해당 날짜의 운동 기록 수를 다시 로드하여 갱신
-                        })
-                        .catch(error => {
-                            console.error('Error deleting exercise:', error);
-                        });
-                    });
-
-                    exerciseSelect.value = "";
-                    reps.value = "";
-                    sets.value = "";
-                    fetchDataForDateAndExercise(selectedDate);
-
-                    })
-                    .catch(error => {
-                        console.error('Error saving exercise:', error);
-                    });
-                } else {
-                    alert("모든 항목을 입력해주세요.");
-                }
-            }
-        });
-    }
-});
+///////////// 그래프 ///////////////
 
 document.addEventListener('DOMContentLoaded', () => {
     const ctx = document.getElementById('weightChart').getContext('2d');
@@ -505,14 +648,14 @@ document.addEventListener('DOMContentLoaded', () => {
               }
           },
           y: {
-            beginAtZero: true ,// y축을 0부터 시작
-            // text: 'Weight (kg)', // y축 레이블
+            beginAtZero: true, // y축을 0부터 시작
             title: {
                 display: true,
                 text: '체중 (kg)' // y축 레이블
               }
-          }, 
-          tooltip: {
+          }
+        },
+        tooltip: {
             enabled: true, // 툴팁 사용
             mode: 'index', // 인덱스 모드로 툴팁 표시
             intersect: false,
@@ -521,7 +664,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return `Weight: ${tooltipItem.formattedValue} kg`; // 툴팁 레이블 포맷
               }
             }
-          }
         },
         elements: {
           line: {
@@ -533,12 +675,10 @@ document.addEventListener('DOMContentLoaded', () => {
             hoverRadius: 7, // 호버 시 데이터 포인트 크기
             hoverBackgroundColor: 'rgba(75, 192, 192, 1)' // 호버 시 데이터 포인트 색상
           }
-
         }
       }
     };
     const weightChart = new Chart(ctx, config); // Chart.js를 사용하여 그래프 생성
-
 
     // 서버에서 날짜별 체중 데이터를 가져와 그래프에 추가하는 함수
     async function fetchAndDisplayWeights() {
@@ -651,12 +791,144 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 폼 제출 시 데이터 저장
-    document.getElementById('weightForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
+});
 
-    document.addEventListener('DOMContentLoaded', loadWeights);
+/////////// 눈바디 /////////////
 
+function previewInbodyImage(event, uploadBoxId, saveButtonId) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const box = document.getElementById(uploadBoxId);
+        let imgElement = box.querySelector('img');
+        if (imgElement) {
+            imgElement.src = e.target.result;
+        } else {
+            imgElement = document.createElement('img');
+            imgElement.src = e.target.result;
+            imgElement.alt = "눈바디 이미지";
+            imgElement.className = "image-nunbody";
+            box.innerHTML = ''; // 기존 내용을 지우고
+            box.appendChild(imgElement); // 새로운 이미지를 추가
+        }
 
+        let saveButton = document.getElementById(saveButtonId);
+        if (!saveButton) {
+            saveButton = document.createElement('button');
+            saveButton.id = saveButtonId;
+            saveButton.className = `saveNunbody ${saveButtonId}`;
+            saveButton.innerText = '저장';
+            saveButton.type = 'submit';
+            const form = box.closest('form');
+            if (form) {
+                form.appendChild(saveButton);
+            } else {
+                console.error('Form not found');
+            }
+        } else {
+            saveButton.style.display = 'block';
+        }
+    };
+    reader.readAsDataURL(event.target.files[0]);
+}
+
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault(); // 기본 폼 제출 동작 방지
+        const hiddenDate = form.querySelector('input[name="date"]');
+        if (hiddenDate) {
+            hiddenDate.value = formatDate(selectedDate); // 선택된 날짜를 hidden input에 설정
+        } else {
+            console.error('Hidden date input not found');
+        }
+
+        const formData = new FormData(form);
+        try {
+            const response = await fetch('/save-nunbody', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            console.log(data.message);
+
+            if (data.message === "눈바디 사진이 성공적으로 저장되었습니다.") {
+                alert(data.message);
+                // 성공적으로 저장된 후 추가적인 동작 수행 (예: 화면 갱신)
+                const saveNunbody = form.querySelector('.saveNunbody');
+                if (saveNunbody) {
+                    saveNunbody.style.display = 'none';
+                }
+                fetchDataForDateAndExercise(selectedDate); // 선택된 날짜에 머물기
+
+                // fetchNunbodyData(selectedDate); // 선택된 날짜의 눈바디 데이터를 다시 불러옴
+            }
+        } catch (error) {
+            console.error('Error saving nunbody:', error);
+        }
     });
 });
+
+
+// 선택된 날짜에 대한 눈바디 데이터 불러오기
+const loadNunbodyForDate = async (year, month, day) => {
+  try {
+    const formattedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const response = await fetch(`/nunbody?date=${formattedDate}`);
+    const nunbody = await response.json();
+    displayNunbody(nunbody);
+  } catch (error) {
+    console.error('Error loading nunbody:', error);
+  }
+};
+
+// 눈바디 데이터 표시 함수
+const displayNunbody = (nunbodyPhotos) => {
+    const nunbodyContainer = document.querySelector('.nunbody');
+    nunbodyContainer.innerHTML = ''; // 기존 내용을 초기화
+  
+    nunbodyPhotos.forEach(nunbodyPhoto => {
+      const imgElement = document.createElement('img');
+      imgElement.src = nunbodyPhoto.imagePath;
+      imgElement.alt = "눈바디 이미지";
+      imgElement.className = "img-nunbody";
+      nunbodyContainer.appendChild(imgElement);
+    });
+  };
+  
+// 특정 날짜의 눈바디 데이터를 서버에서 가져오는 함수
+const fetchNunbodyData = (date) => {
+    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    console.log('Fetching nunbody data from:', `/nunbody?date=${formattedDate}`); // 로그 추가
+  
+    fetch(`/nunbody?date=${formattedDate}`)
+      .then(response => {
+        console.log('Response status:', response.status); // 응답 상태 로그 추가
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // console.log('Fetched nunbody data:', data); // 응답 데이터 로그 추가
+        displayNunbody(data);
+      })
+      .catch(error => {
+        console.error('Error fetching nunbody data:', error);
+      });
+      
+  };
+  
+
+const updateNunbodyPopupContent = (data) => {
+
+    // 서버에서 받은 눈바디 데이터를 각 컨테이너에 표시
+    data.forEach(nunbody => {
+        if (nunbodyContainers) {
+            nunbody.innerHTML = `<img src="${nunbody.imagePath}" alt="눈바디 이미지" class="image-nunbody">`;
+        }
+    });
+};

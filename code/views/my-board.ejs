@@ -10,20 +10,28 @@
     
     <div class="board-list">
         <% if (posts.length > 0) { %>
-            <% for (let i = 0; i < posts.length; i++) { %>
-                <div class="board">
-                    <h4><a href="/<%= posts[i].board %>-board"><%= posts[i].board_name %></a></h4>
-                    <h3><a href="/<%= posts[i].board %>-content/<%= posts[i]._id %>" action="/<%= posts[i].board %>-content/:<%= posts[i]._id %>"><%= posts[i].title %></a></h3>
+            <% posts.forEach((post, index) => { %>
+                <div class="board <%= (index === posts.length - 1) ? 'last-post' : '' %>">
+                    <h4><a href="/<%= post.board %>-board"><%= post.board_name %></a></h4>
+                    <h3><a href="/<%= post.board %>-content/<%= post._id %>" action="/<%= post.board %>-content/:<%= post._id %>"><%= post.title %></a></h3>
                     <div class="low-element">
-                        <p>댓글 수: <%= posts[i].commentCount %></p>
+                        <p>댓글 수: <%= post.commentCount %></p>
                         <span>|</span>
-                        <p>작성일: <%= new Date(posts[i].date).toLocaleDateString("ko-KR") %></p>
+                        <p>작성일: <%= new Date(post.date).toLocaleDateString("ko-KR") %></p>
                     </div>
                 </div>
-            <% } %> 
+            <% }) %> 
         <% } else { %>
-            <style>.board-list {border-bottom:  1px solid rgb(11, 154, 167);};</style>
+            <style>.board-list {border-bottom: 1px solid rgb(11, 154, 167);};</style>
             <p>작성한 글이 없습니다.</p>
+        <% } %>
+    </div>
+
+    <div class="pagination">
+        <% if (totalPages > 1) { %>
+            <% for (let i = 1; i <= totalPages; i++) { %>
+                <a href="/my-board?page=<%= i %>" class="numbering <%= currentPage === i ? 'current-page' : '' %>"><%= i %></a>
+            <% } %>
         <% } %>
     </div>
 </body>

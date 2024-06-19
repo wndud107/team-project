@@ -118,6 +118,11 @@ form {
     box-sizing: border-box;
 }
 
+.existing-image {
+    display: flex;
+    margin-bottom: 10px;
+}
+
 textarea {
     height: 300px;
     padding: 10px;

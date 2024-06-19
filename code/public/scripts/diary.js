@@ -325,7 +325,7 @@ const updateExercisesPopupContent = (data) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ id: exercise._id })
+                body: JSON.stringify({ id: exercise._id, date: exercise.date })
             })
             .then(response => {
                 if (!response.ok) {

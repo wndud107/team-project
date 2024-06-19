@@ -477,7 +477,7 @@
           const result = await response.json();
           if (result.success) {
             alert("D-DAY가 성공적으로 변경되었습니다.");
-            location.reload();
+            location.reload(); // 변경 후 페이지 새로고침
           } else {
             alert("D-DAY 변경에 실패했습니다: " + result.message);
           }

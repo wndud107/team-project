@@ -176,7 +176,7 @@ router.post("/save-info-board", async function (req, res) {
         date: currentDate,
         path: req.session.imagepath || "",
         view: 0, // 조회수 초기화
-        board: "free", // 게시판 이름 추가
+        board: "info", // 게시판 이름 추가
       });
     console.log("Post inserted:", result.insertedId);
     req.session.imagepath = null;
@@ -206,7 +206,7 @@ router.post("/save-end-board", async function (req, res) {
         date: currentDate,
         path: req.session.imagepath || "",
         view: 0, // 조회수 초기화
-        board: "free", // 게시판 이름 추가
+        board: "end", // 게시판 이름 추가
       });
     console.log("Post inserted:", result.insertedId);
     req.session.imagepath = null;
@@ -236,7 +236,7 @@ router.post("/save-child-board", async function (req, res) {
         date: currentDate,
         path: req.session.imagepath || "",
         view: 0, // 조회수 초기화
-        board: "free", // 게시판 이름 추가
+        board: "child", // 게시판 이름 추가
       });
     console.log("Post inserted:", result.insertedId);
     req.session.imagepath = null;
@@ -266,7 +266,7 @@ router.post("/save-ghwm-board", async function (req, res) {
         date: currentDate,
         path: req.session.imagepath || "",
         view: 0, // 조회수 초기화
-        board: "free", // 게시판 이름 추가
+        board: "ghwm", // 게시판 이름 추가
       });
     console.log("Post inserted:", result.insertedId);
     req.session.imagepath = null;

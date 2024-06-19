@@ -41,7 +41,7 @@
         name_join: user.name_join,
         profilePhoto: user.profilePhoto // 프로필 사진 세션에 저장
       };
-      res.redirect("/main-board");
+      res.redirect("/index");
     } catch (error) {
       console.error("Error finding user:", error);
       res.status(500).send("Internal Server Error");

@@ -271,9 +271,7 @@ router.post("/delete-exercise", async function (req, res) {
   }
 });
 
-
 /////////////// 눈바디 ///////////////////
-
 
 router.post('/save-nunbody', upload2.single('nunbodyPhoto'), async (req, res) => {
   const user = req.session.user;
@@ -421,13 +419,10 @@ router.get("/meals", async (req, res) => {
 
 });
 
-
 // 식단 삭제 라우트
 router.delete('/delete-meal/:id', async (req, res) => {
   
 });
-
-
 
 //////////////  체중  ///////////////////
   
@@ -442,7 +437,7 @@ router.post("/save-weight", async (req, res) => {
 
   try {
     const result = await db.getDb().collection("User_inbody").insertOne({ 
-      author: user.id, 
+      id_join: user.id, 
       date: date, 
       weight: weight });
 
@@ -454,13 +449,12 @@ router.post("/save-weight", async (req, res) => {
   console.log(`Date: ${date}, Weight: ${weight}`);
 });
 
-
 // 체중 및 사진 저장 라우트
 router.post('/save-inbody', upload.single('photo'), async (req, res) => {
   const { date } = req.body;
   const user = req.session.user;
   const inbodyData = {
-    author: user.id,
+    id_join: user.id,
     date: date,
     photo: req.file.filename
   };
@@ -473,7 +467,6 @@ router.post('/save-inbody', upload.single('photo'), async (req, res) => {
   }
 });
 
-
 // 인바디 데이터 가져오기 라우트
 router.get('/inbody', async (req, res) => {
   const user = req.session.user;
@@ -483,10 +476,7 @@ router.get('/inbody', async (req, res) => {
   }
 
   try {
-    const inbodyData = await db.getDb().collection('User_inbody')
-      .find({ id_join: user.id })
-      .sort({ date: 1 }) // 날짜 순으로 정렬
-      .toArray();
+    const inbodyData = await db.getDb().collection("User_inbody").find({ id_join: user.id }).sort({ date: 1 }).toArray();
 
     res.json({ success: true, data: inbodyData });
   } catch (error) {
@@ -494,7 +484,6 @@ router.get('/inbody', async (req, res) => {
     res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
   }
 });
-
 
 // 체중 데이터만 가져오기 라우트
 router.get('/weights', async (req, res) => {
@@ -506,7 +495,7 @@ router.get('/weights', async (req, res) => {
 
   try {
     const weights = await db.getDb().collection('User_inbody')
-      .find({ author: user.id })
+      .find({ id_join: user.id })
       .project({ date: 1, weight: 1 })
       .sort({ date: 1 }) // 날짜 순으로 정렬
       .toArray();
@@ -518,7 +507,6 @@ router.get('/weights', async (req, res) => {
   }
 });
 
-
 // 체중 목록 삭제 
 router.post("/delete-weight", async function (req, res) {
   const { date, weight } = req.body;
@@ -526,7 +514,7 @@ router.post("/delete-weight", async function (req, res) {
 
   try {
     await db.getDb().collection("User_inbody").deleteOne({
-      author: user.id,
+      id_join: user.id,
       date, 
       weight
     });
@@ -536,6 +524,5 @@ router.post("/delete-weight", async function (req, res) {
     res.status(500).send("Error deleting weight");
   }
 });
-
 
 module.exports = router;

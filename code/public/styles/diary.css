@@ -7,7 +7,6 @@ body{
 
 .container {
   margin: 0 auto; 
-  /* width: 100%; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -653,7 +652,7 @@ select optgroup {
   align-items: center;
   cursor: pointer;
   position: absolute;
-  top:37px;
+  top:36px;
   z-index: 2;
 }
 .btn-delete-inbody:hover {
@@ -904,24 +903,24 @@ select optgroup {
 .choice-inbody-graph{
   margin-bottom: 20px;
   cursor: pointer;
-  /* background-color: transparent; */
-  /* border: none; */
+
 }
 
-.weight, .BMI, .SMM, .BFM, .BFP{
+.data-type-button{
+  padding: 2px 5px;
   margin: 0 4px;
   background-color: #ffffff;
   font-size: 14px;
-   /* background-color: transparent; */
   font-weight: 500;
   text-shadow: -1px 0 rgb(255, 255, 255), 0 1px rgb(255, 255, 255), 1px 0 rgb(255, 255, 255), 0 -1px rgb(255, 255, 255);
-  /* border: none; */
   border: #9a9a9a solid 1px;
   color: #585858;
   background-color: #fff;
   border-radius: 5px;
   cursor: pointer;
-
+}
+.data-type-button:hover{
+  background-color: rgba(190, 223, 228);
 }
 
 .p-weight{

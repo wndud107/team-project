@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/styles/diary.css" />
     <script src="/scripts/diary.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    
   </head>
   <body>
     <%- include('includes/header') %>
@@ -176,25 +177,25 @@
                     </div>
                     <button type="submit" class="saveNunbody btn-save-nunbody" style="display:none;">저장</button>
                     <div class="popup-input popup-weight">
-                        <label for="weight" class="weight">체중</label>
+                        <!-- <label for="weight" class="weight">체중</label> -->
+                        <p class="p-weight">체중</p>
                         <input type="hidden" id="hiddenDate4" name="date"/>
                         <input type="text" id="weight" name="weight" class="inbody-input input-weight" onKeyup="this.value=this.value.replace(/[^.0-9]/g,'');" />
                         <div id="today-weight"></div>
-                        <p>kg</p>
+                        <p class="p-weight">kg</p>
                     </div>
                   </div>
                   <button class="btn-save-inbody">저장</button>
+                  <!-- <button class="btn-delete-inbody" style="display:none;">삭제</button> -->
                 </form>
                 <div class="nunbody">
                   <% if (nunbodyPhoto) { %>
-                    <!-- <% dinnerMeals.forEach(meal => { %> -->
                       <% if (nunbodyPhoto.date == selectedDate && nunbodyPhoto.author == user.id) { %>
                         <div>
                           <img class="img-nunbody" src="<%= nunbodyPhoto.imagePath%>" alt="눈바디 이미지">
                         </div>
                       <% } %>
-                    <!-- <% }) %> -->
-                  <% } %>
+                   <% } %>
                 </div>
               </div>
             </div>
@@ -207,15 +208,11 @@
           </div>
           <div class="graph">
             <div class="choice-inbody-graph">
-              <form action="">
-                <select name="" id="dataSelector">
-                  <option value="weight" class="weight">체중</option>
-                  <option value="BMI" class="BMI">BMI</option>
-                  <option value="SMM" class="SMM">골격근량</option>
-                  <option value="BFM" class="BFM">체지방량</option>
-                  <option value="BFP" class="BFP">체지방률</option>
-                </select>    
-              </form>
+              <button class="data-type-button" data-type="weight">체중</button>
+              <button class="data-type-button" data-type="BMI">BMI</button>
+              <button class="data-type-button" data-type="SMM">골격근량</button>
+              <button class="data-type-button" data-type="BFM">체지방량</button>
+              <button class="data-type-button" data-type="BFP">체지방률</button>
             </div>
             <div class="inbody-graph">
               <canvas id="weightChart" width="300" height="250"></canvas>   
